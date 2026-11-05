@@ -168,8 +168,12 @@ def _payload(inp: CaseInput, event: dict[str, Any] | None) -> dict[str, Any] | N
     return None
 
 
-def evaluate(inp: CaseInput) -> dict[str, Any]:
-    """Run every rule over a case and return the bundle (brief §6)."""
+def evaluate(inp: CaseInput, default_judgment: bool = False) -> dict[str, Any]:
+    """Run every rule over a case and return the bundle (brief §6).
+
+    ``default_judgment`` enables rule 5b (see :func:`decide`): a side that
+    committed to events and then withholds their plaintext loses the case.
+    """
     findings: list[Finding] = []
     roles = inp.roles
 
@@ -291,7 +295,7 @@ def evaluate(inp: CaseInput) -> dict[str, Any]:
                 Finding("MANDATE_OUT_OF_SCOPE", "high", ev_ids, "; ".join(f"{r['code']}: {r['detail']}" for r in reasons))
             )
 
-    verdict, remedy, rationale = decide(inp.claim, findings, roles, charge, offer)
+    verdict, remedy, rationale = decide(inp.claim, findings, roles, charge, offer, default_judgment=default_judgment)
     cites = sorted({e for f in findings for e in f.evidence})
     return {
         "case_id": inp.case_id,
@@ -311,6 +315,7 @@ def decide(
     roles: dict[str, str],
     charge: dict[str, Any] | None,
     offer: dict[str, Any] | None,
+    default_judgment: bool = False,
 ) -> tuple[str, dict[str, Any], str]:
     """The verdict table (brief §6), in priority order:
 
@@ -327,6 +332,11 @@ def decide(
        finding -> buyer_at_fault (the user did authorise it: the mandate proves it).
     5. a merchant finding together with ``MANDATE_OUT_OF_SCOPE`` -> ambiguous
        (both sides at fault; needs a human).
+    5b. (only with ``default_judgment``) every ``UNVERIFIABLE`` finding that
+       names a party is owed by one side, and nothing is conclusive -> against
+       that side. It committed to those events, so it has the plaintext;
+       withholding it is treated like losing. Events that were never recorded
+       name nobody and do not trigger this.
     6. any ``UNVERIFIABLE`` and nothing conclusive -> unverifiable.
     7. nothing found -> ambiguous.
     """
@@ -368,6 +378,18 @@ def decide(
         )
     if merchant_fault and out_of_scope:
         return "ambiguous", none, "both the merchant and the buyer agent deviated; needs human review"
+    if default_judgment and "UNVERIFIABLE" in codes:
+        owed_by = {f.party_id for f in findings if f.code == "UNVERIFIABLE" and f.party_id}
+        sides = {("merchant" if roles.get(p) == "merchant" else "buyer" if roles.get(p) in ("user", "buyer_agent") else "other")
+                 for p in owed_by}
+        if sides == {"merchant"}:
+            return (
+                "merchant_at_fault",
+                _refund(charge, offer),
+                "default judgment: the merchant committed to events it then refused to reveal",
+            )
+        if sides == {"buyer"}:
+            return "buyer_at_fault", none, "default judgment: the buyer side committed to events it then refused to reveal"
     if "UNVERIFIABLE" in codes:
         return "unverifiable", none, "a needed event was never revealed"
     return "ambiguous", none, "no rule produced a conclusive finding"

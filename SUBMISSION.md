@@ -64,7 +64,7 @@ Suggested title: "TrailProof MVP: the proof layer for AI-agent purchases (MCP)".
 
 ```bash
 uv sync --extra llm
-uv run pytest                 # 73 tests, incl. scenarios over real MCP stdio and the verifier
+uv run pytest                 # 75 tests, incl. scenarios over real MCP stdio and the verifier
 uv run python demo.py         # all six scenarios + fail-open check
 uv run python demo_video.py --pace 0 --no-llm
 uv run python verify_pack.py packs/<case_id>.json --tamper

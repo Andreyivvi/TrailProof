@@ -17,7 +17,7 @@ chargeback-friendly shape.
 
 ```bash
 uv sync
-uv run pytest            # 73 tests, incl. the seven scenarios over real MCP stdio
+uv run pytest            # 75 tests, incl. the seven scenarios over real MCP stdio
 uv run python demo.py    # spawns the MCP server and drives it through the mocks
 ```
 
@@ -64,6 +64,7 @@ Requirements: Python 3.11+, `mcp`, `cryptography`, `pytest`. Nothing else.
 | `SUBMISSION.md` | HW6 kit: paragraph, video script, spreadsheet row, rubric self-check |
 | `PITCH.md` | 90-second pitch and the three application-form texts (identification first, disputes second) |
 | `tests/` | pytest: crypto, ledger, scope rules, findings + verdicts, service tools, attestations, scenarios |
+| `benchmark/` | HW7 benchmark: dishonest-counterparty disputes, TrailProof vs the same rules on unverified records; results and report |
 
 ## How an order looks on the ledger
 
@@ -142,6 +143,14 @@ Verdict table, in priority order:
 5. merchant finding + `MANDATE_OUT_OF_SCOPE` → `ambiguous`
 6. anything `UNVERIFIABLE` and nothing conclusive → `unverifiable`
 7. nothing → `ambiguous`
+
+Opt-in rule 5b, *default judgment* (`TrailProofService(default_judgment=True)`):
+when nothing is conclusive and every unverifiable finding that names a party
+is owed by one side, the verdict goes against that side. The ledger holds that
+side's signed commitment, so it had the plaintext and chose not to reveal it.
+Events nobody ever recorded name nobody and stay `unverifiable`. Off by
+default because it also punishes a party that is merely unavailable; see the
+benchmark for why it exists.
 
 ## Merchant auto-refund policy (`mocks/shop.py`)
 
@@ -229,6 +238,21 @@ when the ledger is unreachable.
   call it after a rejection; any party to the order may export.
 * **No LLM anywhere** in the ledger or rules. The only model-driven component
   is the optional buyer below, which is a *client* of the ledger.
+
+## Benchmark: dishonest counterparties (`benchmark/`)
+
+`benchmark/bench_disputes.py` generates seeded disputes (overcharge, wrong
+item, not shipped, out of scope, friendly fraud, baseless) where the party at
+fault is honest, lies at reveal time, or withholds its records, runs each
+through the real flow, and compares the verdict with the same rules applied to
+unverified self-reports (TrailProof with commitments disabled). Honest cases:
+both right. Lies: TrailProof right every time, the baseline never. Withholding
+beat both until rule 5b. `benchmark/make_report.py` renders the write-up to
+`benchmark/HW7_TrailProof_benchmark.pdf`.
+
+```bash
+uv run python benchmark/bench_disputes.py --seed 2 --n 120 --default-judgment
+```
 
 ## Verifying a result offline
 

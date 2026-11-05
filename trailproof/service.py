@@ -36,9 +36,16 @@ def _tool(fn):
 
 
 class TrailProofService:
-    def __init__(self, ledger: Ledger | None = None, clock: Callable[[], datetime] | None = None):
+    def __init__(
+        self,
+        ledger: Ledger | None = None,
+        clock: Callable[[], datetime] | None = None,
+        default_judgment: bool = False,
+    ):
         self.ledger = ledger or Ledger(":memory:", clock=clock)
         self.dispute_hooks: list[DisputeHook] = []
+        #: rule 5b: a side that withholds plaintext it committed to loses (off by default; see benchmark/)
+        self.default_judgment = default_judgment
 
     # ------------------------------------------------------------ helpers
     def _now(self) -> datetime:
@@ -278,7 +285,7 @@ class TrailProofService:
             if not offers or offers[-1].party_id != merchant_party_id:
                 continue
             for case in self.ledger.cases_for_order(order_id):
-                if rules.evaluate(self._case_input(case["case_id"]))["verdict"] == "buyer_at_fault":
+                if rules.evaluate(self._case_input(case["case_id"]), default_judgment=self.default_judgment)["verdict"] == "buyer_at_fault":
                     lost += 1
             charge = next((e for e in events if e.type == "CHARGE"), None)
             if charge is None or any(e.type == "REFUND" for e in events):
@@ -331,7 +338,7 @@ class TrailProofService:
     def get_case_bundle(self, case_id: str, party_id: str) -> dict[str, Any]:
         case = self.ledger.get_case(case_id)
         self._require_party_to_order(case["order_id"], party_id)
-        bundle = rules.evaluate(self._case_input(case_id))
+        bundle = rules.evaluate(self._case_input(case_id), default_judgment=self.default_judgment)
         bundle["status"] = case["status"]
         bundle["resolution"] = case["resolution"]
         bundle["opened_by"] = case["opened_by"]
@@ -352,7 +359,7 @@ class TrailProofService:
         order_id = case["order_id"]
         self._require_party_to_order(order_id, party_id)
         inp = self._case_input(case_id)
-        bundle = rules.evaluate(inp)
+        bundle = rules.evaluate(inp, default_judgment=self.default_judgment)
         events = {e["event_id"]: e for e in inp.events}
         by_type: dict[str, dict[str, Any]] = {}
         for e in inp.events:

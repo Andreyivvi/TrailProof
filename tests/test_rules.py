@@ -191,3 +191,23 @@ def test_verdict_table():
     assert decide("not_as_described", [], ROLES, None, None)[0] == "ambiguous"
     # refund falls back to the offer total when no charge was revealed
     assert decide("not_as_described", [F("DELIVERED_NE_OFFER"), in_scope], ROLES, None, {"total": "36.90", "currency": "EUR"})[1]["amount"] == "36.90"
+
+
+def test_default_judgment_rule_5b_goes_against_the_side_that_withholds():
+    """Rule 5b (opt-in): a side that committed to events and then withholds the plaintext loses."""
+    in_scope = F("MANDATE_IN_SCOPE")
+    owed_by_merchant = F("UNVERIFIABLE", "OFFER was never revealed; merchant pty_shop owes it", "pty_shop")
+    owed_by_user = F("UNVERIFIABLE", "MANDATE was never revealed; user pty_user owes it", "pty_user")
+    never_recorded = F("UNVERIFIABLE", "no FULFILMENT event was ever recorded for this order", None)
+    # off by default: unchanged behaviour
+    assert decide("not_as_described", [owed_by_merchant], ROLES, CHARGE, None)[0] == "unverifiable"
+    # on: the withholding side loses, and the merchant's refund is the charge
+    v, remedy, why = decide("not_as_described", [owed_by_merchant], ROLES, CHARGE, None, default_judgment=True)
+    assert v == "merchant_at_fault" and remedy["amount"] == CHARGE["amount"] and "default judgment" in why
+    assert decide("not_received", [owed_by_user, in_scope], ROLES, CHARGE, None, default_judgment=True)[0] == "buyer_at_fault"
+    # an event nobody ever recorded names nobody: still unverifiable
+    assert decide("not_received", [never_recorded], ROLES, CHARGE, None, default_judgment=True)[0] == "unverifiable"
+    # both sides withholding is not one side's fault
+    assert decide("not_received", [owed_by_merchant, owed_by_user], ROLES, CHARGE, None, default_judgment=True)[0] == "unverifiable"
+    # conclusive findings still win over 5b
+    assert decide("not_as_described", [F("TAMPERED", "merchant pty_shop x", "pty_shop"), owed_by_user], ROLES, CHARGE, None, default_judgment=True)[0] == "merchant_at_fault"

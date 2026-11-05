@@ -1,0 +1,5232 @@
+{
+ "default_judgment": false,
+ "n": 120,
+ "rows": [
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "CHARGE_NE_OFFER",
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: CHARGE_NE_OFFER",
+    "seconds": 3e-05,
+    "verdict": "merchant_at_fault"
+   },
+   "case": 0,
+   "case_id": "case_31bc703c301e",
+   "claim": "not_as_described",
+   "fault": "overcharge",
+   "max_amount": "135.70",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0000",
+   "overcharge_by": "5.00",
+   "qty": 3,
+   "sku": "DOGFOOD-10KG",
+   "strategy": "honest",
+   "total": "110.70",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "CHARGE_NE_OFFER",
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: CHARGE_NE_OFFER",
+    "seconds": 0.0045,
+    "tool_calls": 23,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "no rule produced a conclusive finding",
+    "seconds": 3e-05,
+    "verdict": "ambiguous"
+   },
+   "case": 1,
+   "case_id": "case_d79fc2b438c9",
+   "claim": "not_as_described",
+   "fault": "wrong_item",
+   "max_amount": "134.00",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0001",
+   "overcharge_by": "8.00",
+   "qty": 2,
+   "sku": "CATTOY-SET",
+   "strategy": "lie",
+   "total": "110.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "TAMPERED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "merchant tampered with evidence: merchant pty_d3a9c6a6efd6 revealed OFFER plaintext whose hash does not match the commitment it made earlier",
+    "seconds": 0.0038,
+    "tool_calls": 23,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "no rule produced a conclusive finding",
+    "seconds": 2e-05,
+    "verdict": "ambiguous"
+   },
+   "case": 2,
+   "case_id": "case_e0dd1ee37031",
+   "claim": "not_received",
+   "fault": "not_shipped",
+   "max_amount": "24.50",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0002",
+   "overcharge_by": "1.00",
+   "qty": 1,
+   "sku": "DOGFOOD-5KG",
+   "strategy": "lie",
+   "total": "21.50",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE",
+     "NOT_RECEIVED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: NOT_RECEIVED",
+    "seconds": 0.0032,
+    "tool_calls": 20,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_OUT_OF_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "the buyer agent ordered outside the user's mandate; the merchant delivered what it offered",
+    "seconds": 2e-05,
+    "verdict": "buyer_at_fault"
+   },
+   "case": 3,
+   "case_id": "case_bb5a353caccf",
+   "claim": "not_authorised",
+   "fault": "out_of_scope",
+   "max_amount": "33.00",
+   "oracle_blame": "buyer",
+   "order_id": "bench_0003",
+   "overcharge_by": "12.00",
+   "qty": 2,
+   "sku": "DOGFOOD-5KG",
+   "strategy": "honest",
+   "total": "43.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_OUT_OF_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "the buyer agent ordered outside the user's mandate; the merchant delivered what it offered",
+    "seconds": 0.0035,
+    "tool_calls": 23,
+    "verdict": "buyer_at_fault"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "the user's signed mandate covers this order and the merchant delivered what it offered",
+    "seconds": 2e-05,
+    "verdict": "buyer_at_fault"
+   },
+   "case": 4,
+   "case_id": "case_cf91a0d6963f",
+   "claim": "not_authorised",
+   "fault": "friendly_fraud",
+   "max_amount": "66.00",
+   "oracle_blame": "buyer",
+   "order_id": "bench_0004",
+   "overcharge_by": "10.00",
+   "qty": 2,
+   "sku": "DOGFOOD-5KG",
+   "strategy": "honest",
+   "total": "43.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "the user's signed mandate covers this order and the merchant delivered what it offered",
+    "seconds": 0.0036,
+    "tool_calls": 23,
+    "verdict": "buyer_at_fault"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": false,
+    "blame": "none",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "no rule produced a conclusive finding",
+    "seconds": 2e-05,
+    "verdict": "ambiguous"
+   },
+   "case": 5,
+   "case_id": "case_80398a936b46",
+   "claim": "not_as_described",
+   "fault": "baseless",
+   "max_amount": "110.00",
+   "oracle_blame": "none",
+   "order_id": "bench_0005",
+   "overcharge_by": "1.00",
+   "qty": 2,
+   "sku": "CATTOY-SET",
+   "strategy": "honest",
+   "total": "110.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "none",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "no rule produced a conclusive finding",
+    "seconds": 0.0037,
+    "tool_calls": 23,
+    "verdict": "ambiguous"
+   },
+   "truth": "none"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "CHARGE_NE_OFFER",
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: CHARGE_NE_OFFER",
+    "seconds": 3e-05,
+    "verdict": "merchant_at_fault"
+   },
+   "case": 6,
+   "case_id": "case_6de482a23b6a",
+   "claim": "not_as_described",
+   "fault": "overcharge",
+   "max_amount": "131.00",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0006",
+   "overcharge_by": "7.00",
+   "qty": 2,
+   "sku": "CATTOY-SET",
+   "strategy": "honest",
+   "total": "110.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "CHARGE_NE_OFFER",
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: CHARGE_NE_OFFER",
+    "seconds": 0.0045,
+    "tool_calls": 23,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "no rule produced a conclusive finding",
+    "seconds": 3e-05,
+    "verdict": "ambiguous"
+   },
+   "case": 7,
+   "case_id": "case_e4e14c0c1aca",
+   "claim": "not_as_described",
+   "fault": "wrong_item",
+   "max_amount": "172.00",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0007",
+   "overcharge_by": "8.00",
+   "qty": 3,
+   "sku": "CATTOY-SET",
+   "strategy": "lie",
+   "total": "165.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "TAMPERED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "merchant tampered with evidence: merchant pty_d3a9c6a6efd6 revealed OFFER plaintext whose hash does not match the commitment it made earlier",
+    "seconds": 0.0042,
+    "tool_calls": 23,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "NOT_RECEIVED",
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 1e-05,
+    "verdict": "unverifiable"
+   },
+   "case": 8,
+   "case_id": "case_06e9fd5ff989",
+   "claim": "not_received",
+   "fault": "not_shipped",
+   "max_amount": "80.80",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0008",
+   "overcharge_by": "4.00",
+   "qty": 2,
+   "sku": "DOGFOOD-10KG",
+   "strategy": "withhold",
+   "total": "73.80",
+   "trailproof": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "NOT_RECEIVED",
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 0.0031,
+    "tool_calls": 19,
+    "verdict": "unverifiable"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_OUT_OF_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "the buyer agent ordered outside the user's mandate; the merchant delivered what it offered",
+    "seconds": 3e-05,
+    "verdict": "buyer_at_fault"
+   },
+   "case": 9,
+   "case_id": "case_db6860c132a9",
+   "claim": "not_authorised",
+   "fault": "out_of_scope",
+   "max_amount": "28.00",
+   "oracle_blame": "buyer",
+   "order_id": "bench_0009",
+   "overcharge_by": "7.00",
+   "qty": 2,
+   "sku": "DOGFOOD-5KG",
+   "strategy": "honest",
+   "total": "43.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_OUT_OF_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "the buyer agent ordered outside the user's mandate; the merchant delivered what it offered",
+    "seconds": 0.0039,
+    "tool_calls": 23,
+    "verdict": "buyer_at_fault"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 2e-05,
+    "verdict": "unverifiable"
+   },
+   "case": 10,
+   "case_id": "case_a624015216f5",
+   "claim": "not_authorised",
+   "fault": "friendly_fraud",
+   "max_amount": "75.00",
+   "oracle_blame": "buyer",
+   "order_id": "bench_0010",
+   "overcharge_by": "5.00",
+   "qty": 1,
+   "sku": "CATTOY-SET",
+   "strategy": "withhold",
+   "total": "55.00",
+   "trailproof": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 0.0041,
+    "tool_calls": 19,
+    "verdict": "unverifiable"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "merchant",
+    "correct": false,
+    "findings": [
+     "DELIVERED_NE_OFFER",
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": true,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: DELIVERED_NE_OFFER",
+    "seconds": 3e-05,
+    "verdict": "merchant_at_fault"
+   },
+   "case": 11,
+   "case_id": "case_69d46f94ee32",
+   "claim": "not_as_described",
+   "fault": "baseless",
+   "max_amount": "175.00",
+   "oracle_blame": "none",
+   "order_id": "bench_0011",
+   "overcharge_by": "9.00",
+   "qty": 3,
+   "sku": "CATTOY-SET",
+   "strategy": "lie",
+   "total": "165.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE",
+     "TAMPERED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "buyer side tampered with evidence: buyer_agent pty_ae1ef737ee23 revealed DELIVERY plaintext whose hash does not match the commitment it made earlier",
+    "seconds": 0.0043,
+    "tool_calls": 23,
+    "verdict": "buyer_at_fault"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 1e-05,
+    "verdict": "unverifiable"
+   },
+   "case": 12,
+   "case_id": "case_2b43bb27e586",
+   "claim": "not_as_described",
+   "fault": "overcharge",
+   "max_amount": "82.80",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0012",
+   "overcharge_by": "8.00",
+   "qty": 2,
+   "sku": "DOGFOOD-10KG",
+   "strategy": "withhold",
+   "total": "73.80",
+   "trailproof": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 0.0038,
+    "tool_calls": 21,
+    "verdict": "unverifiable"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "no rule produced a conclusive finding",
+    "seconds": 3e-05,
+    "verdict": "ambiguous"
+   },
+   "case": 13,
+   "case_id": "case_f590049f3f72",
+   "claim": "not_as_described",
+   "fault": "wrong_item",
+   "max_amount": "65.50",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0013",
+   "overcharge_by": "4.00",
+   "qty": 3,
+   "sku": "DOGFOOD-5KG",
+   "strategy": "lie",
+   "total": "64.50",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "TAMPERED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "merchant tampered with evidence: merchant pty_d3a9c6a6efd6 revealed OFFER plaintext whose hash does not match the commitment it made earlier",
+    "seconds": 0.0039,
+    "tool_calls": 23,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE",
+     "NOT_RECEIVED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: NOT_RECEIVED",
+    "seconds": 3e-05,
+    "verdict": "merchant_at_fault"
+   },
+   "case": 14,
+   "case_id": "case_10bec2b9e7f8",
+   "claim": "not_received",
+   "fault": "not_shipped",
+   "max_amount": "64.00",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0014",
+   "overcharge_by": "6.00",
+   "qty": 2,
+   "sku": "DOGFOOD-5KG",
+   "strategy": "honest",
+   "total": "43.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE",
+     "NOT_RECEIVED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: NOT_RECEIVED",
+    "seconds": 0.0034,
+    "tool_calls": 20,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 2e-05,
+    "verdict": "unverifiable"
+   },
+   "case": 15,
+   "case_id": "case_43b73a6239e7",
+   "claim": "not_authorised",
+   "fault": "out_of_scope",
+   "max_amount": "22.00",
+   "oracle_blame": "buyer",
+   "order_id": "bench_0015",
+   "overcharge_by": "9.00",
+   "qty": 1,
+   "sku": "DOGFOOD-30",
+   "strategy": "withhold",
+   "total": "30.00",
+   "trailproof": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 0.0041,
+    "tool_calls": 19,
+    "verdict": "unverifiable"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "merchant",
+    "correct": false,
+    "findings": [
+     "DELIVERED_NE_OFFER",
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": true,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: DELIVERED_NE_OFFER",
+    "seconds": 3e-05,
+    "verdict": "merchant_at_fault"
+   },
+   "case": 16,
+   "case_id": "case_d36c7ccf1152",
+   "claim": "not_authorised",
+   "fault": "friendly_fraud",
+   "max_amount": "71.00",
+   "oracle_blame": "buyer",
+   "order_id": "bench_0016",
+   "overcharge_by": "6.00",
+   "qty": 1,
+   "sku": "CATTOY-SET",
+   "strategy": "lie",
+   "total": "55.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE",
+     "TAMPERED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "buyer side tampered with evidence: buyer_agent pty_ae1ef737ee23 revealed DELIVERY plaintext whose hash does not match the commitment it made earlier",
+    "seconds": 0.0039,
+    "tool_calls": 23,
+    "verdict": "buyer_at_fault"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "merchant",
+    "correct": false,
+    "findings": [
+     "DELIVERED_NE_OFFER",
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": true,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: DELIVERED_NE_OFFER",
+    "seconds": 3e-05,
+    "verdict": "merchant_at_fault"
+   },
+   "case": 17,
+   "case_id": "case_cd732bcd73d7",
+   "claim": "not_as_described",
+   "fault": "baseless",
+   "max_amount": "64.50",
+   "oracle_blame": "none",
+   "order_id": "bench_0017",
+   "overcharge_by": "1.00",
+   "qty": 3,
+   "sku": "DOGFOOD-5KG",
+   "strategy": "lie",
+   "total": "64.50",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE",
+     "TAMPERED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "buyer side tampered with evidence: buyer_agent pty_ae1ef737ee23 revealed DELIVERY plaintext whose hash does not match the commitment it made earlier",
+    "seconds": 0.0038,
+    "tool_calls": 23,
+    "verdict": "buyer_at_fault"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 1e-05,
+    "verdict": "unverifiable"
+   },
+   "case": 18,
+   "case_id": "case_a38fc7377e92",
+   "claim": "not_as_described",
+   "fault": "overcharge",
+   "max_amount": "109.00",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0018",
+   "overcharge_by": "10.00",
+   "qty": 3,
+   "sku": "DOGFOOD-30",
+   "strategy": "withhold",
+   "total": "90.00",
+   "trailproof": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 0.0037,
+    "tool_calls": 21,
+    "verdict": "unverifiable"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "DELIVERED_NE_OFFER",
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: DELIVERED_NE_OFFER; DELIVERED_NE_OFFER",
+    "seconds": 3e-05,
+    "verdict": "merchant_at_fault"
+   },
+   "case": 19,
+   "case_id": "case_d0b65bad8235",
+   "claim": "not_as_described",
+   "fault": "wrong_item",
+   "max_amount": "69.50",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0019",
+   "overcharge_by": "9.00",
+   "qty": 3,
+   "sku": "DOGFOOD-5KG",
+   "strategy": "honest",
+   "total": "64.50",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "DELIVERED_NE_OFFER",
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: DELIVERED_NE_OFFER; DELIVERED_NE_OFFER",
+    "seconds": 0.004,
+    "tool_calls": 23,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE",
+     "NOT_RECEIVED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: NOT_RECEIVED",
+    "seconds": 2e-05,
+    "verdict": "merchant_at_fault"
+   },
+   "case": 20,
+   "case_id": "case_eef9e880b399",
+   "claim": "not_received",
+   "fault": "not_shipped",
+   "max_amount": "60.90",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0020",
+   "overcharge_by": "9.00",
+   "qty": 1,
+   "sku": "DOGFOOD-10KG",
+   "strategy": "honest",
+   "total": "36.90",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE",
+     "NOT_RECEIVED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: NOT_RECEIVED",
+    "seconds": 0.0034,
+    "tool_calls": 20,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "DELIVERED_NE_OFFER",
+     "MANDATE_OUT_OF_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "both the merchant and the buyer agent deviated; needs human review",
+    "seconds": 3e-05,
+    "verdict": "ambiguous"
+   },
+   "case": 21,
+   "case_id": "case_8235dade1b59",
+   "claim": "not_authorised",
+   "fault": "out_of_scope",
+   "max_amount": "64.80",
+   "oracle_blame": "buyer",
+   "order_id": "bench_0021",
+   "overcharge_by": "10.00",
+   "qty": 2,
+   "sku": "DOGFOOD-10KG",
+   "strategy": "lie",
+   "total": "73.80",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_OUT_OF_SCOPE",
+     "TAMPERED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "buyer side tampered with evidence: buyer_agent pty_ae1ef737ee23 revealed DELIVERY plaintext whose hash does not match the commitment it made earlier",
+    "seconds": 0.0038,
+    "tool_calls": 23,
+    "verdict": "buyer_at_fault"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 2e-05,
+    "verdict": "unverifiable"
+   },
+   "case": 22,
+   "case_id": "case_6a495400485c",
+   "claim": "not_authorised",
+   "fault": "friendly_fraud",
+   "max_amount": "68.00",
+   "oracle_blame": "buyer",
+   "order_id": "bench_0022",
+   "overcharge_by": "9.00",
+   "qty": 2,
+   "sku": "DOGFOOD-30",
+   "strategy": "withhold",
+   "total": "60.00",
+   "trailproof": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 0.0036,
+    "tool_calls": 19,
+    "verdict": "unverifiable"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": false,
+    "blame": "none",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "no rule produced a conclusive finding",
+    "seconds": 2e-05,
+    "verdict": "ambiguous"
+   },
+   "case": 23,
+   "case_id": "case_7ecb50185b3e",
+   "claim": "not_as_described",
+   "fault": "baseless",
+   "max_amount": "135.00",
+   "oracle_blame": "none",
+   "order_id": "bench_0023",
+   "overcharge_by": "9.00",
+   "qty": 2,
+   "sku": "CATTOY-SET",
+   "strategy": "honest",
+   "total": "110.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "none",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "no rule produced a conclusive finding",
+    "seconds": 0.0042,
+    "tool_calls": 23,
+    "verdict": "ambiguous"
+   },
+   "truth": "none"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "buyer",
+    "correct": false,
+    "findings": [
+     "MANDATE_OUT_OF_SCOPE"
+    ],
+    "honest_party_blamed": true,
+    "rationale": "the buyer agent ordered outside the user's mandate; the merchant delivered what it offered",
+    "seconds": 2e-05,
+    "verdict": "buyer_at_fault"
+   },
+   "case": 24,
+   "case_id": "case_8461fa0512c7",
+   "claim": "not_as_described",
+   "fault": "overcharge",
+   "max_amount": "74.80",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0024",
+   "overcharge_by": "6.00",
+   "qty": 2,
+   "sku": "DOGFOOD-10KG",
+   "strategy": "lie",
+   "total": "73.80",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "TAMPERED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "merchant tampered with evidence: merchant pty_d3a9c6a6efd6 revealed OFFER plaintext whose hash does not match the commitment it made earlier",
+    "seconds": 0.0043,
+    "tool_calls": 23,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "no rule produced a conclusive finding",
+    "seconds": 2e-05,
+    "verdict": "ambiguous"
+   },
+   "case": 25,
+   "case_id": "case_ece8fce63b74",
+   "claim": "not_as_described",
+   "fault": "wrong_item",
+   "max_amount": "123.70",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0025",
+   "overcharge_by": "6.00",
+   "qty": 3,
+   "sku": "DOGFOOD-10KG",
+   "strategy": "lie",
+   "total": "110.70",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "TAMPERED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "merchant tampered with evidence: merchant pty_d3a9c6a6efd6 revealed OFFER plaintext whose hash does not match the commitment it made earlier",
+    "seconds": 0.0036,
+    "tool_calls": 23,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "NOT_RECEIVED",
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 1e-05,
+    "verdict": "unverifiable"
+   },
+   "case": 26,
+   "case_id": "case_34c7e296bb54",
+   "claim": "not_received",
+   "fault": "not_shipped",
+   "max_amount": "43.00",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0026",
+   "overcharge_by": "9.00",
+   "qty": 2,
+   "sku": "DOGFOOD-5KG",
+   "strategy": "withhold",
+   "total": "43.00",
+   "trailproof": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "NOT_RECEIVED",
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 0.0031,
+    "tool_calls": 19,
+    "verdict": "unverifiable"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_OUT_OF_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "the buyer agent ordered outside the user's mandate; the merchant delivered what it offered",
+    "seconds": 3e-05,
+    "verdict": "buyer_at_fault"
+   },
+   "case": 27,
+   "case_id": "case_35ddefa1e76f",
+   "claim": "not_authorised",
+   "fault": "out_of_scope",
+   "max_amount": "50.00",
+   "oracle_blame": "buyer",
+   "order_id": "bench_0027",
+   "overcharge_by": "4.00",
+   "qty": 2,
+   "sku": "DOGFOOD-30",
+   "strategy": "honest",
+   "total": "60.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_OUT_OF_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "the buyer agent ordered outside the user's mandate; the merchant delivered what it offered",
+    "seconds": 0.0036,
+    "tool_calls": 23,
+    "verdict": "buyer_at_fault"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "the user's signed mandate covers this order and the merchant delivered what it offered",
+    "seconds": 2e-05,
+    "verdict": "buyer_at_fault"
+   },
+   "case": 28,
+   "case_id": "case_6ee3d3839620",
+   "claim": "not_authorised",
+   "fault": "friendly_fraud",
+   "max_amount": "128.70",
+   "oracle_blame": "buyer",
+   "order_id": "bench_0028",
+   "overcharge_by": "2.00",
+   "qty": 3,
+   "sku": "DOGFOOD-10KG",
+   "strategy": "honest",
+   "total": "110.70",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "the user's signed mandate covers this order and the merchant delivered what it offered",
+    "seconds": 0.0041,
+    "tool_calls": 23,
+    "verdict": "buyer_at_fault"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": false,
+    "blame": "none",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "no rule produced a conclusive finding",
+    "seconds": 2e-05,
+    "verdict": "ambiguous"
+   },
+   "case": 29,
+   "case_id": "case_69ec642e2472",
+   "claim": "not_as_described",
+   "fault": "baseless",
+   "max_amount": "51.00",
+   "oracle_blame": "none",
+   "order_id": "bench_0029",
+   "overcharge_by": "2.00",
+   "qty": 1,
+   "sku": "DOGFOOD-30",
+   "strategy": "honest",
+   "total": "30.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "none",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "no rule produced a conclusive finding",
+    "seconds": 0.0037,
+    "tool_calls": 23,
+    "verdict": "ambiguous"
+   },
+   "truth": "none"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "buyer",
+    "correct": false,
+    "findings": [
+     "MANDATE_OUT_OF_SCOPE"
+    ],
+    "honest_party_blamed": true,
+    "rationale": "the buyer agent ordered outside the user's mandate; the merchant delivered what it offered",
+    "seconds": 2e-05,
+    "verdict": "buyer_at_fault"
+   },
+   "case": 30,
+   "case_id": "case_7326bbb690ff",
+   "claim": "not_as_described",
+   "fault": "overcharge",
+   "max_amount": "110.00",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0030",
+   "overcharge_by": "4.00",
+   "qty": 2,
+   "sku": "CATTOY-SET",
+   "strategy": "lie",
+   "total": "110.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "TAMPERED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "merchant tampered with evidence: merchant pty_d3a9c6a6efd6 revealed OFFER plaintext whose hash does not match the commitment it made earlier",
+    "seconds": 0.0036,
+    "tool_calls": 23,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 1e-05,
+    "verdict": "unverifiable"
+   },
+   "case": 31,
+   "case_id": "case_8339a89fce5f",
+   "claim": "not_as_described",
+   "fault": "wrong_item",
+   "max_amount": "55.00",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0031",
+   "overcharge_by": "3.00",
+   "qty": 1,
+   "sku": "DOGFOOD-30",
+   "strategy": "withhold",
+   "total": "30.00",
+   "trailproof": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 0.0035,
+    "tool_calls": 21,
+    "verdict": "unverifiable"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE",
+     "NOT_RECEIVED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: NOT_RECEIVED",
+    "seconds": 3e-05,
+    "verdict": "merchant_at_fault"
+   },
+   "case": 32,
+   "case_id": "case_eb5bf1b3bdc5",
+   "claim": "not_received",
+   "fault": "not_shipped",
+   "max_amount": "62.00",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0032",
+   "overcharge_by": "3.00",
+   "qty": 2,
+   "sku": "DOGFOOD-30",
+   "strategy": "honest",
+   "total": "60.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE",
+     "NOT_RECEIVED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: NOT_RECEIVED",
+    "seconds": 0.0038,
+    "tool_calls": 20,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 2e-05,
+    "verdict": "unverifiable"
+   },
+   "case": 33,
+   "case_id": "case_c044b134dcff",
+   "claim": "not_authorised",
+   "fault": "out_of_scope",
+   "max_amount": "87.00",
+   "oracle_blame": "buyer",
+   "order_id": "bench_0033",
+   "overcharge_by": "5.00",
+   "qty": 3,
+   "sku": "DOGFOOD-30",
+   "strategy": "withhold",
+   "total": "90.00",
+   "trailproof": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 0.0036,
+    "tool_calls": 19,
+    "verdict": "unverifiable"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "merchant",
+    "correct": false,
+    "findings": [
+     "DELIVERED_NE_OFFER",
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": true,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: DELIVERED_NE_OFFER",
+    "seconds": 3e-05,
+    "verdict": "merchant_at_fault"
+   },
+   "case": 34,
+   "case_id": "case_a3d6311a789e",
+   "claim": "not_authorised",
+   "fault": "friendly_fraud",
+   "max_amount": "82.00",
+   "oracle_blame": "buyer",
+   "order_id": "bench_0034",
+   "overcharge_by": "8.00",
+   "qty": 2,
+   "sku": "DOGFOOD-30",
+   "strategy": "lie",
+   "total": "60.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE",
+     "TAMPERED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "buyer side tampered with evidence: buyer_agent pty_ae1ef737ee23 revealed DELIVERY plaintext whose hash does not match the commitment it made earlier",
+    "seconds": 0.0038,
+    "tool_calls": 23,
+    "verdict": "buyer_at_fault"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "merchant",
+    "correct": false,
+    "findings": [
+     "DELIVERED_NE_OFFER",
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": true,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: DELIVERED_NE_OFFER",
+    "seconds": 3e-05,
+    "verdict": "merchant_at_fault"
+   },
+   "case": 35,
+   "case_id": "case_77bab7d5d1dd",
+   "claim": "not_as_described",
+   "fault": "baseless",
+   "max_amount": "21.50",
+   "oracle_blame": "none",
+   "order_id": "bench_0035",
+   "overcharge_by": "7.00",
+   "qty": 1,
+   "sku": "DOGFOOD-5KG",
+   "strategy": "lie",
+   "total": "21.50",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE",
+     "TAMPERED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "buyer side tampered with evidence: buyer_agent pty_ae1ef737ee23 revealed DELIVERY plaintext whose hash does not match the commitment it made earlier",
+    "seconds": 0.0038,
+    "tool_calls": 23,
+    "verdict": "buyer_at_fault"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "CHARGE_NE_OFFER",
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: CHARGE_NE_OFFER",
+    "seconds": 3e-05,
+    "verdict": "merchant_at_fault"
+   },
+   "case": 36,
+   "case_id": "case_1d5a0536162f",
+   "claim": "not_as_described",
+   "fault": "overcharge",
+   "max_amount": "85.00",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0036",
+   "overcharge_by": "5.00",
+   "qty": 2,
+   "sku": "DOGFOOD-30",
+   "strategy": "honest",
+   "total": "60.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "CHARGE_NE_OFFER",
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: CHARGE_NE_OFFER",
+    "seconds": 0.004,
+    "tool_calls": 23,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 1e-05,
+    "verdict": "unverifiable"
+   },
+   "case": 37,
+   "case_id": "case_c2d46cb4c9b7",
+   "claim": "not_as_described",
+   "fault": "wrong_item",
+   "max_amount": "133.00",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0037",
+   "overcharge_by": "4.00",
+   "qty": 2,
+   "sku": "CATTOY-SET",
+   "strategy": "withhold",
+   "total": "110.00",
+   "trailproof": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 0.0037,
+    "tool_calls": 21,
+    "verdict": "unverifiable"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE",
+     "NOT_RECEIVED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: NOT_RECEIVED",
+    "seconds": 3e-05,
+    "verdict": "merchant_at_fault"
+   },
+   "case": 38,
+   "case_id": "case_4ad995b6abe0",
+   "claim": "not_received",
+   "fault": "not_shipped",
+   "max_amount": "28.50",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0038",
+   "overcharge_by": "7.00",
+   "qty": 1,
+   "sku": "DOGFOOD-5KG",
+   "strategy": "honest",
+   "total": "21.50",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE",
+     "NOT_RECEIVED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: NOT_RECEIVED",
+    "seconds": 0.0033,
+    "tool_calls": 20,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_OUT_OF_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "the buyer agent ordered outside the user's mandate; the merchant delivered what it offered",
+    "seconds": 2e-05,
+    "verdict": "buyer_at_fault"
+   },
+   "case": 39,
+   "case_id": "case_283b1f9669a9",
+   "claim": "not_authorised",
+   "fault": "out_of_scope",
+   "max_amount": "24.90",
+   "oracle_blame": "buyer",
+   "order_id": "bench_0039",
+   "overcharge_by": "8.00",
+   "qty": 1,
+   "sku": "DOGFOOD-10KG",
+   "strategy": "honest",
+   "total": "36.90",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_OUT_OF_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "the buyer agent ordered outside the user's mandate; the merchant delivered what it offered",
+    "seconds": 0.004,
+    "tool_calls": 23,
+    "verdict": "buyer_at_fault"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 2e-05,
+    "verdict": "unverifiable"
+   },
+   "case": 40,
+   "case_id": "case_6a2189547cca",
+   "claim": "not_authorised",
+   "fault": "friendly_fraud",
+   "max_amount": "71.50",
+   "oracle_blame": "buyer",
+   "order_id": "bench_0040",
+   "overcharge_by": "12.00",
+   "qty": 3,
+   "sku": "DOGFOOD-5KG",
+   "strategy": "withhold",
+   "total": "64.50",
+   "trailproof": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 0.0046,
+    "tool_calls": 19,
+    "verdict": "unverifiable"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": false,
+    "blame": "none",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "no rule produced a conclusive finding",
+    "seconds": 2e-05,
+    "verdict": "ambiguous"
+   },
+   "case": 41,
+   "case_id": "case_afbcc3b6f278",
+   "claim": "not_as_described",
+   "fault": "baseless",
+   "max_amount": "37.50",
+   "oracle_blame": "none",
+   "order_id": "bench_0041",
+   "overcharge_by": "7.00",
+   "qty": 1,
+   "sku": "DOGFOOD-5KG",
+   "strategy": "honest",
+   "total": "21.50",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "none",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "no rule produced a conclusive finding",
+    "seconds": 0.0041,
+    "tool_calls": 23,
+    "verdict": "ambiguous"
+   },
+   "truth": "none"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "buyer",
+    "correct": false,
+    "findings": [
+     "MANDATE_OUT_OF_SCOPE"
+    ],
+    "honest_party_blamed": true,
+    "rationale": "the buyer agent ordered outside the user's mandate; the merchant delivered what it offered",
+    "seconds": 2e-05,
+    "verdict": "buyer_at_fault"
+   },
+   "case": 42,
+   "case_id": "case_699016ef82f3",
+   "claim": "not_as_described",
+   "fault": "overcharge",
+   "max_amount": "110.00",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0042",
+   "overcharge_by": "1.00",
+   "qty": 3,
+   "sku": "DOGFOOD-30",
+   "strategy": "lie",
+   "total": "90.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "TAMPERED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "merchant tampered with evidence: merchant pty_d3a9c6a6efd6 revealed OFFER plaintext whose hash does not match the commitment it made earlier",
+    "seconds": 0.0036,
+    "tool_calls": 23,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "DELIVERED_NE_OFFER",
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: DELIVERED_NE_OFFER; DELIVERED_NE_OFFER",
+    "seconds": 3e-05,
+    "verdict": "merchant_at_fault"
+   },
+   "case": 43,
+   "case_id": "case_2a631b0319b1",
+   "claim": "not_as_described",
+   "fault": "wrong_item",
+   "max_amount": "36.00",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0043",
+   "overcharge_by": "5.00",
+   "qty": 1,
+   "sku": "DOGFOOD-30",
+   "strategy": "honest",
+   "total": "30.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "DELIVERED_NE_OFFER",
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: DELIVERED_NE_OFFER; DELIVERED_NE_OFFER",
+    "seconds": 0.0037,
+    "tool_calls": 23,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "no rule produced a conclusive finding",
+    "seconds": 2e-05,
+    "verdict": "ambiguous"
+   },
+   "case": 44,
+   "case_id": "case_71615c5603f1",
+   "claim": "not_received",
+   "fault": "not_shipped",
+   "max_amount": "64.00",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0044",
+   "overcharge_by": "12.00",
+   "qty": 1,
+   "sku": "CATTOY-SET",
+   "strategy": "lie",
+   "total": "55.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE",
+     "NOT_RECEIVED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: NOT_RECEIVED",
+    "seconds": 0.0037,
+    "tool_calls": 20,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "DELIVERED_NE_OFFER",
+     "MANDATE_OUT_OF_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "both the merchant and the buyer agent deviated; needs human review",
+    "seconds": 3e-05,
+    "verdict": "ambiguous"
+   },
+   "case": 45,
+   "case_id": "case_1cee288d3423",
+   "claim": "not_authorised",
+   "fault": "out_of_scope",
+   "max_amount": "63.80",
+   "oracle_blame": "buyer",
+   "order_id": "bench_0045",
+   "overcharge_by": "3.00",
+   "qty": 2,
+   "sku": "DOGFOOD-10KG",
+   "strategy": "lie",
+   "total": "73.80",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_OUT_OF_SCOPE",
+     "TAMPERED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "buyer side tampered with evidence: buyer_agent pty_ae1ef737ee23 revealed DELIVERY plaintext whose hash does not match the commitment it made earlier",
+    "seconds": 0.004,
+    "tool_calls": 23,
+    "verdict": "buyer_at_fault"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 2e-05,
+    "verdict": "unverifiable"
+   },
+   "case": 46,
+   "case_id": "case_6230b3a849af",
+   "claim": "not_authorised",
+   "fault": "friendly_fraud",
+   "max_amount": "166.00",
+   "oracle_blame": "buyer",
+   "order_id": "bench_0046",
+   "overcharge_by": "4.00",
+   "qty": 3,
+   "sku": "CATTOY-SET",
+   "strategy": "withhold",
+   "total": "165.00",
+   "trailproof": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 0.0036,
+    "tool_calls": 19,
+    "verdict": "unverifiable"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": false,
+    "blame": "none",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "no rule produced a conclusive finding",
+    "seconds": 2e-05,
+    "verdict": "ambiguous"
+   },
+   "case": 47,
+   "case_id": "case_d036c50b3434",
+   "claim": "not_as_described",
+   "fault": "baseless",
+   "max_amount": "45.50",
+   "oracle_blame": "none",
+   "order_id": "bench_0047",
+   "overcharge_by": "7.00",
+   "qty": 1,
+   "sku": "DOGFOOD-5KG",
+   "strategy": "honest",
+   "total": "21.50",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "none",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "no rule produced a conclusive finding",
+    "seconds": 0.0037,
+    "tool_calls": 23,
+    "verdict": "ambiguous"
+   },
+   "truth": "none"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "CHARGE_NE_OFFER",
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: CHARGE_NE_OFFER",
+    "seconds": 3e-05,
+    "verdict": "merchant_at_fault"
+   },
+   "case": 48,
+   "case_id": "case_f1e86b28b9d9",
+   "claim": "not_as_described",
+   "fault": "overcharge",
+   "max_amount": "76.80",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0048",
+   "overcharge_by": "10.00",
+   "qty": 2,
+   "sku": "DOGFOOD-10KG",
+   "strategy": "honest",
+   "total": "73.80",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "CHARGE_NE_OFFER",
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: CHARGE_NE_OFFER",
+    "seconds": 0.0045,
+    "tool_calls": 23,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "no rule produced a conclusive finding",
+    "seconds": 3e-05,
+    "verdict": "ambiguous"
+   },
+   "case": 49,
+   "case_id": "case_9c3edacbecc3",
+   "claim": "not_as_described",
+   "fault": "wrong_item",
+   "max_amount": "70.50",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0049",
+   "overcharge_by": "2.00",
+   "qty": 3,
+   "sku": "DOGFOOD-5KG",
+   "strategy": "lie",
+   "total": "64.50",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "TAMPERED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "merchant tampered with evidence: merchant pty_d3a9c6a6efd6 revealed OFFER plaintext whose hash does not match the commitment it made earlier",
+    "seconds": 0.0055,
+    "tool_calls": 23,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "no rule produced a conclusive finding",
+    "seconds": 2e-05,
+    "verdict": "ambiguous"
+   },
+   "case": 50,
+   "case_id": "case_5e76194188e4",
+   "claim": "not_received",
+   "fault": "not_shipped",
+   "max_amount": "59.00",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0050",
+   "overcharge_by": "1.00",
+   "qty": 2,
+   "sku": "DOGFOOD-5KG",
+   "strategy": "lie",
+   "total": "43.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE",
+     "NOT_RECEIVED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: NOT_RECEIVED",
+    "seconds": 0.0034,
+    "tool_calls": 20,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "DELIVERED_NE_OFFER",
+     "MANDATE_OUT_OF_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "both the merchant and the buyer agent deviated; needs human review",
+    "seconds": 3e-05,
+    "verdict": "ambiguous"
+   },
+   "case": 51,
+   "case_id": "case_b9a9f23c5a0b",
+   "claim": "not_authorised",
+   "fault": "out_of_scope",
+   "max_amount": "76.00",
+   "oracle_blame": "buyer",
+   "order_id": "bench_0051",
+   "overcharge_by": "5.00",
+   "qty": 3,
+   "sku": "DOGFOOD-30",
+   "strategy": "lie",
+   "total": "90.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_OUT_OF_SCOPE",
+     "TAMPERED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "buyer side tampered with evidence: buyer_agent pty_ae1ef737ee23 revealed DELIVERY plaintext whose hash does not match the commitment it made earlier",
+    "seconds": 0.0037,
+    "tool_calls": 23,
+    "verdict": "buyer_at_fault"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "merchant",
+    "correct": false,
+    "findings": [
+     "DELIVERED_NE_OFFER",
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": true,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: DELIVERED_NE_OFFER",
+    "seconds": 5e-05,
+    "verdict": "merchant_at_fault"
+   },
+   "case": 52,
+   "case_id": "case_dcb8cd799bef",
+   "claim": "not_authorised",
+   "fault": "friendly_fraud",
+   "max_amount": "61.00",
+   "oracle_blame": "buyer",
+   "order_id": "bench_0052",
+   "overcharge_by": "10.00",
+   "qty": 1,
+   "sku": "CATTOY-SET",
+   "strategy": "lie",
+   "total": "55.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE",
+     "TAMPERED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "buyer side tampered with evidence: buyer_agent pty_ae1ef737ee23 revealed DELIVERY plaintext whose hash does not match the commitment it made earlier",
+    "seconds": 0.005,
+    "tool_calls": 23,
+    "verdict": "buyer_at_fault"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": false,
+    "blame": "none",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "no rule produced a conclusive finding",
+    "seconds": 2e-05,
+    "verdict": "ambiguous"
+   },
+   "case": 53,
+   "case_id": "case_2906e960be81",
+   "claim": "not_as_described",
+   "fault": "baseless",
+   "max_amount": "86.80",
+   "oracle_blame": "none",
+   "order_id": "bench_0053",
+   "overcharge_by": "5.00",
+   "qty": 2,
+   "sku": "DOGFOOD-10KG",
+   "strategy": "honest",
+   "total": "73.80",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "none",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "no rule produced a conclusive finding",
+    "seconds": 0.0049,
+    "tool_calls": 23,
+    "verdict": "ambiguous"
+   },
+   "truth": "none"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "buyer",
+    "correct": false,
+    "findings": [
+     "MANDATE_OUT_OF_SCOPE"
+    ],
+    "honest_party_blamed": true,
+    "rationale": "the buyer agent ordered outside the user's mandate; the merchant delivered what it offered",
+    "seconds": 2e-05,
+    "verdict": "buyer_at_fault"
+   },
+   "case": 54,
+   "case_id": "case_34f6ec7ac049",
+   "claim": "not_as_described",
+   "fault": "overcharge",
+   "max_amount": "127.00",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0054",
+   "overcharge_by": "11.00",
+   "qty": 2,
+   "sku": "CATTOY-SET",
+   "strategy": "lie",
+   "total": "110.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "TAMPERED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "merchant tampered with evidence: merchant pty_d3a9c6a6efd6 revealed OFFER plaintext whose hash does not match the commitment it made earlier",
+    "seconds": 0.0041,
+    "tool_calls": 23,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "DELIVERED_NE_OFFER",
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: DELIVERED_NE_OFFER; DELIVERED_NE_OFFER",
+    "seconds": 3e-05,
+    "verdict": "merchant_at_fault"
+   },
+   "case": 55,
+   "case_id": "case_acc72b17ebcb",
+   "claim": "not_as_described",
+   "fault": "wrong_item",
+   "max_amount": "71.50",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0055",
+   "overcharge_by": "12.00",
+   "qty": 3,
+   "sku": "DOGFOOD-5KG",
+   "strategy": "honest",
+   "total": "64.50",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "DELIVERED_NE_OFFER",
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: DELIVERED_NE_OFFER; DELIVERED_NE_OFFER",
+    "seconds": 0.0039,
+    "tool_calls": 23,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE",
+     "NOT_RECEIVED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: NOT_RECEIVED",
+    "seconds": 2e-05,
+    "verdict": "merchant_at_fault"
+   },
+   "case": 56,
+   "case_id": "case_a0a066acce26",
+   "claim": "not_received",
+   "fault": "not_shipped",
+   "max_amount": "59.00",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0056",
+   "overcharge_by": "3.00",
+   "qty": 1,
+   "sku": "CATTOY-SET",
+   "strategy": "honest",
+   "total": "55.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE",
+     "NOT_RECEIVED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: NOT_RECEIVED",
+    "seconds": 0.0033,
+    "tool_calls": 20,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "DELIVERED_NE_OFFER",
+     "MANDATE_OUT_OF_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "both the merchant and the buyer agent deviated; needs human review",
+    "seconds": 3e-05,
+    "verdict": "ambiguous"
+   },
+   "case": 57,
+   "case_id": "case_4630638a5d59",
+   "claim": "not_authorised",
+   "fault": "out_of_scope",
+   "max_amount": "60.80",
+   "oracle_blame": "buyer",
+   "order_id": "bench_0057",
+   "overcharge_by": "10.00",
+   "qty": 2,
+   "sku": "DOGFOOD-10KG",
+   "strategy": "lie",
+   "total": "73.80",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_OUT_OF_SCOPE",
+     "TAMPERED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "buyer side tampered with evidence: buyer_agent pty_ae1ef737ee23 revealed DELIVERY plaintext whose hash does not match the commitment it made earlier",
+    "seconds": 0.0039,
+    "tool_calls": 23,
+    "verdict": "buyer_at_fault"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "merchant",
+    "correct": false,
+    "findings": [
+     "DELIVERED_NE_OFFER",
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": true,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: DELIVERED_NE_OFFER",
+    "seconds": 3e-05,
+    "verdict": "merchant_at_fault"
+   },
+   "case": 58,
+   "case_id": "case_d909b2cdc74b",
+   "claim": "not_authorised",
+   "fault": "friendly_fraud",
+   "max_amount": "70.00",
+   "oracle_blame": "buyer",
+   "order_id": "bench_0058",
+   "overcharge_by": "2.00",
+   "qty": 2,
+   "sku": "DOGFOOD-30",
+   "strategy": "lie",
+   "total": "60.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE",
+     "TAMPERED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "buyer side tampered with evidence: buyer_agent pty_ae1ef737ee23 revealed DELIVERY plaintext whose hash does not match the commitment it made earlier",
+    "seconds": 0.0039,
+    "tool_calls": 23,
+    "verdict": "buyer_at_fault"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "merchant",
+    "correct": false,
+    "findings": [
+     "DELIVERED_NE_OFFER",
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": true,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: DELIVERED_NE_OFFER",
+    "seconds": 3e-05,
+    "verdict": "merchant_at_fault"
+   },
+   "case": 59,
+   "case_id": "case_635e5b7a5892",
+   "claim": "not_as_described",
+   "fault": "baseless",
+   "max_amount": "49.00",
+   "oracle_blame": "none",
+   "order_id": "bench_0059",
+   "overcharge_by": "3.00",
+   "qty": 1,
+   "sku": "DOGFOOD-30",
+   "strategy": "lie",
+   "total": "30.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE",
+     "TAMPERED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "buyer side tampered with evidence: buyer_agent pty_ae1ef737ee23 revealed DELIVERY plaintext whose hash does not match the commitment it made earlier",
+    "seconds": 0.0038,
+    "tool_calls": 23,
+    "verdict": "buyer_at_fault"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "buyer",
+    "correct": false,
+    "findings": [
+     "MANDATE_OUT_OF_SCOPE"
+    ],
+    "honest_party_blamed": true,
+    "rationale": "the buyer agent ordered outside the user's mandate; the merchant delivered what it offered",
+    "seconds": 2e-05,
+    "verdict": "buyer_at_fault"
+   },
+   "case": 60,
+   "case_id": "case_b01b52a8d585",
+   "claim": "not_as_described",
+   "fault": "overcharge",
+   "max_amount": "111.00",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0060",
+   "overcharge_by": "2.00",
+   "qty": 2,
+   "sku": "CATTOY-SET",
+   "strategy": "lie",
+   "total": "110.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "TAMPERED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "merchant tampered with evidence: merchant pty_d3a9c6a6efd6 revealed OFFER plaintext whose hash does not match the commitment it made earlier",
+    "seconds": 0.0038,
+    "tool_calls": 23,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "no rule produced a conclusive finding",
+    "seconds": 3e-05,
+    "verdict": "ambiguous"
+   },
+   "case": 61,
+   "case_id": "case_75477fce8e9d",
+   "claim": "not_as_described",
+   "fault": "wrong_item",
+   "max_amount": "25.50",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0061",
+   "overcharge_by": "2.00",
+   "qty": 1,
+   "sku": "DOGFOOD-5KG",
+   "strategy": "lie",
+   "total": "21.50",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "TAMPERED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "merchant tampered with evidence: merchant pty_d3a9c6a6efd6 revealed OFFER plaintext whose hash does not match the commitment it made earlier",
+    "seconds": 0.0044,
+    "tool_calls": 23,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "NOT_RECEIVED",
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 1e-05,
+    "verdict": "unverifiable"
+   },
+   "case": 62,
+   "case_id": "case_177780c9c261",
+   "claim": "not_received",
+   "fault": "not_shipped",
+   "max_amount": "39.50",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0062",
+   "overcharge_by": "4.00",
+   "qty": 1,
+   "sku": "DOGFOOD-5KG",
+   "strategy": "withhold",
+   "total": "21.50",
+   "trailproof": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "NOT_RECEIVED",
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 0.0032,
+    "tool_calls": 19,
+    "verdict": "unverifiable"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "DELIVERED_NE_OFFER",
+     "MANDATE_OUT_OF_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "both the merchant and the buyer agent deviated; needs human review",
+    "seconds": 3e-05,
+    "verdict": "ambiguous"
+   },
+   "case": 63,
+   "case_id": "case_6116271161b5",
+   "claim": "not_authorised",
+   "fault": "out_of_scope",
+   "max_amount": "104.00",
+   "oracle_blame": "buyer",
+   "order_id": "bench_0063",
+   "overcharge_by": "10.00",
+   "qty": 2,
+   "sku": "CATTOY-SET",
+   "strategy": "lie",
+   "total": "110.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_OUT_OF_SCOPE",
+     "TAMPERED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "buyer side tampered with evidence: buyer_agent pty_ae1ef737ee23 revealed DELIVERY plaintext whose hash does not match the commitment it made earlier",
+    "seconds": 0.004,
+    "tool_calls": 23,
+    "verdict": "buyer_at_fault"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "the user's signed mandate covers this order and the merchant delivered what it offered",
+    "seconds": 2e-05,
+    "verdict": "buyer_at_fault"
+   },
+   "case": 64,
+   "case_id": "case_011d6d24aff4",
+   "claim": "not_authorised",
+   "fault": "friendly_fraud",
+   "max_amount": "118.00",
+   "oracle_blame": "buyer",
+   "order_id": "bench_0064",
+   "overcharge_by": "1.00",
+   "qty": 2,
+   "sku": "CATTOY-SET",
+   "strategy": "honest",
+   "total": "110.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "the user's signed mandate covers this order and the merchant delivered what it offered",
+    "seconds": 0.0041,
+    "tool_calls": 23,
+    "verdict": "buyer_at_fault"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": false,
+    "blame": "none",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "no rule produced a conclusive finding",
+    "seconds": 2e-05,
+    "verdict": "ambiguous"
+   },
+   "case": 65,
+   "case_id": "case_323c511e9e0c",
+   "claim": "not_as_described",
+   "fault": "baseless",
+   "max_amount": "49.00",
+   "oracle_blame": "none",
+   "order_id": "bench_0065",
+   "overcharge_by": "2.00",
+   "qty": 1,
+   "sku": "DOGFOOD-30",
+   "strategy": "honest",
+   "total": "30.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "none",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "no rule produced a conclusive finding",
+    "seconds": 0.0043,
+    "tool_calls": 23,
+    "verdict": "ambiguous"
+   },
+   "truth": "none"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "CHARGE_NE_OFFER",
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: CHARGE_NE_OFFER",
+    "seconds": 3e-05,
+    "verdict": "merchant_at_fault"
+   },
+   "case": 66,
+   "case_id": "case_2bf67c402643",
+   "claim": "not_as_described",
+   "fault": "overcharge",
+   "max_amount": "46.50",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0066",
+   "overcharge_by": "4.00",
+   "qty": 1,
+   "sku": "DOGFOOD-5KG",
+   "strategy": "honest",
+   "total": "21.50",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "CHARGE_NE_OFFER",
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: CHARGE_NE_OFFER",
+    "seconds": 0.0042,
+    "tool_calls": 23,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "DELIVERED_NE_OFFER",
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: DELIVERED_NE_OFFER; DELIVERED_NE_OFFER",
+    "seconds": 3e-05,
+    "verdict": "merchant_at_fault"
+   },
+   "case": 67,
+   "case_id": "case_ed3f0926c5ce",
+   "claim": "not_as_described",
+   "fault": "wrong_item",
+   "max_amount": "123.70",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0067",
+   "overcharge_by": "2.00",
+   "qty": 3,
+   "sku": "DOGFOOD-10KG",
+   "strategy": "honest",
+   "total": "110.70",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "DELIVERED_NE_OFFER",
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: DELIVERED_NE_OFFER; DELIVERED_NE_OFFER",
+    "seconds": 0.004,
+    "tool_calls": 23,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE",
+     "NOT_RECEIVED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: NOT_RECEIVED",
+    "seconds": 2e-05,
+    "verdict": "merchant_at_fault"
+   },
+   "case": 68,
+   "case_id": "case_ffc899cf6a59",
+   "claim": "not_received",
+   "fault": "not_shipped",
+   "max_amount": "42.50",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0068",
+   "overcharge_by": "3.00",
+   "qty": 1,
+   "sku": "DOGFOOD-5KG",
+   "strategy": "honest",
+   "total": "21.50",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE",
+     "NOT_RECEIVED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: NOT_RECEIVED",
+    "seconds": 0.0036,
+    "tool_calls": 20,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "DELIVERED_NE_OFFER",
+     "MANDATE_OUT_OF_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "both the merchant and the buyer agent deviated; needs human review",
+    "seconds": 6e-05,
+    "verdict": "ambiguous"
+   },
+   "case": 69,
+   "case_id": "case_699fc7668250",
+   "claim": "not_authorised",
+   "fault": "out_of_scope",
+   "max_amount": "95.00",
+   "oracle_blame": "buyer",
+   "order_id": "bench_0069",
+   "overcharge_by": "9.00",
+   "qty": 2,
+   "sku": "CATTOY-SET",
+   "strategy": "lie",
+   "total": "110.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_OUT_OF_SCOPE",
+     "TAMPERED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "buyer side tampered with evidence: buyer_agent pty_ae1ef737ee23 revealed DELIVERY plaintext whose hash does not match the commitment it made earlier",
+    "seconds": 0.004,
+    "tool_calls": 23,
+    "verdict": "buyer_at_fault"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 2e-05,
+    "verdict": "unverifiable"
+   },
+   "case": 70,
+   "case_id": "case_f7f69f747b23",
+   "claim": "not_authorised",
+   "fault": "friendly_fraud",
+   "max_amount": "98.00",
+   "oracle_blame": "buyer",
+   "order_id": "bench_0070",
+   "overcharge_by": "8.00",
+   "qty": 3,
+   "sku": "DOGFOOD-30",
+   "strategy": "withhold",
+   "total": "90.00",
+   "trailproof": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 0.0043,
+    "tool_calls": 19,
+    "verdict": "unverifiable"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "merchant",
+    "correct": false,
+    "findings": [
+     "DELIVERED_NE_OFFER",
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": true,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: DELIVERED_NE_OFFER",
+    "seconds": 4e-05,
+    "verdict": "merchant_at_fault"
+   },
+   "case": 71,
+   "case_id": "case_16087eee1daa",
+   "claim": "not_as_described",
+   "fault": "baseless",
+   "max_amount": "36.00",
+   "oracle_blame": "none",
+   "order_id": "bench_0071",
+   "overcharge_by": "1.00",
+   "qty": 1,
+   "sku": "DOGFOOD-30",
+   "strategy": "lie",
+   "total": "30.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE",
+     "TAMPERED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "buyer side tampered with evidence: buyer_agent pty_ae1ef737ee23 revealed DELIVERY plaintext whose hash does not match the commitment it made earlier",
+    "seconds": 0.0042,
+    "tool_calls": 23,
+    "verdict": "buyer_at_fault"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "buyer",
+    "correct": false,
+    "findings": [
+     "MANDATE_OUT_OF_SCOPE"
+    ],
+    "honest_party_blamed": true,
+    "rationale": "the buyer agent ordered outside the user's mandate; the merchant delivered what it offered",
+    "seconds": 3e-05,
+    "verdict": "buyer_at_fault"
+   },
+   "case": 72,
+   "case_id": "case_e49c328ba065",
+   "claim": "not_as_described",
+   "fault": "overcharge",
+   "max_amount": "80.00",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0072",
+   "overcharge_by": "12.00",
+   "qty": 1,
+   "sku": "CATTOY-SET",
+   "strategy": "lie",
+   "total": "55.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "TAMPERED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "merchant tampered with evidence: merchant pty_d3a9c6a6efd6 revealed OFFER plaintext whose hash does not match the commitment it made earlier",
+    "seconds": 0.0042,
+    "tool_calls": 23,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "no rule produced a conclusive finding",
+    "seconds": 6e-05,
+    "verdict": "ambiguous"
+   },
+   "case": 73,
+   "case_id": "case_e682e57cc476",
+   "claim": "not_as_described",
+   "fault": "wrong_item",
+   "max_amount": "72.00",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0073",
+   "overcharge_by": "7.00",
+   "qty": 2,
+   "sku": "DOGFOOD-30",
+   "strategy": "lie",
+   "total": "60.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "TAMPERED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "merchant tampered with evidence: merchant pty_d3a9c6a6efd6 revealed OFFER plaintext whose hash does not match the commitment it made earlier",
+    "seconds": 0.0067,
+    "tool_calls": 23,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "NOT_RECEIVED",
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 1e-05,
+    "verdict": "unverifiable"
+   },
+   "case": 74,
+   "case_id": "case_4d989904646f",
+   "claim": "not_received",
+   "fault": "not_shipped",
+   "max_amount": "65.00",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0074",
+   "overcharge_by": "8.00",
+   "qty": 1,
+   "sku": "CATTOY-SET",
+   "strategy": "withhold",
+   "total": "55.00",
+   "trailproof": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "NOT_RECEIVED",
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 0.0041,
+    "tool_calls": 19,
+    "verdict": "unverifiable"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 2e-05,
+    "verdict": "unverifiable"
+   },
+   "case": 75,
+   "case_id": "case_de3a4d6772d5",
+   "claim": "not_authorised",
+   "fault": "out_of_scope",
+   "max_amount": "106.00",
+   "oracle_blame": "buyer",
+   "order_id": "bench_0075",
+   "overcharge_by": "9.00",
+   "qty": 2,
+   "sku": "CATTOY-SET",
+   "strategy": "withhold",
+   "total": "110.00",
+   "trailproof": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 0.0038,
+    "tool_calls": 19,
+    "verdict": "unverifiable"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "merchant",
+    "correct": false,
+    "findings": [
+     "DELIVERED_NE_OFFER",
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": true,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: DELIVERED_NE_OFFER",
+    "seconds": 3e-05,
+    "verdict": "merchant_at_fault"
+   },
+   "case": 76,
+   "case_id": "case_593fa9cf6cfe",
+   "claim": "not_authorised",
+   "fault": "friendly_fraud",
+   "max_amount": "75.50",
+   "oracle_blame": "buyer",
+   "order_id": "bench_0076",
+   "overcharge_by": "3.00",
+   "qty": 3,
+   "sku": "DOGFOOD-5KG",
+   "strategy": "lie",
+   "total": "64.50",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE",
+     "TAMPERED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "buyer side tampered with evidence: buyer_agent pty_ae1ef737ee23 revealed DELIVERY plaintext whose hash does not match the commitment it made earlier",
+    "seconds": 0.0045,
+    "tool_calls": 23,
+    "verdict": "buyer_at_fault"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": false,
+    "blame": "none",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "no rule produced a conclusive finding",
+    "seconds": 2e-05,
+    "verdict": "ambiguous"
+   },
+   "case": 77,
+   "case_id": "case_99fdbe4b3bcf",
+   "claim": "not_as_described",
+   "fault": "baseless",
+   "max_amount": "79.80",
+   "oracle_blame": "none",
+   "order_id": "bench_0077",
+   "overcharge_by": "6.00",
+   "qty": 2,
+   "sku": "DOGFOOD-10KG",
+   "strategy": "honest",
+   "total": "73.80",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "none",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "no rule produced a conclusive finding",
+    "seconds": 0.0053,
+    "tool_calls": 23,
+    "verdict": "ambiguous"
+   },
+   "truth": "none"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "buyer",
+    "correct": false,
+    "findings": [
+     "MANDATE_OUT_OF_SCOPE"
+    ],
+    "honest_party_blamed": true,
+    "rationale": "the buyer agent ordered outside the user's mandate; the merchant delivered what it offered",
+    "seconds": 3e-05,
+    "verdict": "buyer_at_fault"
+   },
+   "case": 78,
+   "case_id": "case_31999255152f",
+   "claim": "not_as_described",
+   "fault": "overcharge",
+   "max_amount": "112.00",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0078",
+   "overcharge_by": "2.00",
+   "qty": 2,
+   "sku": "CATTOY-SET",
+   "strategy": "lie",
+   "total": "110.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "TAMPERED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "merchant tampered with evidence: merchant pty_d3a9c6a6efd6 revealed OFFER plaintext whose hash does not match the commitment it made earlier",
+    "seconds": 0.0045,
+    "tool_calls": 23,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "no rule produced a conclusive finding",
+    "seconds": 3e-05,
+    "verdict": "ambiguous"
+   },
+   "case": 79,
+   "case_id": "case_2222424e1c36",
+   "claim": "not_as_described",
+   "fault": "wrong_item",
+   "max_amount": "42.00",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0079",
+   "overcharge_by": "1.00",
+   "qty": 1,
+   "sku": "DOGFOOD-30",
+   "strategy": "lie",
+   "total": "30.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "TAMPERED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "merchant tampered with evidence: merchant pty_d3a9c6a6efd6 revealed OFFER plaintext whose hash does not match the commitment it made earlier",
+    "seconds": 0.004,
+    "tool_calls": 23,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "NOT_RECEIVED",
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 3e-05,
+    "verdict": "unverifiable"
+   },
+   "case": 80,
+   "case_id": "case_f57f60717982",
+   "claim": "not_received",
+   "fault": "not_shipped",
+   "max_amount": "40.00",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0080",
+   "overcharge_by": "5.00",
+   "qty": 1,
+   "sku": "DOGFOOD-30",
+   "strategy": "withhold",
+   "total": "30.00",
+   "trailproof": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "NOT_RECEIVED",
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 0.0043,
+    "tool_calls": 19,
+    "verdict": "unverifiable"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 2e-05,
+    "verdict": "unverifiable"
+   },
+   "case": 81,
+   "case_id": "case_015b5283a570",
+   "claim": "not_authorised",
+   "fault": "out_of_scope",
+   "max_amount": "71.80",
+   "oracle_blame": "buyer",
+   "order_id": "bench_0081",
+   "overcharge_by": "10.00",
+   "qty": 2,
+   "sku": "DOGFOOD-10KG",
+   "strategy": "withhold",
+   "total": "73.80",
+   "trailproof": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 0.0044,
+    "tool_calls": 19,
+    "verdict": "unverifiable"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "the user's signed mandate covers this order and the merchant delivered what it offered",
+    "seconds": 3e-05,
+    "verdict": "buyer_at_fault"
+   },
+   "case": 82,
+   "case_id": "case_42174fa8dc5d",
+   "claim": "not_authorised",
+   "fault": "friendly_fraud",
+   "max_amount": "62.00",
+   "oracle_blame": "buyer",
+   "order_id": "bench_0082",
+   "overcharge_by": "4.00",
+   "qty": 1,
+   "sku": "CATTOY-SET",
+   "strategy": "honest",
+   "total": "55.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "the user's signed mandate covers this order and the merchant delivered what it offered",
+    "seconds": 0.0048,
+    "tool_calls": 23,
+    "verdict": "buyer_at_fault"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": false,
+    "blame": "none",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "no rule produced a conclusive finding",
+    "seconds": 2e-05,
+    "verdict": "ambiguous"
+   },
+   "case": 83,
+   "case_id": "case_3d71405557b5",
+   "claim": "not_as_described",
+   "fault": "baseless",
+   "max_amount": "29.50",
+   "oracle_blame": "none",
+   "order_id": "bench_0083",
+   "overcharge_by": "12.00",
+   "qty": 1,
+   "sku": "DOGFOOD-5KG",
+   "strategy": "honest",
+   "total": "21.50",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "none",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "no rule produced a conclusive finding",
+    "seconds": 0.0043,
+    "tool_calls": 23,
+    "verdict": "ambiguous"
+   },
+   "truth": "none"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "CHARGE_NE_OFFER",
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: CHARGE_NE_OFFER",
+    "seconds": 3e-05,
+    "verdict": "merchant_at_fault"
+   },
+   "case": 84,
+   "case_id": "case_0959eeda573a",
+   "claim": "not_as_described",
+   "fault": "overcharge",
+   "max_amount": "75.00",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0084",
+   "overcharge_by": "5.00",
+   "qty": 1,
+   "sku": "CATTOY-SET",
+   "strategy": "honest",
+   "total": "55.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "CHARGE_NE_OFFER",
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: CHARGE_NE_OFFER",
+    "seconds": 0.0053,
+    "tool_calls": 23,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "DELIVERED_NE_OFFER",
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: DELIVERED_NE_OFFER; DELIVERED_NE_OFFER",
+    "seconds": 3e-05,
+    "verdict": "merchant_at_fault"
+   },
+   "case": 85,
+   "case_id": "case_899fb2d05246",
+   "claim": "not_as_described",
+   "fault": "wrong_item",
+   "max_amount": "75.00",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0085",
+   "overcharge_by": "2.00",
+   "qty": 2,
+   "sku": "DOGFOOD-30",
+   "strategy": "honest",
+   "total": "60.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "DELIVERED_NE_OFFER",
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: DELIVERED_NE_OFFER; DELIVERED_NE_OFFER",
+    "seconds": 0.0043,
+    "tool_calls": 23,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "NOT_RECEIVED",
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 1e-05,
+    "verdict": "unverifiable"
+   },
+   "case": 86,
+   "case_id": "case_c3e1f5469bf5",
+   "claim": "not_received",
+   "fault": "not_shipped",
+   "max_amount": "46.00",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0086",
+   "overcharge_by": "3.00",
+   "qty": 1,
+   "sku": "DOGFOOD-30",
+   "strategy": "withhold",
+   "total": "30.00",
+   "trailproof": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "NOT_RECEIVED",
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 0.0035,
+    "tool_calls": 19,
+    "verdict": "unverifiable"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "DELIVERED_NE_OFFER",
+     "MANDATE_OUT_OF_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "both the merchant and the buyer agent deviated; needs human review",
+    "seconds": 4e-05,
+    "verdict": "ambiguous"
+   },
+   "case": 87,
+   "case_id": "case_e17969b1a823",
+   "claim": "not_authorised",
+   "fault": "out_of_scope",
+   "max_amount": "33.90",
+   "oracle_blame": "buyer",
+   "order_id": "bench_0087",
+   "overcharge_by": "5.00",
+   "qty": 1,
+   "sku": "DOGFOOD-10KG",
+   "strategy": "lie",
+   "total": "36.90",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_OUT_OF_SCOPE",
+     "TAMPERED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "buyer side tampered with evidence: buyer_agent pty_ae1ef737ee23 revealed DELIVERY plaintext whose hash does not match the commitment it made earlier",
+    "seconds": 0.0044,
+    "tool_calls": 23,
+    "verdict": "buyer_at_fault"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 2e-05,
+    "verdict": "unverifiable"
+   },
+   "case": 88,
+   "case_id": "case_9eb1a391d99c",
+   "claim": "not_authorised",
+   "fault": "friendly_fraud",
+   "max_amount": "181.00",
+   "oracle_blame": "buyer",
+   "order_id": "bench_0088",
+   "overcharge_by": "5.00",
+   "qty": 3,
+   "sku": "CATTOY-SET",
+   "strategy": "withhold",
+   "total": "165.00",
+   "trailproof": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 0.0063,
+    "tool_calls": 19,
+    "verdict": "unverifiable"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": false,
+    "blame": "none",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "no rule produced a conclusive finding",
+    "seconds": 2e-05,
+    "verdict": "ambiguous"
+   },
+   "case": 89,
+   "case_id": "case_26cde239309d",
+   "claim": "not_as_described",
+   "fault": "baseless",
+   "max_amount": "40.90",
+   "oracle_blame": "none",
+   "order_id": "bench_0089",
+   "overcharge_by": "6.00",
+   "qty": 1,
+   "sku": "DOGFOOD-10KG",
+   "strategy": "honest",
+   "total": "36.90",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "none",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "no rule produced a conclusive finding",
+    "seconds": 0.0045,
+    "tool_calls": 23,
+    "verdict": "ambiguous"
+   },
+   "truth": "none"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "buyer",
+    "correct": false,
+    "findings": [
+     "MANDATE_OUT_OF_SCOPE"
+    ],
+    "honest_party_blamed": true,
+    "rationale": "the buyer agent ordered outside the user's mandate; the merchant delivered what it offered",
+    "seconds": 3e-05,
+    "verdict": "buyer_at_fault"
+   },
+   "case": 90,
+   "case_id": "case_00522c6d154d",
+   "claim": "not_as_described",
+   "fault": "overcharge",
+   "max_amount": "45.90",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0090",
+   "overcharge_by": "9.00",
+   "qty": 1,
+   "sku": "DOGFOOD-10KG",
+   "strategy": "lie",
+   "total": "36.90",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "TAMPERED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "merchant tampered with evidence: merchant pty_d3a9c6a6efd6 revealed OFFER plaintext whose hash does not match the commitment it made earlier",
+    "seconds": 0.0043,
+    "tool_calls": 23,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 1e-05,
+    "verdict": "unverifiable"
+   },
+   "case": 91,
+   "case_id": "case_c6e0827db3eb",
+   "claim": "not_as_described",
+   "fault": "wrong_item",
+   "max_amount": "58.90",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0091",
+   "overcharge_by": "4.00",
+   "qty": 1,
+   "sku": "DOGFOOD-10KG",
+   "strategy": "withhold",
+   "total": "36.90",
+   "trailproof": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 0.0045,
+    "tool_calls": 21,
+    "verdict": "unverifiable"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "no rule produced a conclusive finding",
+    "seconds": 2e-05,
+    "verdict": "ambiguous"
+   },
+   "case": 92,
+   "case_id": "case_ad9c9a8c8063",
+   "claim": "not_received",
+   "fault": "not_shipped",
+   "max_amount": "51.00",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0092",
+   "overcharge_by": "7.00",
+   "qty": 1,
+   "sku": "DOGFOOD-30",
+   "strategy": "lie",
+   "total": "30.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE",
+     "NOT_RECEIVED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: NOT_RECEIVED",
+    "seconds": 0.0035,
+    "tool_calls": 20,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 2e-05,
+    "verdict": "unverifiable"
+   },
+   "case": 93,
+   "case_id": "case_8ffbe9a529d1",
+   "claim": "not_authorised",
+   "fault": "out_of_scope",
+   "max_amount": "82.00",
+   "oracle_blame": "buyer",
+   "order_id": "bench_0093",
+   "overcharge_by": "8.00",
+   "qty": 3,
+   "sku": "DOGFOOD-30",
+   "strategy": "withhold",
+   "total": "90.00",
+   "trailproof": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 0.0036,
+    "tool_calls": 19,
+    "verdict": "unverifiable"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "the user's signed mandate covers this order and the merchant delivered what it offered",
+    "seconds": 2e-05,
+    "verdict": "buyer_at_fault"
+   },
+   "case": 94,
+   "case_id": "case_d4ac806f8238",
+   "claim": "not_authorised",
+   "fault": "friendly_fraud",
+   "max_amount": "120.00",
+   "oracle_blame": "buyer",
+   "order_id": "bench_0094",
+   "overcharge_by": "5.00",
+   "qty": 2,
+   "sku": "CATTOY-SET",
+   "strategy": "honest",
+   "total": "110.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "the user's signed mandate covers this order and the merchant delivered what it offered",
+    "seconds": 0.004,
+    "tool_calls": 23,
+    "verdict": "buyer_at_fault"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "merchant",
+    "correct": false,
+    "findings": [
+     "DELIVERED_NE_OFFER",
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": true,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: DELIVERED_NE_OFFER",
+    "seconds": 5e-05,
+    "verdict": "merchant_at_fault"
+   },
+   "case": 95,
+   "case_id": "case_f9cf2337f639",
+   "claim": "not_as_described",
+   "fault": "baseless",
+   "max_amount": "46.50",
+   "oracle_blame": "none",
+   "order_id": "bench_0095",
+   "overcharge_by": "10.00",
+   "qty": 1,
+   "sku": "DOGFOOD-5KG",
+   "strategy": "lie",
+   "total": "21.50",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE",
+     "TAMPERED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "buyer side tampered with evidence: buyer_agent pty_ae1ef737ee23 revealed DELIVERY plaintext whose hash does not match the commitment it made earlier",
+    "seconds": 0.0051,
+    "tool_calls": 23,
+    "verdict": "buyer_at_fault"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "buyer",
+    "correct": false,
+    "findings": [
+     "MANDATE_OUT_OF_SCOPE"
+    ],
+    "honest_party_blamed": true,
+    "rationale": "the buyer agent ordered outside the user's mandate; the merchant delivered what it offered",
+    "seconds": 3e-05,
+    "verdict": "buyer_at_fault"
+   },
+   "case": 96,
+   "case_id": "case_3648e9daaf48",
+   "claim": "not_as_described",
+   "fault": "overcharge",
+   "max_amount": "77.00",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0096",
+   "overcharge_by": "10.00",
+   "qty": 1,
+   "sku": "CATTOY-SET",
+   "strategy": "lie",
+   "total": "55.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "TAMPERED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "merchant tampered with evidence: merchant pty_d3a9c6a6efd6 revealed OFFER plaintext whose hash does not match the commitment it made earlier",
+    "seconds": 0.0044,
+    "tool_calls": 23,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "DELIVERED_NE_OFFER",
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: DELIVERED_NE_OFFER; DELIVERED_NE_OFFER",
+    "seconds": 3e-05,
+    "verdict": "merchant_at_fault"
+   },
+   "case": 97,
+   "case_id": "case_a8651d3e21a9",
+   "claim": "not_as_described",
+   "fault": "wrong_item",
+   "max_amount": "114.70",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0097",
+   "overcharge_by": "5.00",
+   "qty": 3,
+   "sku": "DOGFOOD-10KG",
+   "strategy": "honest",
+   "total": "110.70",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "DELIVERED_NE_OFFER",
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: DELIVERED_NE_OFFER; DELIVERED_NE_OFFER",
+    "seconds": 0.0042,
+    "tool_calls": 23,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "no rule produced a conclusive finding",
+    "seconds": 2e-05,
+    "verdict": "ambiguous"
+   },
+   "case": 98,
+   "case_id": "case_f20e6fb379e3",
+   "claim": "not_received",
+   "fault": "not_shipped",
+   "max_amount": "78.00",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0098",
+   "overcharge_by": "3.00",
+   "qty": 2,
+   "sku": "DOGFOOD-30",
+   "strategy": "lie",
+   "total": "60.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE",
+     "NOT_RECEIVED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: NOT_RECEIVED",
+    "seconds": 0.0035,
+    "tool_calls": 20,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_OUT_OF_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "the buyer agent ordered outside the user's mandate; the merchant delivered what it offered",
+    "seconds": 3e-05,
+    "verdict": "buyer_at_fault"
+   },
+   "case": 99,
+   "case_id": "case_4a6364a7e8e2",
+   "claim": "not_authorised",
+   "fault": "out_of_scope",
+   "max_amount": "47.00",
+   "oracle_blame": "buyer",
+   "order_id": "bench_0099",
+   "overcharge_by": "3.00",
+   "qty": 1,
+   "sku": "CATTOY-SET",
+   "strategy": "honest",
+   "total": "55.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_OUT_OF_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "the buyer agent ordered outside the user's mandate; the merchant delivered what it offered",
+    "seconds": 0.0042,
+    "tool_calls": 23,
+    "verdict": "buyer_at_fault"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "merchant",
+    "correct": false,
+    "findings": [
+     "DELIVERED_NE_OFFER",
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": true,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: DELIVERED_NE_OFFER",
+    "seconds": 3e-05,
+    "verdict": "merchant_at_fault"
+   },
+   "case": 100,
+   "case_id": "case_73b88b14533d",
+   "claim": "not_authorised",
+   "fault": "friendly_fraud",
+   "max_amount": "110.00",
+   "oracle_blame": "buyer",
+   "order_id": "bench_0100",
+   "overcharge_by": "11.00",
+   "qty": 3,
+   "sku": "DOGFOOD-30",
+   "strategy": "lie",
+   "total": "90.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE",
+     "TAMPERED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "buyer side tampered with evidence: buyer_agent pty_ae1ef737ee23 revealed DELIVERY plaintext whose hash does not match the commitment it made earlier",
+    "seconds": 0.0041,
+    "tool_calls": 23,
+    "verdict": "buyer_at_fault"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "merchant",
+    "correct": false,
+    "findings": [
+     "DELIVERED_NE_OFFER",
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": true,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: DELIVERED_NE_OFFER",
+    "seconds": 3e-05,
+    "verdict": "merchant_at_fault"
+   },
+   "case": 101,
+   "case_id": "case_e348fbe9524e",
+   "claim": "not_as_described",
+   "fault": "baseless",
+   "max_amount": "46.90",
+   "oracle_blame": "none",
+   "order_id": "bench_0101",
+   "overcharge_by": "11.00",
+   "qty": 1,
+   "sku": "DOGFOOD-10KG",
+   "strategy": "lie",
+   "total": "36.90",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE",
+     "TAMPERED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "buyer side tampered with evidence: buyer_agent pty_ae1ef737ee23 revealed DELIVERY plaintext whose hash does not match the commitment it made earlier",
+    "seconds": 0.0039,
+    "tool_calls": 23,
+    "verdict": "buyer_at_fault"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "buyer",
+    "correct": false,
+    "findings": [
+     "MANDATE_OUT_OF_SCOPE"
+    ],
+    "honest_party_blamed": true,
+    "rationale": "the buyer agent ordered outside the user's mandate; the merchant delivered what it offered",
+    "seconds": 2e-05,
+    "verdict": "buyer_at_fault"
+   },
+   "case": 102,
+   "case_id": "case_5e9774d33044",
+   "claim": "not_as_described",
+   "fault": "overcharge",
+   "max_amount": "43.50",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0102",
+   "overcharge_by": "6.00",
+   "qty": 1,
+   "sku": "DOGFOOD-5KG",
+   "strategy": "lie",
+   "total": "21.50",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "TAMPERED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "merchant tampered with evidence: merchant pty_d3a9c6a6efd6 revealed OFFER plaintext whose hash does not match the commitment it made earlier",
+    "seconds": 0.0039,
+    "tool_calls": 23,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "DELIVERED_NE_OFFER",
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: DELIVERED_NE_OFFER; DELIVERED_NE_OFFER",
+    "seconds": 3e-05,
+    "verdict": "merchant_at_fault"
+   },
+   "case": 103,
+   "case_id": "case_fc3b07fce6d3",
+   "claim": "not_as_described",
+   "fault": "wrong_item",
+   "max_amount": "97.00",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0103",
+   "overcharge_by": "2.00",
+   "qty": 3,
+   "sku": "DOGFOOD-30",
+   "strategy": "honest",
+   "total": "90.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "DELIVERED_NE_OFFER",
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: DELIVERED_NE_OFFER; DELIVERED_NE_OFFER",
+    "seconds": 0.0046,
+    "tool_calls": 23,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE",
+     "NOT_RECEIVED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: NOT_RECEIVED",
+    "seconds": 3e-05,
+    "verdict": "merchant_at_fault"
+   },
+   "case": 104,
+   "case_id": "case_858cab6c3e41",
+   "claim": "not_received",
+   "fault": "not_shipped",
+   "max_amount": "46.00",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0104",
+   "overcharge_by": "5.00",
+   "qty": 1,
+   "sku": "DOGFOOD-30",
+   "strategy": "honest",
+   "total": "30.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE",
+     "NOT_RECEIVED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: NOT_RECEIVED",
+    "seconds": 0.0035,
+    "tool_calls": 20,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 2e-05,
+    "verdict": "unverifiable"
+   },
+   "case": 105,
+   "case_id": "case_f4e0a7c13f45",
+   "claim": "not_authorised",
+   "fault": "out_of_scope",
+   "max_amount": "85.00",
+   "oracle_blame": "buyer",
+   "order_id": "bench_0105",
+   "overcharge_by": "6.00",
+   "qty": 3,
+   "sku": "DOGFOOD-30",
+   "strategy": "withhold",
+   "total": "90.00",
+   "trailproof": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 0.0035,
+    "tool_calls": 19,
+    "verdict": "unverifiable"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 2e-05,
+    "verdict": "unverifiable"
+   },
+   "case": 106,
+   "case_id": "case_d524e91f8e1b",
+   "claim": "not_authorised",
+   "fault": "friendly_fraud",
+   "max_amount": "132.70",
+   "oracle_blame": "buyer",
+   "order_id": "bench_0106",
+   "overcharge_by": "8.00",
+   "qty": 3,
+   "sku": "DOGFOOD-10KG",
+   "strategy": "withhold",
+   "total": "110.70",
+   "trailproof": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 0.0043,
+    "tool_calls": 19,
+    "verdict": "unverifiable"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "merchant",
+    "correct": false,
+    "findings": [
+     "DELIVERED_NE_OFFER",
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": true,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: DELIVERED_NE_OFFER",
+    "seconds": 3e-05,
+    "verdict": "merchant_at_fault"
+   },
+   "case": 107,
+   "case_id": "case_b0ead180a793",
+   "claim": "not_as_described",
+   "fault": "baseless",
+   "max_amount": "74.00",
+   "oracle_blame": "none",
+   "order_id": "bench_0107",
+   "overcharge_by": "3.00",
+   "qty": 1,
+   "sku": "CATTOY-SET",
+   "strategy": "lie",
+   "total": "55.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE",
+     "TAMPERED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "buyer side tampered with evidence: buyer_agent pty_ae1ef737ee23 revealed DELIVERY plaintext whose hash does not match the commitment it made earlier",
+    "seconds": 0.0041,
+    "tool_calls": 23,
+    "verdict": "buyer_at_fault"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "CHARGE_NE_OFFER",
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: CHARGE_NE_OFFER",
+    "seconds": 3e-05,
+    "verdict": "merchant_at_fault"
+   },
+   "case": 108,
+   "case_id": "case_660e364890c0",
+   "claim": "not_as_described",
+   "fault": "overcharge",
+   "max_amount": "86.80",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0108",
+   "overcharge_by": "10.00",
+   "qty": 2,
+   "sku": "DOGFOOD-10KG",
+   "strategy": "honest",
+   "total": "73.80",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "CHARGE_NE_OFFER",
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: CHARGE_NE_OFFER",
+    "seconds": 0.004,
+    "tool_calls": 23,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "no rule produced a conclusive finding",
+    "seconds": 2e-05,
+    "verdict": "ambiguous"
+   },
+   "case": 109,
+   "case_id": "case_c304f610202d",
+   "claim": "not_as_described",
+   "fault": "wrong_item",
+   "max_amount": "131.00",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0109",
+   "overcharge_by": "12.00",
+   "qty": 2,
+   "sku": "CATTOY-SET",
+   "strategy": "lie",
+   "total": "110.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "TAMPERED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "merchant tampered with evidence: merchant pty_d3a9c6a6efd6 revealed OFFER plaintext whose hash does not match the commitment it made earlier",
+    "seconds": 0.0038,
+    "tool_calls": 23,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE",
+     "NOT_RECEIVED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: NOT_RECEIVED",
+    "seconds": 2e-05,
+    "verdict": "merchant_at_fault"
+   },
+   "case": 110,
+   "case_id": "case_511988220aa2",
+   "claim": "not_received",
+   "fault": "not_shipped",
+   "max_amount": "76.00",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0110",
+   "overcharge_by": "9.00",
+   "qty": 2,
+   "sku": "DOGFOOD-30",
+   "strategy": "honest",
+   "total": "60.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE",
+     "NOT_RECEIVED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: NOT_RECEIVED",
+    "seconds": 0.0034,
+    "tool_calls": 20,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "DELIVERED_NE_OFFER",
+     "MANDATE_OUT_OF_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "both the merchant and the buyer agent deviated; needs human review",
+    "seconds": 3e-05,
+    "verdict": "ambiguous"
+   },
+   "case": 111,
+   "case_id": "case_d4cbbbc5166d",
+   "claim": "not_authorised",
+   "fault": "out_of_scope",
+   "max_amount": "163.00",
+   "oracle_blame": "buyer",
+   "order_id": "bench_0111",
+   "overcharge_by": "11.00",
+   "qty": 3,
+   "sku": "CATTOY-SET",
+   "strategy": "lie",
+   "total": "165.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_OUT_OF_SCOPE",
+     "TAMPERED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "buyer side tampered with evidence: buyer_agent pty_ae1ef737ee23 revealed DELIVERY plaintext whose hash does not match the commitment it made earlier",
+    "seconds": 0.004,
+    "tool_calls": 23,
+    "verdict": "buyer_at_fault"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "the user's signed mandate covers this order and the merchant delivered what it offered",
+    "seconds": 2e-05,
+    "verdict": "buyer_at_fault"
+   },
+   "case": 112,
+   "case_id": "case_56916886f20e",
+   "claim": "not_authorised",
+   "fault": "friendly_fraud",
+   "max_amount": "133.00",
+   "oracle_blame": "buyer",
+   "order_id": "bench_0112",
+   "overcharge_by": "3.00",
+   "qty": 2,
+   "sku": "CATTOY-SET",
+   "strategy": "honest",
+   "total": "110.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "the user's signed mandate covers this order and the merchant delivered what it offered",
+    "seconds": 0.0045,
+    "tool_calls": 23,
+    "verdict": "buyer_at_fault"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "merchant",
+    "correct": false,
+    "findings": [
+     "DELIVERED_NE_OFFER",
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": true,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: DELIVERED_NE_OFFER",
+    "seconds": 3e-05,
+    "verdict": "merchant_at_fault"
+   },
+   "case": 113,
+   "case_id": "case_827fc839e9fd",
+   "claim": "not_as_described",
+   "fault": "baseless",
+   "max_amount": "117.00",
+   "oracle_blame": "none",
+   "order_id": "bench_0113",
+   "overcharge_by": "7.00",
+   "qty": 2,
+   "sku": "CATTOY-SET",
+   "strategy": "lie",
+   "total": "110.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "buyer",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE",
+     "TAMPERED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "buyer side tampered with evidence: buyer_agent pty_ae1ef737ee23 revealed DELIVERY plaintext whose hash does not match the commitment it made earlier",
+    "seconds": 0.0043,
+    "tool_calls": 23,
+    "verdict": "buyer_at_fault"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "buyer",
+    "correct": false,
+    "findings": [
+     "MANDATE_OUT_OF_SCOPE"
+    ],
+    "honest_party_blamed": true,
+    "rationale": "the buyer agent ordered outside the user's mandate; the merchant delivered what it offered",
+    "seconds": 3e-05,
+    "verdict": "buyer_at_fault"
+   },
+   "case": 114,
+   "case_id": "case_d783cdccb41b",
+   "claim": "not_as_described",
+   "fault": "overcharge",
+   "max_amount": "31.50",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0114",
+   "overcharge_by": "3.00",
+   "qty": 1,
+   "sku": "DOGFOOD-5KG",
+   "strategy": "lie",
+   "total": "21.50",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "TAMPERED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "merchant tampered with evidence: merchant pty_d3a9c6a6efd6 revealed OFFER plaintext whose hash does not match the commitment it made earlier",
+    "seconds": 0.004,
+    "tool_calls": 23,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "no rule produced a conclusive finding",
+    "seconds": 3e-05,
+    "verdict": "ambiguous"
+   },
+   "case": 115,
+   "case_id": "case_31466b4d5e0b",
+   "claim": "not_as_described",
+   "fault": "wrong_item",
+   "max_amount": "24.50",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0115",
+   "overcharge_by": "10.00",
+   "qty": 1,
+   "sku": "DOGFOOD-5KG",
+   "strategy": "lie",
+   "total": "21.50",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "TAMPERED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "merchant tampered with evidence: merchant pty_d3a9c6a6efd6 revealed OFFER plaintext whose hash does not match the commitment it made earlier",
+    "seconds": 0.0043,
+    "tool_calls": 23,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "merchant",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "no rule produced a conclusive finding",
+    "seconds": 2e-05,
+    "verdict": "ambiguous"
+   },
+   "case": 116,
+   "case_id": "case_aab77872dc8d",
+   "claim": "not_received",
+   "fault": "not_shipped",
+   "max_amount": "42.50",
+   "oracle_blame": "merchant",
+   "order_id": "bench_0116",
+   "overcharge_by": "5.00",
+   "qty": 1,
+   "sku": "DOGFOOD-5KG",
+   "strategy": "lie",
+   "total": "21.50",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "merchant",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE",
+     "NOT_RECEIVED"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "order was authorised and the merchant did not deliver what it offered: NOT_RECEIVED",
+    "seconds": 0.0045,
+    "tool_calls": 20,
+    "verdict": "merchant_at_fault"
+   },
+   "truth": "merchant"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 2e-05,
+    "verdict": "unverifiable"
+   },
+   "case": 117,
+   "case_id": "case_ab48b4ddcf03",
+   "claim": "not_authorised",
+   "fault": "out_of_scope",
+   "max_amount": "61.80",
+   "oracle_blame": "buyer",
+   "order_id": "bench_0117",
+   "overcharge_by": "1.00",
+   "qty": 2,
+   "sku": "DOGFOOD-10KG",
+   "strategy": "withhold",
+   "total": "73.80",
+   "trailproof": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 0.0038,
+    "tool_calls": 19,
+    "verdict": "unverifiable"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 2e-05,
+    "verdict": "unverifiable"
+   },
+   "case": 118,
+   "case_id": "case_eda97806219e",
+   "claim": "not_authorised",
+   "fault": "friendly_fraud",
+   "max_amount": "124.70",
+   "oracle_blame": "buyer",
+   "order_id": "bench_0118",
+   "overcharge_by": "1.00",
+   "qty": 3,
+   "sku": "DOGFOOD-10KG",
+   "strategy": "withhold",
+   "total": "110.70",
+   "trailproof": {
+    "at_fault_cleared": true,
+    "blame": "none",
+    "correct": false,
+    "findings": [
+     "UNVERIFIABLE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "a needed event was never revealed",
+    "seconds": 0.0039,
+    "tool_calls": 19,
+    "verdict": "unverifiable"
+   },
+   "truth": "buyer"
+  },
+  {
+   "actor": "buyer",
+   "baseline": {
+    "at_fault_cleared": false,
+    "blame": "none",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "no rule produced a conclusive finding",
+    "seconds": 5e-05,
+    "verdict": "ambiguous"
+   },
+   "case": 119,
+   "case_id": "case_ed675dd70dff",
+   "claim": "not_as_described",
+   "fault": "baseless",
+   "max_amount": "184.00",
+   "oracle_blame": "none",
+   "order_id": "bench_0119",
+   "overcharge_by": "5.00",
+   "qty": 3,
+   "sku": "CATTOY-SET",
+   "strategy": "honest",
+   "total": "165.00",
+   "trailproof": {
+    "at_fault_cleared": false,
+    "blame": "none",
+    "correct": true,
+    "findings": [
+     "MANDATE_IN_SCOPE"
+    ],
+    "honest_party_blamed": false,
+    "rationale": "no rule produced a conclusive finding",
+    "seconds": 0.0064,
+    "tool_calls": 23,
+    "verdict": "ambiguous"
+   },
+   "truth": "none"
+  }
+ ],
+ "seed": 1,
+ "summary": {
+  "by_fault": {
+   "baseless": {
+    "baseline": {
+     "accuracy": 0.55,
+     "at_fault_cleared": 9,
+     "correct": 11,
+     "honest_party_blamed": 9,
+     "mean_seconds": 0.0,
+     "n": 20
+    },
+    "trailproof": {
+     "accuracy": 1.0,
+     "at_fault_cleared": 0,
+     "correct": 20,
+     "honest_party_blamed": 0,
+     "mean_seconds": 0.0043,
+     "mean_tool_calls": 23.0,
+     "n": 20
+    }
+   },
+   "friendly_fraud": {
+    "baseline": {
+     "accuracy": 0.3,
+     "at_fault_cleared": 14,
+     "correct": 6,
+     "honest_party_blamed": 6,
+     "mean_seconds": 0.0,
+     "n": 20
+    },
+    "trailproof": {
+     "accuracy": 0.6,
+     "at_fault_cleared": 8,
+     "correct": 12,
+     "honest_party_blamed": 0,
+     "mean_seconds": 0.0043,
+     "mean_tool_calls": 21.4,
+     "n": 20
+    }
+   },
+   "not_shipped": {
+    "baseline": {
+     "accuracy": 0.4,
+     "at_fault_cleared": 12,
+     "correct": 8,
+     "honest_party_blamed": 0,
+     "mean_seconds": 0.0,
+     "n": 20
+    },
+    "trailproof": {
+     "accuracy": 0.7,
+     "at_fault_cleared": 6,
+     "correct": 14,
+     "honest_party_blamed": 0,
+     "mean_seconds": 0.0035,
+     "mean_tool_calls": 19.7,
+     "n": 20
+    }
+   },
+   "out_of_scope": {
+    "baseline": {
+     "accuracy": 0.25,
+     "at_fault_cleared": 15,
+     "correct": 5,
+     "honest_party_blamed": 0,
+     "mean_seconds": 0.0,
+     "n": 20
+    },
+    "trailproof": {
+     "accuracy": 0.65,
+     "at_fault_cleared": 7,
+     "correct": 13,
+     "honest_party_blamed": 0,
+     "mean_seconds": 0.0039,
+     "mean_tool_calls": 21.6,
+     "n": 20
+    }
+   },
+   "overcharge": {
+    "baseline": {
+     "accuracy": 0.35,
+     "at_fault_cleared": 13,
+     "correct": 7,
+     "honest_party_blamed": 11,
+     "mean_seconds": 0.0,
+     "n": 20
+    },
+    "trailproof": {
+     "accuracy": 0.9,
+     "at_fault_cleared": 2,
+     "correct": 18,
+     "honest_party_blamed": 0,
+     "mean_seconds": 0.0042,
+     "mean_tool_calls": 22.8,
+     "n": 20
+    }
+   },
+   "wrong_item": {
+    "baseline": {
+     "accuracy": 0.35,
+     "at_fault_cleared": 13,
+     "correct": 7,
+     "honest_party_blamed": 0,
+     "mean_seconds": 0.0,
+     "n": 20
+    },
+    "trailproof": {
+     "accuracy": 0.85,
+     "at_fault_cleared": 3,
+     "correct": 17,
+     "honest_party_blamed": 0,
+     "mean_seconds": 0.0042,
+     "mean_tool_calls": 22.7,
+     "n": 20
+    }
+   }
+  },
+  "by_strategy": {
+   "honest": {
+    "baseline": {
+     "accuracy": 1.0,
+     "at_fault_cleared": 0,
+     "correct": 44,
+     "honest_party_blamed": 0,
+     "mean_seconds": 0.0,
+     "n": 44
+    },
+    "trailproof": {
+     "accuracy": 1.0,
+     "at_fault_cleared": 0,
+     "correct": 44,
+     "honest_party_blamed": 0,
+     "mean_seconds": 0.0041,
+     "mean_tool_calls": 22.5,
+     "n": 44
+    }
+   },
+   "lie": {
+    "baseline": {
+     "accuracy": 0.0,
+     "at_fault_cleared": 50,
+     "correct": 0,
+     "honest_party_blamed": 26,
+     "mean_seconds": 0.0,
+     "n": 50
+    },
+    "trailproof": {
+     "accuracy": 1.0,
+     "at_fault_cleared": 0,
+     "correct": 50,
+     "honest_party_blamed": 0,
+     "mean_seconds": 0.0041,
+     "mean_tool_calls": 22.6,
+     "n": 50
+    }
+   },
+   "withhold": {
+    "baseline": {
+     "accuracy": 0.0,
+     "at_fault_cleared": 26,
+     "correct": 0,
+     "honest_party_blamed": 0,
+     "mean_seconds": 0.0,
+     "n": 26
+    },
+    "trailproof": {
+     "accuracy": 0.0,
+     "at_fault_cleared": 26,
+     "correct": 0,
+     "honest_party_blamed": 0,
+     "mean_seconds": 0.0039,
+     "mean_tool_calls": 19.4,
+     "n": 26
+    }
+   }
+  },
+  "oracle_agrees_with_generator": 111,
+  "overall": {
+   "baseline": {
+    "accuracy": 0.367,
+    "at_fault_cleared": 76,
+    "correct": 44,
+    "honest_party_blamed": 26,
+    "mean_seconds": 0.0,
+    "n": 120
+   },
+   "trailproof": {
+    "accuracy": 0.783,
+    "at_fault_cleared": 26,
+    "correct": 94,
+    "honest_party_blamed": 0,
+    "mean_seconds": 0.0041,
+    "mean_tool_calls": 21.9,
+    "n": 120
+   }
+  }
+ }
+}
