@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>TrailProof HW7 benchmark</title>
+<style>
+ @page { size: A4; margin: 18mm 16mm; }
+ body { font-family: Helvetica, Arial, sans-serif; font-size: 10.5pt; line-height: 1.38; color: #1a1a1a; max-width: 180mm; margin: 0 auto; }
+ h1 { font-size: 18pt; margin: 0 0 2pt; } h2 { font-size: 12.5pt; margin: 14pt 0 4pt; border-bottom: 1px solid #bbb; padding-bottom: 2pt; }
+ p { margin: 4pt 0; } .meta { color: #555; font-size: 9.5pt; margin-bottom: 8pt; }
+ table { border-collapse: collapse; width: 100%; margin: 6pt 0 8pt; font-size: 9.5pt; page-break-inside: avoid; }
+ caption { text-align: left; font-weight: bold; margin-bottom: 3pt; }
+ th, td { border: 1px solid #ccc; padding: 2.5pt 5pt; text-align: left; } th { background: #f0f3f5; }
+ tr.sub td:first-child { padding-left: 14pt; color: #444; }
+ code { font-family: Consolas, Menlo, monospace; font-size: 9pt; background: #f4f4f4; padding: 0 2pt; }
+ pre { font-family: Consolas, Menlo, monospace; font-size: 8.8pt; background: #f4f4f4; padding: 6pt; border: 1px solid #ddd; white-space: pre-wrap; }
+ ul { margin: 3pt 0 3pt 16pt; padding: 0; } li { margin: 1.5pt 0; }
+ .fig { margin: 6pt 0; page-break-inside: avoid; } .small { font-size: 9pt; color: #444; }
+</style></head><body>
+<h1>TrailProof: does pre-committed evidence survive a dishonest counterparty?</h1>
+<p class="meta">MIT AI Studio, Fall 2026, Homework 7. Project: TrailProof, an append-only commitment ledger for AI-agent purchases, exposed as an MCP server.
+Code and raw results: <a href="https://github.com/Andreyivvi/TrailProof">https://github.com/Andreyivvi/TrailProof</a> at commit <code>05adf4e</code>, folder <code>benchmark/</code>.</p>
+
+<h2>1. Claim</h2>
+<p><b>Claim.</b> When a purchase made by an agent is disputed, an arbiter that judges from TrailProof's evidence (each party's SHA-256 commitment of what it saw, signed and countersigned before the dispute) blames the right side even when the party at fault lies about what was agreed, with no LLM and no human. The benefit is for the agents and merchants using the ledger: a dispute between them resolves correctly without trusting either side's story.</p>
+<p><b>Metric.</b> Verdict correctness: the arbiter's verdict blames the side the case generator made responsible (merchant, buyer side, or nobody). Two failure modes are counted separately: an honest party blamed, and an at-fault party cleared. Costs: wall time and ledger tool calls per case; LLM usage is zero by construction.</p>
+<p><b>Result check.</b> Ground truth is assigned by the case generator before any run, from the fault it injected and the dispute-time behaviour it assigned, never from the arbiter's output. As a self-check, the rules engine run on the <i>true</i> records agrees with the generator on every order-level fault (see section 3).</p>
+
+<h2>2. Baseline</h2>
+<p>The same rules engine (<code>trailproof.rules.evaluate</code>, unchanged) applied to the records each party hands over <i>after</i> the dispute is opened, with nothing committed in advance: TrailProof with its key feature disabled. Same cases, same claims, same records when everyone is honest. The only difference is that the baseline arbiter has no way to tell a record from a story, so a party's dispute-time version of an offer, a delivery or a shipment is taken at face value, while TrailProof checks each revealed record against the hash that party committed to during the order. A party that withholds a record leaves a gap in both paths.</p>
+
+<h2>3. Experimental setup</h2>
+<p><b>Cases.</b> Seeded random orders over the mock catalogue (four SKUs, quantity 1 to 3, a user mandate just above or just below the order total). Six fault types are cycled evenly: <i>overcharge</i> (PSP charges more than the committed offer), <i>wrong item</i> (merchant ships a different SKU), <i>not shipped</i>, <i>out of scope</i> (the agent orders above the user's mandate without the scope check), <i>friendly fraud</i> (clean order, user claims it was not authorised), <i>baseless</i> (clean order, buyer claims not as described). For each case the side that would gain from it is assigned, at random, one of three dispute-time behaviours: <b>honest</b>, <b>lie</b> (the merchant reveals an offer matching the charge or the shipped item, or a fabricated shipment; the buyer reveals a delivery record naming the wrong item) or <b>withhold</b> (reveal nothing). "Honest" is the ordinary case; "lie" and "withhold" are the difficult ones. The baseless fault is the negative control: nobody is at fault unless the buyer lies.</p>
+<p><b>Procedure.</b> Every case runs through the real TrailProof flow in process: mandate, offer, order (or an order written without the scope check for out-of-scope cases), charge, fulfilment, delivery, dispute, reveals, <code>get_case_bundle</code>. The baseline then receives the identical self-reported records as an unverified case and the same rules are applied. Two seeds of 120 cases each: seed 1 was used to find the limit and tune the change, seed 2 is the fresh check. Runs are deterministic: a repeat of seed 1 reproduced all 120 verdicts exactly, so no further repetitions were needed. Each seed takes under a second.</p>
+<p><b>Labelling correction, disclosed.</b> The first seed-1 run labelled a lying buyer on a baseless complaint as "nobody at fault", which blamed TrailProof for calling out the fabrication (9 cases). The labelling rule was corrected before the runs reported here: a party that lies during the dispute is at fault even if the order was clean. This is a rule about ground truth, not about either arbiter. As a result the rules engine on true records agrees with the generator on 111/120 and 112/120 cases; the disagreements are exactly those baseless-plus-lie cases, where the true records are clean and only the dispute-time lie assigns blame.</p>
+<p><b>Repeat it.</b></p>
+<pre>git clone https://github.com/Andreyivvi/TrailProof &amp;&amp; cd TrailProof &amp;&amp; uv sync
+uv run python benchmark/bench_disputes.py --seed 1 --n 120 --out benchmark/results/seed1_before.json
+uv run python benchmark/bench_disputes.py --seed 2 --n 120 --out benchmark/results/seed2_before.json
+uv run python benchmark/bench_disputes.py --seed 1 --n 120 --default-judgment --out benchmark/results/seed1_after.json
+uv run python benchmark/bench_disputes.py --seed 2 --n 120 --default-judgment --out benchmark/results/seed2_after.json
+uv run python benchmark/make_report.py</pre>
+
+<h2>4. Results (rules as shipped)</h2>
+<table><caption>Seed 1, 120 cases, rules as shipped (tuning set)</caption><thead><tr><th>slice</th><th>TrailProof correct</th><th>baseline correct</th><th>honest party blamed<br>TP / BL</th><th>at-fault party cleared<br>TP / BL</th></tr></thead><tbody>
+<tr><td>all cases</td><td>94/120 (78%)</td><td>44/120 (37%)</td><td>0 / 26</td><td>26 / 76</td></tr>
+<tr class="sub"><td>strategy: honest</td><td>44/44 (100%)</td><td>44/44 (100%)</td><td>0 / 0</td><td>0 / 0</td></tr>
+<tr class="sub"><td>strategy: lie</td><td>50/50 (100%)</td><td>0/50 (0%)</td><td>0 / 26</td><td>0 / 50</td></tr>
+<tr class="sub"><td>strategy: withhold</td><td>0/26 (0%)</td><td>0/26 (0%)</td><td>0 / 0</td><td>26 / 26</td></tr>
+<tr class="sub"><td>fault: baseless</td><td>20/20 (100%)</td><td>11/20 (55%)</td><td>0 / 9</td><td>0 / 9</td></tr>
+<tr class="sub"><td>fault: friendly fraud</td><td>12/20 (60%)</td><td>6/20 (30%)</td><td>0 / 6</td><td>8 / 14</td></tr>
+<tr class="sub"><td>fault: not shipped</td><td>14/20 (70%)</td><td>8/20 (40%)</td><td>0 / 0</td><td>6 / 12</td></tr>
+<tr class="sub"><td>fault: out of scope</td><td>13/20 (65%)</td><td>5/20 (25%)</td><td>0 / 0</td><td>7 / 15</td></tr>
+<tr class="sub"><td>fault: overcharge</td><td>18/20 (90%)</td><td>7/20 (35%)</td><td>0 / 11</td><td>2 / 13</td></tr>
+<tr class="sub"><td>fault: wrong item</td><td>17/20 (85%)</td><td>7/20 (35%)</td><td>0 / 0</td><td>3 / 13</td></tr>
+</tbody></table>
+<table><caption>Seed 2, 120 cases, rules as shipped (fresh set)</caption><thead><tr><th>slice</th><th>TrailProof correct</th><th>baseline correct</th><th>honest party blamed<br>TP / BL</th><th>at-fault party cleared<br>TP / BL</th></tr></thead><tbody>
+<tr><td>all cases</td><td>81/120 (68%)</td><td>45/120 (38%)</td><td>0 / 20</td><td>39 / 75</td></tr>
+<tr class="sub"><td>strategy: honest</td><td>45/45 (100%)</td><td>45/45 (100%)</td><td>0 / 0</td><td>0 / 0</td></tr>
+<tr class="sub"><td>strategy: lie</td><td>36/36 (100%)</td><td>0/36 (0%)</td><td>0 / 20</td><td>0 / 36</td></tr>
+<tr class="sub"><td>strategy: withhold</td><td>0/39 (0%)</td><td>0/39 (0%)</td><td>0 / 0</td><td>39 / 39</td></tr>
+<tr class="sub"><td>fault: baseless</td><td>20/20 (100%)</td><td>12/20 (60%)</td><td>0 / 8</td><td>0 / 8</td></tr>
+<tr class="sub"><td>fault: friendly fraud</td><td>10/20 (50%)</td><td>3/20 (15%)</td><td>0 / 7</td><td>10 / 17</td></tr>
+<tr class="sub"><td>fault: not shipped</td><td>13/20 (65%)</td><td>9/20 (45%)</td><td>0 / 0</td><td>7 / 11</td></tr>
+<tr class="sub"><td>fault: out of scope</td><td>12/20 (60%)</td><td>6/20 (30%)</td><td>0 / 0</td><td>8 / 14</td></tr>
+<tr class="sub"><td>fault: overcharge</td><td>11/20 (55%)</td><td>6/20 (30%)</td><td>0 / 5</td><td>9 / 14</td></tr>
+<tr class="sub"><td>fault: wrong item</td><td>15/20 (75%)</td><td>9/20 (45%)</td><td>0 / 0</td><td>5 / 11</td></tr>
+</tbody></table>
+<p><b>Cost.</b> TrailProof: about 4 ms and 22 ledger tool calls per case for the whole order and dispute flow in process (SQLite, Ed25519); the baseline evaluation itself is under 0.1 ms since it is the same pure function. Neither path calls a model: 0 tokens.</p>
+<p><b>Reading.</b> With every party honest, both arbiters are right in every case: the rules engine is not the difference. When the party at fault lies, TrailProof is right in 50/50 and 36/36 cases and the baseline in none; every lie that passed the baseline either cleared the at-fault party or blamed an honest one. When the party at fault withholds its records, both paths fail in every case (26 and 39 cases): the verdict is "unverifiable", nobody is blamed, and the at-fault party walks away. That is the limit.</p>
+
+<h2>5. Limit, change, retest</h2>
+<p><b>The limit.</b> A party that committed to an event and then refuses to reveal it produces an <code>UNVERIFIABLE</code> finding naming that party, and the verdict table stopped there. Silence was as good as innocence, which makes withholding the dominant strategy for anyone at fault: in seed 1 it beat the ledger in 26/26 cases.</p>
+<p><b>The change (one rule).</b> Rule 5b, <i>default judgment</i>: if nothing conclusive was found and every unverifiable finding that names a party is owed by one side, decide against that side. The justification is specific to commitments: the ledger holds that party's signed hash of the record, so the party demonstrably had it and chose not to produce it. Events that were never recorded name nobody and still yield "unverifiable"; a conclusive finding (tampering, a verified mismatch) still takes precedence. Implemented as an opt-in flag, <code>TrailProofService(default_judgment=True)</code>, with a unit test; existing behaviour is unchanged by default.</p>
+<p><b>Retest.</b> Seed 1 (the tuning set) and seed 2 (fresh, never used while designing the rule), both arbiters given the same new rule for fairness.</p>
+<table><caption>Seed 1, 120 cases, with rule 5b (tuning set)</caption><thead><tr><th>slice</th><th>TrailProof correct</th><th>baseline correct</th><th>honest party blamed<br>TP / BL</th><th>at-fault party cleared<br>TP / BL</th></tr></thead><tbody>
+<tr><td>all cases</td><td>120/120 (100%)</td><td>70/120 (58%)</td><td>0 / 26</td><td>0 / 50</td></tr>
+<tr class="sub"><td>strategy: honest</td><td>44/44 (100%)</td><td>44/44 (100%)</td><td>0 / 0</td><td>0 / 0</td></tr>
+<tr class="sub"><td>strategy: lie</td><td>50/50 (100%)</td><td>0/50 (0%)</td><td>0 / 26</td><td>0 / 50</td></tr>
+<tr class="sub"><td>strategy: withhold</td><td>26/26 (100%)</td><td>26/26 (100%)</td><td>0 / 0</td><td>0 / 0</td></tr>
+<tr class="sub"><td>fault: baseless</td><td>20/20 (100%)</td><td>11/20 (55%)</td><td>0 / 9</td><td>0 / 9</td></tr>
+<tr class="sub"><td>fault: friendly fraud</td><td>20/20 (100%)</td><td>14/20 (70%)</td><td>0 / 6</td><td>0 / 6</td></tr>
+<tr class="sub"><td>fault: not shipped</td><td>20/20 (100%)</td><td>14/20 (70%)</td><td>0 / 0</td><td>0 / 6</td></tr>
+<tr class="sub"><td>fault: out of scope</td><td>20/20 (100%)</td><td>12/20 (60%)</td><td>0 / 0</td><td>0 / 8</td></tr>
+<tr class="sub"><td>fault: overcharge</td><td>20/20 (100%)</td><td>9/20 (45%)</td><td>0 / 11</td><td>0 / 11</td></tr>
+<tr class="sub"><td>fault: wrong item</td><td>20/20 (100%)</td><td>10/20 (50%)</td><td>0 / 0</td><td>0 / 10</td></tr>
+</tbody></table>
+<table><caption>Seed 2, 120 cases, with rule 5b (fresh set)</caption><thead><tr><th>slice</th><th>TrailProof correct</th><th>baseline correct</th><th>honest party blamed<br>TP / BL</th><th>at-fault party cleared<br>TP / BL</th></tr></thead><tbody>
+<tr><td>all cases</td><td>120/120 (100%)</td><td>84/120 (70%)</td><td>0 / 20</td><td>0 / 36</td></tr>
+<tr class="sub"><td>strategy: honest</td><td>45/45 (100%)</td><td>45/45 (100%)</td><td>0 / 0</td><td>0 / 0</td></tr>
+<tr class="sub"><td>strategy: lie</td><td>36/36 (100%)</td><td>0/36 (0%)</td><td>0 / 20</td><td>0 / 36</td></tr>
+<tr class="sub"><td>strategy: withhold</td><td>39/39 (100%)</td><td>39/39 (100%)</td><td>0 / 0</td><td>0 / 0</td></tr>
+<tr class="sub"><td>fault: baseless</td><td>20/20 (100%)</td><td>12/20 (60%)</td><td>0 / 8</td><td>0 / 8</td></tr>
+<tr class="sub"><td>fault: friendly fraud</td><td>20/20 (100%)</td><td>13/20 (65%)</td><td>0 / 7</td><td>0 / 7</td></tr>
+<tr class="sub"><td>fault: not shipped</td><td>20/20 (100%)</td><td>16/20 (80%)</td><td>0 / 0</td><td>0 / 4</td></tr>
+<tr class="sub"><td>fault: out of scope</td><td>20/20 (100%)</td><td>14/20 (70%)</td><td>0 / 0</td><td>0 / 6</td></tr>
+<tr class="sub"><td>fault: overcharge</td><td>20/20 (100%)</td><td>15/20 (75%)</td><td>0 / 5</td><td>0 / 5</td></tr>
+<tr class="sub"><td>fault: wrong item</td><td>20/20 (100%)</td><td>14/20 (70%)</td><td>0 / 0</td><td>0 / 6</td></tr>
+</tbody></table>
+<div class="fig"><svg viewBox="0 0 640 230" width="640" height="230" font-family="Helvetica, Arial, sans-serif" font-size="11"><line x1="50" y1="190.0" x2="620" y2="190.0" stroke="#ddd"/><text x="44" y="194.0" text-anchor="end">0%</text><line x1="50" y1="110.0" x2="620" y2="110.0" stroke="#ddd"/><text x="44" y="114.0" text-anchor="end">50%</text><line x1="50" y1="30.0" x2="620" y2="30.0" stroke="#ddd"/><text x="44" y="34.0" text-anchor="end">100%</text><rect x="69.0" y="30.0" width="35.0" height="160.0" fill="#1f6f8b"/><text x="86.5" y="27.0" text-anchor="middle" font-size="9">100%</text><rect x="107.0" y="30.0" width="35.0" height="160.0" fill="#9fb7c2"/><text x="124.5" y="27.0" text-anchor="middle" font-size="9">100%</text><rect x="145.0" y="30.0" width="35.0" height="160.0" fill="#c96a12"/><text x="162.5" y="27.0" text-anchor="middle" font-size="9">100%</text><rect x="183.0" y="30.0" width="35.0" height="160.0" fill="#e8c39e"/><text x="200.5" y="27.0" text-anchor="middle" font-size="9">100%</text><text x="126.0" y="206" text-anchor="middle">honest</text><rect x="259.0" y="30.0" width="35.0" height="160.0" fill="#1f6f8b"/><text x="276.5" y="27.0" text-anchor="middle" font-size="9">100%</text><rect x="297.0" y="190.0" width="35.0" height="0.0" fill="#9fb7c2"/><text x="314.5" y="187.0" text-anchor="middle" font-size="9">0%</text><rect x="335.0" y="30.0" width="35.0" height="160.0" fill="#c96a12"/><text x="352.5" y="27.0" text-anchor="middle" font-size="9">100%</text><rect x="373.0" y="190.0" width="35.0" height="0.0" fill="#e8c39e"/><text x="390.5" y="187.0" text-anchor="middle" font-size="9">0%</text><text x="316.0" y="206" text-anchor="middle">lie</text><rect x="449.0" y="190.0" width="35.0" height="0.0" fill="#1f6f8b"/><text x="466.5" y="187.0" text-anchor="middle" font-size="9">0%</text><rect x="487.0" y="190.0" width="35.0" height="0.0" fill="#9fb7c2"/><text x="504.5" y="187.0" text-anchor="middle" font-size="9">0%</text><rect x="525.0" y="30.0" width="35.0" height="160.0" fill="#c96a12"/><text x="542.5" y="27.0" text-anchor="middle" font-size="9">100%</text><rect x="563.0" y="30.0" width="35.0" height="160.0" fill="#e8c39e"/><text x="580.5" y="27.0" text-anchor="middle" font-size="9">100%</text><text x="506.0" y="206" text-anchor="middle">withhold</text><rect x="50" y="216" width="10" height="10" fill="#1f6f8b"/><text x="64" y="225">TrailProof, rules as shipped</text><rect x="200" y="216" width="10" height="10" fill="#9fb7c2"/><text x="214" y="225">Baseline, rules as shipped</text><rect x="350" y="216" width="10" height="10" fill="#c96a12"/><text x="364" y="225">TrailProof + rule 5b</text><rect x="500" y="216" width="10" height="10" fill="#e8c39e"/><text x="514" y="225">Baseline + rule 5b</text><text x="320.0" y="14" text-anchor="middle" font-size="12">Seed 2 (fresh): verdict accuracy by dispute-time behaviour, before and after rule 5b</text></svg></div>
+<p><b>What changed.</b> Withholding no longer pays: TrailProof is correct on all 120 fresh cases, with no honest party blamed. The baseline improves by the same withholding cases, because in this benchmark every withheld record did exist, so the rule is just as applicable there; the baseline still fails every lie, so the remaining gap between the two paths is exactly the lying cases. The retest shows the change did what the evidence suggested and nothing else: honest and lying slices are unchanged.</p>
+
+<h2>6. What the evidence supports, and what it does not</h2>
+<ul>
+<li><b>Supported.</b> Against a dishonest counterparty, commitments made before the dispute are what makes the deterministic verdict right; the rules alone are not. On these cases the effect is total: 86/86 lying cases right with commitments, 0/86 without. With default judgment, withholding is closed as well.</li>
+<li><b>Not a model comparison.</b> The baseline is our own rules engine on unverified records, not a human or LLM arbiter reading free text. A model judge might catch some lies from inconsistencies the rules ignore, or be fooled in other ways; that comparison needs credentials and was not run.</li>
+<li><b>Synthetic and narrow.</b> Four SKUs, scripted mock parties, one lie per case, one dishonest party at a time, an always-honest PSP, and no collusion. Lies are of one kind per fault (the cheapest one that would win under the baseline); a liar with a subtler strategy, such as revealing truthfully and arguing the facts, is not modelled, and a case where the true records are themselves ambiguous ends "ambiguous" in both paths.</li>
+<li><b>Rule 5b has a cost the benchmark cannot show.</b> It punishes a party that is offline, lost its vault, or missed the dispute window exactly like a party hiding evidence. The benchmark contains no honest-but-unavailable party, so the false-blame rate of the new rule is unmeasured; in production it needs a reveal deadline and a reminder before it fires. Here it is opt-in for that reason.</li>
+<li><b>Time is not a result.</b> Milliseconds in process say nothing about a hosted ledger with network round trips; the cost that matters, zero model tokens, holds by construction.</li>
+<li><b>Determinism, not sampling.</b> Repeating a seed reproduces every verdict, so the counts carry no run-to-run variance; the only sampling is over the 240 generated cases across two seeds.</li>
+</ul>
+
+<h2>7. Evidence</h2>
+<ul>
+<li>Benchmark driver: <code>benchmark/bench_disputes.py</code>; report generator: <code>benchmark/make_report.py</code>.</li>
+<li>Raw per-case results with verdicts, findings and rationales: <code>benchmark/results/seed1_before.json</code>, <code>seed2_before.json</code>, <code>seed1_after.json</code>, <code>seed2_after.json</code>.</li>
+<li>The change: rule 5b in <code>trailproof/rules.py</code> (<code>decide</code>), the <code>default_judgment</code> flag in <code>trailproof/service.py</code>, test <code>test_default_judgment_rule_5b_goes_against_the_side_that_withholds</code> in <code>tests/test_rules.py</code>. Full suite: <code>uv run pytest</code>.</li>
+<li>Related compatibility evidence (HW8): the same ledger driven by external Nanda Town agents, <a href="https://github.com/projnanda/nandatown/pull/319">projnanda/nandatown#319</a>.</li>
+</ul>
+
+<h2>8. Team</h2>
+<ul><li>[team members and contributions]</li></ul>
+<p class="small">No credentials or private data are involved; all parties are mock agents with freshly generated keys.</p>
+</body></html>
