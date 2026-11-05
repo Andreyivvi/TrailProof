@@ -16,7 +16,7 @@
 </style></head><body>
 <h1>TrailProof: does pre-committed evidence survive a dishonest counterparty?</h1>
 <p class="meta">MIT AI Studio, Fall 2026, Homework 7. Project: TrailProof, an append-only commitment ledger for AI-agent purchases, exposed as an MCP server.
-Code and raw results: <a href="https://github.com/Andreyivvi/TrailProof">https://github.com/Andreyivvi/TrailProof</a> at commit <code>05adf4e</code>, folder <code>benchmark/</code>.</p>
+Code and raw results: <a href="https://github.com/Andreyivvi/TrailProof">https://github.com/Andreyivvi/TrailProof</a> at commit <code>953c9fc</code>, folder <code>benchmark/</code>.</p>
 
 <h2>1. Claim</h2>
 <p><b>Claim.</b> When a purchase made by an agent is disputed, an arbiter that judges from TrailProof's evidence (each party's SHA-256 commitment of what it saw, signed and countersigned before the dispute) blames the right side even when the party at fault lies about what was agreed, with no LLM and no human. The benefit is for the agents and merchants using the ledger: a dispute between them resolves correctly without trusting either side's story.</p>
@@ -116,6 +116,6 @@ uv run python benchmark/make_report.py</pre>
 </ul>
 
 <h2>8. Team</h2>
-<ul><li>[team members and contributions]</li></ul>
+<ul><li>Andrey (sole team member): product direction, benchmark and scenario design, review of results and report; implementation and experiment runs assisted by Claude Code</li></ul>
 <p class="small">No credentials or private data are involved; all parties are mock agents with freshly generated keys.</p>
 </body></html>
