@@ -117,6 +117,16 @@ class Keypair:
     def generate(cls) -> "Keypair":
         return cls(Ed25519PrivateKey.generate())
 
+    @classmethod
+    def from_private_hex(cls, private_hex: str) -> "Keypair":
+        """Rebuild a keypair from the 32 raw private bytes, hex-encoded (see :attr:`private_hex`)."""
+        return cls(Ed25519PrivateKey.from_private_bytes(bytes.fromhex(private_hex)))
+
+    @property
+    def private_hex(self) -> str:
+        """The raw private key, hex-encoded. Whoever holds this *is* the party; keep it out of logs."""
+        return self.private_key.private_bytes_raw().hex()
+
     @property
     def public_hex(self) -> str:
         return public_key_hex(self.private_key.public_key())

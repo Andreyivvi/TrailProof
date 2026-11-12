@@ -218,3 +218,48 @@ def test_scenario_7_over_direct_client():
     # the recognised OFFER payload cites the attestation by hash, and the shop kept the reason
     assert result["recognitions"]["ord_leo_3"] == {"recognised": True, "reason": "2 completed order(s), 0 lost case(s): 10% off"}
     assert result["recognitions"]["ord_stranger_1"]["reason"] == "no attestation presented"
+
+
+def test_wallet_wide_attestation_counts_every_merchant_and_names_none():
+    """merchant "*": what an agent shows a shop it has never bought from."""
+    import asyncio
+
+    from mocks.scenarios import World
+    from mocks.shop import MockShop
+    from mocks.transport import DirectToolClient
+    from trailproof import crypto
+    from trailproof.ledger import Ledger
+    from trailproof.service import TrailProofService
+
+    async def go():
+        client = DirectToolClient(TrailProofService(Ledger()))
+        w = await World.create(client)
+        leo = await w.new_buyer("leo", "petbot")
+        for oid in ("o1", "o2"):
+            m = leo.new_mandate(["pet_food"], "40.00")
+            await leo.submit_mandate(oid, m)
+            o = (await w.shop.make_offer(oid, "DOGFOOD-10KG"))["payload"]
+            assert (await leo.place_order(oid, m, o))["placed"]
+            await w.shop.take_payment(oid, w.psp)
+        second = MockShop(client, operator="second-shop")
+        await second.register()
+        att = await client.call("attest_history", party_id=leo.agent.party_id, merchant_party_id="*",
+                                audience_party_id=second.party_id)
+        offer = await second.recognise_and_offer("o3", "DOGFOOD-5KG", att, buyer_party_id=leo.agent.party_id)
+        # the same proof shown to the first shop is refused: it is addressed to the second
+        replay = w.shop.check_recognition(att, leo.agent.party_id)
+        stranger = await w.new_buyer("zed", "newbot")
+        cold = await client.call("attest_history", party_id=stranger.agent.party_id, merchant_party_id="*",
+                                 audience_party_id=second.party_id)
+        cold_offer = await second.recognise_and_offer("o4", "DOGFOOD-5KG", cold, buyer_party_id=stranger.agent.party_id)
+        return att, offer, replay, cold_offer, second, w
+
+    att, offer, replay, cold_offer, second, w = asyncio.run(go())
+    assert att["merchant"] == "*" and att["audience"] == second.party_id
+    assert att["stats"]["orders_completed"] == 2 and att["stats"]["merchants"] == 1 and att["stats"]["cases_lost"] == 0
+    assert w.shop.party_id not in crypto.canonical_json(att)  # where the user shops is not disclosed
+    assert crypto.verify_attestation(att, second.ledger_public_key)
+    assert offer["recognised"] and offer["payload"]["recognition"]["discount_pct"] == 5
+    assert offer["payload"]["total"] in ("20.42", "20.43")
+    assert replay == (False, "attestation is addressed to another audience")
+    assert not cold_offer["recognised"] and cold_offer["payload"]["total"] == "21.50"

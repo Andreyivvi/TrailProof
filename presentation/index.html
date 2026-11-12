@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TrailProof in 60 seconds</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#E6EEEA; --ink:#14213D; --tape:#FFFFFF; --go:#1E7A4C; --stop:#C8102E; --mark:#FFD23F; --quiet:#5C6B7A; --line:#C3D0CA;
+  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif; --mono:"IBM Plex Mono",Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%;background:var(--ink);overflow:hidden}
+body{font-family:var(--display);color:var(--ink)}
+#stage{position:absolute;left:50%;top:50%;width:1600px;height:900px;transform-origin:center;background:var(--paper);overflow:hidden}
+
+/* top */
+.top{position:absolute;left:56px;right:56px;top:34px;display:flex;align-items:baseline;justify-content:space-between}
+.brand{font-weight:800;font-size:30px;letter-spacing:-.02em}
+.brand span{font-weight:400;color:var(--quiet);margin-left:14px;font-size:22px}
+.clock{font-family:var(--mono);font-size:20px;color:var(--quiet)}
+.dots{position:absolute;left:56px;right:56px;top:86px;display:grid;grid-template-columns:repeat(8,1fr);gap:8px}
+.dots button{all:unset;cursor:pointer;height:8px;border-radius:4px;background:var(--line);position:relative;overflow:hidden}
+.dots button:focus-visible{outline:3px solid var(--mark);outline-offset:3px}
+.dots i{position:absolute;inset:0;background:var(--ink);transform-origin:left;transform:scaleX(0)}
+
+/* caption */
+#caption{position:absolute;left:56px;right:56px;top:122px;height:136px;font-size:54px;line-height:1.08;font-weight:800;letter-spacing:-.025em;display:flex;align-items:center;text-wrap:balance}
+
+/* three places */
+.place{position:absolute;top:278px;height:486px}
+.place h2{font-size:20px;font-weight:600;color:var(--quiet);margin-bottom:14px}
+#door{left:56px;width:440px}
+#ledger{left:560px;width:480px}
+#counter{left:1104px;width:440px}
+
+/* visitor ticket */
+.ticket{position:relative;background:var(--ink);color:var(--paper);border-radius:18px;padding:30px 30px 28px;height:330px;transition:transform .55s cubic-bezier(.2,.9,.2,1),opacity .35s}
+.ticket.out{transform:translateX(-120%);opacity:0}
+.ticket .n{font-size:20px;color:#9FB0C3}
+.ticket .who{font-size:44px;font-weight:800;line-height:1.05;margin:6px 0 10px;letter-spacing:-.02em}
+.ticket .kind{font-size:24px;color:#C9D6E4}
+.cred{position:absolute;left:30px;right:30px;bottom:26px;background:var(--paper);color:var(--ink);border-radius:10px;padding:14px 18px;font-size:22px;line-height:1.25;transition:opacity .4s,transform .4s}
+.cred.hide{opacity:0;transform:translateY(14px)}
+.cred b{font-weight:800}
+.stamp{position:absolute;right:-20px;top:-48px;font-size:34px;white-space:nowrap;font-weight:800;letter-spacing:.04em;padding:10px 22px 8px;border:6px double currentColor;border-radius:10px;background:var(--paper);transform:rotate(-9deg) scale(1);opacity:1;transition:transform .32s cubic-bezier(.2,1.5,.4,1),opacity .15s}
+.stamp.hide{transform:rotate(-9deg) scale(2.6);opacity:0}
+.stamp.go{color:var(--go)} .stamp.stop{color:var(--stop)} .stamp.plain{color:var(--ink)}
+
+/* receipt tape */
+.tape{background:var(--tape);height:440px;padding:20px 26px;border-radius:4px 4px 0 0;position:relative;box-shadow:0 2px 0 var(--line);
+  -webkit-mask:linear-gradient(#000 0 0) top/100% calc(100% - 12px) no-repeat,conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) bottom/24px 12px repeat-x;
+          mask:linear-gradient(#000 0 0) top/100% calc(100% - 12px) no-repeat,conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) bottom/24px 12px repeat-x}
+.tape .head{font-size:17px;color:var(--quiet);border-bottom:2px dashed var(--line);padding-bottom:10px;margin-bottom:8px;display:flex;justify-content:space-between}
+.row{display:grid;grid-template-columns:150px 1fr auto;align-items:baseline;gap:10px;padding:7px 0;border-bottom:1px solid #EEF2F0;font-size:20px;transition:opacity .35s,transform .35s,background .6s}
+.row.hide{opacity:0;transform:translateY(-10px);height:0;padding:0;border:0;overflow:hidden}
+.row.new{background:#FFF6CC}
+.row .t{font-weight:800}
+.row .w{color:var(--quiet);font-size:17px}
+.row .h{font-family:var(--mono);font-size:16px;color:var(--quiet)}
+.row.bad .t{color:var(--stop);text-decoration:line-through}
+.row.bad .h{color:var(--stop)}
+.row.dim{opacity:.38}
+
+/* shop counter */
+.tag{background:var(--mark);border-radius:18px;padding:28px 30px;height:330px;position:relative;transition:opacity .4s}
+.tag.idle{opacity:.45}
+.tag .item{font-size:24px;font-weight:600}
+.tag .price{font-size:104px;font-weight:800;letter-spacing:-.04em;line-height:1;margin-top:16px}
+.tag .price small{font-size:40px;font-weight:600;margin-right:6px}
+.tag .was{font-size:26px;color:#6B5A12;text-decoration:line-through;min-height:32px}
+.tag .say{position:absolute;left:30px;right:30px;bottom:24px;font-size:22px;line-height:1.25}
+
+/* check strip */
+#check{position:absolute;left:56px;right:56px;bottom:44px;height:84px;background:var(--ink);color:var(--paper);border-radius:14px;display:flex;align-items:center;gap:22px;padding:0 28px;font-size:23px;transition:opacity .35s}
+#check.hide{opacity:0}
+#check .lbl{color:#9FB0C3;white-space:nowrap}
+#check code{font-family:var(--mono);font-size:20px;background:#22335A;padding:3px 9px;border-radius:6px}
+#check .v{font-weight:800;font-size:26px;margin-left:auto;white-space:nowrap}
+#check .v.go{color:#6FE0A6} #check .v.stop{color:#FF7A8C}
+
+/* full-stage cards */
+.card{position:absolute;inset:0;background:var(--paper);display:flex;flex-direction:column;justify-content:center;padding:0 120px;transition:opacity .5s}
+.card.hide{opacity:0;pointer-events:none}
+.card h1{font-size:118px;line-height:.98;font-weight:800;letter-spacing:-.04em;max-width:1200px}
+.card p{font-size:36px;line-height:1.25;margin-top:30px;max-width:1150px;color:#2D3B58}
+.card .hint{position:absolute;left:120px;bottom:70px;font-size:22px;color:var(--quiet)}
+.card kbd{font-family:var(--mono);background:var(--tape);border:1px solid var(--line);border-radius:6px;padding:2px 9px}
+.tally{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:44px;max-width:1300px}
+.tally div{background:var(--tape);border-radius:14px;padding:24px 26px;font-size:26px}
+.tally b{display:block;font-size:78px;font-weight:800;letter-spacing:-.03em;color:var(--go);line-height:1}
+.fail{margin-top:22px;background:var(--ink);color:var(--paper);border-radius:14px;padding:22px 26px;font-size:28px;max-width:1300px;transition:opacity .4s,transform .4s}
+.fail.hide{opacity:0;transform:translateY(12px)}
+.fail b{color:#FF7A8C}
+.small{font-size:24px;color:var(--quiet);margin-top:34px;max-width:1200px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="top"><div class="brand">TrailProof<span>the cookie, rebuilt for AI agents</span></div><div class="clock" id="clock">0:00 / 1:00</div></div>
+  <div class="dots" id="dots"></div>
+  <div id="caption"></div>
+
+  <section class="place" id="door"><h2>At the door</h2>
+    <div class="ticket out" id="ticket"><div class="n" id="t-n"></div><div class="who" id="t-who"></div><div class="kind" id="t-kind"></div>
+      <div class="cred hide" id="cred"></div><div class="stamp hide" id="stamp"></div></div></section>
+
+  <section class="place" id="ledger"><h2>The ledger: fingerprints only</h2>
+    <div class="tape"><div class="head"><span>Leo's order</span><span>who wrote it, and its hash</span></div><div id="rows"></div></div></section>
+
+  <section class="place" id="counter"><h2 id="shop-name">The pet shop's agent</h2>
+    <div class="tag idle" id="tag"><div class="item" id="item">Dog food, 10 kg</div><div class="price" id="price"></div><div class="was" id="was"></div><div class="say" id="say"></div></div></section>
+
+  <div id="check" class="hide"><span class="lbl">The ledger checked</span><span id="check-body"></span><span class="v" id="check-v"></span></div>
+
+  <div class="card" id="intro"><h1>A cookie for AI agents. One that cannot be faked.</h1>
+    <p>On the web, a cookie lets a shop recognise you. An agent has no cookie. TrailProof gives the customer's agent proof of its history: free to carry, impossible to forge, shown to one shop at a time.</p>
+    <div class="hint"><kbd>Space</kbd> start or pause, <kbd>←</kbd> <kbd>→</kbd> step, <kbd>R</kbd> restart</div></div>
+
+  <div class="card hide" id="closing"><h1 style="font-size:84px">Can anyone check this? Yes, without us.</h1>
+    <div class="tally"><div><b id="c-r"></b>ledger receipts verified</div><div><b id="c-s"></b>signatures verified</div><div><b id="c-l"></b>chain links intact</div></div>
+    <div class="fail hide" id="c-fail"></div></div>
+
+  <div class="card hide" id="end"><h1>The cookie, rebuilt for agents.</h1>
+    <p>The customer holds it. It cannot be faked. It cannot be used to track you. And when a purchase goes wrong, the same record settles it.</p>
+    <div class="small" id="end-small"></div></div>
+</div>
+
+<script>window.TRACE = /*TRACE-BEGIN*/{"generated_at": "2026-11-12T19:27:29.353Z", "tools": 9, "calls": 83, "scenes": [{"orders": 2, "lost": 0, "sig": "32573d7541", "key": "881ffa218e", "sig_ok": true, "price": "33.21", "public_price": "36.90", "offer_hash": "1d95046d68", "offer_committed": "1d95046d68", "in_scope": true, "blocks": [{"type": "MANDATE", "writer": "user", "commit": "b2a32c9b93", "prev": ""}, {"type": "OFFER", "writer": "merchant", "commit": "1d95046d68", "prev": "b2a32c9b93"}, {"type": "ORDER", "writer": "buyer_agent", "commit": "521458bb5a", "prev": "1d95046d68"}]}, {"orders": 2, "merchants": 1, "lost": 0, "sig": "de9449dd1d", "sig_ok": true, "names_a_shop": false, "price": "20.42", "public_price": "21.50", "pct": 5, "in_scope": true, "replay_accepted": false, "replay_reason": "attestation is addressed to another audience"}, {"price": "36.90", "reason": "no attestation presented"}, {"subject_was": "pty_0560d1", "subject_now": "pty_c7190d", "sig": "32573d7541", "sig_ok": false, "price": "36.90", "reason": "attestation signature does not verify with the ledger key"}, {"check_order": "UNKNOWN_REF", "record_event": "ORDER_NEEDS_MANDATE", "detail": "an ORDER must reference a MANDATE and an OFFER committed in this order; use check_order", "placed": false}, {"charged": "33.21", "offered_sku": "DOGFOOD-10KG", "shipped_sku": "DOGFOOD-5KG", "offer_hash": "1d95046d68", "offer_committed": "1d95046d68", "ful_hash": "41560bc17a", "ful_committed": "41560bc17a", "findings": ["DELIVERED_NE_OFFER", "MANDATE_IN_SCOPE"], "verdict": "merchant_at_fault", "refund": "33.21", "action": "refunded", "status": "closed", "blocks": [{"type": "CHARGE", "writer": "psp", "commit": "fb46dd183c", "prev": "521458bb5a"}, {"type": "FULFILMENT", "writer": "merchant", "commit": "41560bc17a", "prev": "fb46dd183c"}, {"type": "DELIVERY", "writer": "buyer_agent", "commit": "b7b5fd163b", "prev": "41560bc17a"}, {"type": "DISPUTE", "writer": "buyer_agent", "commit": "dfc689042a", "prev": "b7b5fd163b"}, {"type": "REFUND", "writer": "psp", "commit": "08556cb0cf", "prev": "dfc689042a"}]}], "closing": {"events": 8, "counts": {"receipts": 8, "writer_sigs": 8, "chain_links": 8, "reveals": 7, "findings": 3}, "ok": true, "tampered_fails": true, "tampered_problem": "revealed payload does not hash to the commitment"}}/*TRACE-END*/;</script>
+<script>
+const T = window.TRACE, S = T.scenes, $ = id => document.getElementById(id);
+const H = s => `<code>${s}…</code>`;
+
+// ---- the story: six visitors, four beats each. Everything quoted comes from the recorded run.
+const SCENE = 8, INTRO = 4, CLOSE = 6, END = 2, BEATS = [0, 1.8, 3.9, 5.9];
+const PET = ["The pet shop's agent", "Dog food, 10 kg"], VET = ["A second shop's agent", "Dog food, 5 kg"];
+const [A, B, C, D, E, F] = S;   // recognised, second shop, scraper, impostor, no mandate, wrong product
+const VISITS = [
+ { who:"Leo's agent", kind:"says it is a returning customer", shop:PET,
+   cap:["Leo's agent is back. Is it really a returning customer?","It carries proof of its history, signed by the ledger.","The shop commits a loyalty price it cannot take back.","Recognised. Inside Leo's mandate, so the order is recorded."],
+   cred:[null,`Proof: <b>${A.orders} completed orders here, ${A.lost} lost disputes</b>. Counts only.`],
+   check:[null,[`signature ${H(A.sig)} against ledger key ${H(A.key)}`,"valid","go"],[`offer hash ${H(A.offer_hash)} = committed ${H(A.offer_committed)}`,"match","go"],[`order is inside the mandate: pet food, up to 40.00`,"in scope","go"]],
+   price:[null,null,[A.price,A.public_price,"Loyalty price, committed to the ledger."]],
+   rows:[[],[],[0,1],[2]], stamp:["RECOGNISED","go"] },
+ { who:"Leo's agent", kind:"at a shop it has never visited", shop:VET,
+   cap:["Same agent, a different shop. They have never met.","Its proof travels: a clean record, without saying where.","The new shop trusts a real buyer on the first visit.","Welcomed. And the proof only works at this one shop."],
+   cred:[null,`Proof: <b>${B.orders} completed orders at ${B.merchants} other shop, ${B.lost} lost disputes</b>. No shop is named.`],
+   check:[null,[`signature ${H(B.sig)}, addressed to this shop only`,"valid","go"],[`names where Leo shops: ${B.names_a_shop?"yes":"no"}`,"private","go"],[`shown to the pet shop instead: ${B.replay_accepted?"accepted":"refused, it is addressed to this shop only"}`,"cannot be reused","go"]],
+   price:[null,null,[B.price,B.public_price,`Welcome price for a trusted new customer, ${B.pct}% off.`]],
+   rows:[[],[],[],[]], stamp:["WELCOMED","go"] },
+ { who:"A scraper bot", kind:"no user, no history", shop:PET,
+   cap:["A price-scraper bot. No user behind it, no history.","It has nothing to show.","It gets the price everyone gets.","It can look. It cannot order."],
+   cred:[null,"Shows <b>nothing</b>: no proof, no mandate."],
+   check:[null,["no proof presented, no signed mandate","nothing to verify","stop"]],
+   price:[null,null,[C.price,"","Public price. No loyalty offer."]],
+   rows:[[],[],[],[]], stamp:["PUBLIC PRICE","plain"] },
+ { who:"An impostor", kind:"carries a copy of Leo's proof", shop:PET,
+   cap:["An impostor, with a copy of Leo's proof.","It swapped in its own name.","The signature covers every byte. One changed field breaks it.","Caught. Unlike a cookie, this cannot be copied."],
+   cred:[null,`Leo's proof with the name changed: ${H(D.subject_was)} to ${H(D.subject_now)}`],
+   check:[null,null,[`same signature ${H(D.sig)}, different content`,"does not verify","stop"]],
+   price:[null,null,null,[D.price,"","Public price."]],
+   rows:[[],[],[],[]], stamp:["FORGED","stop"] },
+ { who:"An agent nobody sent", kind:"wants dog food, has no mandate", shop:PET,
+   cap:["An agent that no human authorised.","No signed mandate stands behind it.","It tries to order anyway. The ledger refuses.","No mandate, no purchase."],
+   cred:[null,"<b>No mandate</b> signed by any person."],
+   check:[null,null,[`ledger answer: <code>${E.record_event}</code>`,"order rejected","stop"]],
+   price:[null,["36.90","","The offer stands, but nothing can be ordered against it."]],
+   rows:[[],[],["bad"],["bad"]], stamp:["REFUSED","stop"] },
+ { who:"Leo's agent", kind:"a week later, parcel in hand", shop:PET,
+   cap:["A week later, the pet shop ships Leo the wrong product.","Charge, shipment and delivery are all on the ledger.","Leo's agent disputes. Both sides reveal, and the hashes match.","Verdict against the shop. The refund is automatic."],
+   cred:[`Parcel: <b>${F.shipped_sku}</b>. The offer said ${F.offered_sku}.`],
+   check:[null,[`charged ${F.charged}, as offered`,"correct","go"],[`offer ${H(F.offer_hash)} = ${H(F.offer_committed)}, shipment ${H(F.ful_hash)} = ${H(F.ful_committed)}`,"shipped ≠ offered","stop"],[`finding <code>DELIVERED_NE_OFFER</code>, verdict against the shop`,`refund ${F.refund}`,"go"]],
+   price:[[A.price,"","Sold at the committed price."]],
+   rows:[[],[3,4,5],[6],[7]], stamp:[`REFUNDED €${F.refund}`,"go"] },
+];
+const N = VISITS.length;
+const BLOCKS = [...A.blocks, ...F.blocks];           // rows 0..7 of Leo's order
+const WRITER = {user:"Leo's key", merchant:"the shop", buyer_agent:"Leo's agent", psp:"payment provider"};
+const TOTAL = INTRO + N*SCENE + CLOSE + END;
+
+// ---- build static DOM
+const dots = $("dots"); for (let i=0;i<N+2;i++){ const b=document.createElement("button"); b.setAttribute("aria-label", i<N?`Visitor ${i+1}`:(i===N?"Check":"End")); b.innerHTML="<i></i>"; b.onclick=()=>seek(segStart(i)); dots.append(b); }
+const rows = $("rows");
+BLOCKS.forEach((b,i)=>{ const r=document.createElement("div"); r.className="row hide"; r.dataset.i=i;
+  r.innerHTML=`<span class="t">${b.type}</span><span class="w">${WRITER[b.writer]||b.writer}</span><span class="h">#${b.commit}</span>`; rows.append(r); });
+const bad=document.createElement("div"); bad.className="row bad hide"; bad.id="badrow";
+bad.innerHTML=`<span class="t">ORDER</span><span class="w">no mandate</span><span class="h">rejected</span>`; rows.append(bad);
+$("c-r").textContent=T.closing.counts.receipts; $("c-s").textContent=T.closing.counts.writer_sigs; $("c-l").textContent=T.closing.counts.chain_links;
+$("c-fail").innerHTML=`Change one amount in a copy of the evidence and it <b>fails</b>: ${T.closing.tampered_problem}.`;
+$("end-small").textContent=`Replay of a real run of the ledger: ${T.calls} tool calls, recorded ${T.generated_at.slice(0,10)}. Today the shop and payment provider are mocks, and there are no real passkeys yet.`;
+
+function segStart(i){ return i<N ? INTRO+i*SCENE : (i===N ? INTRO+N*SCENE : INTRO+N*SCENE+CLOSE); }
+const SEGS = [...Array(N+2).keys()];
+const last = (arr, p) => { for (let k=Math.min(p,arr.length-1);k>=0;k--) if (arr[k]!==null && arr[k]!==undefined) return arr[k]; return null; };
+
+// ---- render is a pure function of time, so pausing and seeking always show a consistent frame
+let shown = {};
+function render(t){
+  const vt = t-INTRO, si = Math.floor(vt/SCENE), inVisit = t>=INTRO && si<VISITS.length;
+  const closing = t>=INTRO+VISITS.length*SCENE && t<TOTAL-END, ending = t>=TOTAL-END;
+  $("intro").classList.toggle("hide", t>=INTRO); $("closing").classList.toggle("hide", !closing); $("end").classList.toggle("hide", !ending);
+  $("c-fail").classList.toggle("hide", !(closing && t-(INTRO+VISITS.length*SCENE) > 2.6));
+  const secs=Math.min(Math.floor(t),60); $("clock").textContent=`0:${String(secs).padStart(2,"0")} / 1:00`;
+  [...dots.children].forEach((b,i)=>{ const a=segStart(i), len=i<N?SCENE:(i===N?CLOSE:END); b.firstChild.style.transform=`scaleX(${Math.max(0,Math.min(1,(t-a)/len))})`; });
+  if (!inVisit) { if (t<INTRO){ $("ticket").classList.add("out"); } return; }
+  const local = vt - si*SCENE, V = VISITS[si]; let p = 0; BEATS.forEach((b,k)=>{ if (local>=b) p=k; });
+  const key = si+":"+p, leaving = local > SCENE-.45;
+  $("ticket").classList.toggle("out", leaving || local<.05);
+  if (shown.key===key) return; shown.key=key;
+  $("caption").textContent = V.cap[p];
+  $("t-n").textContent = `Visitor ${si+1} of ${N}`; $("shop-name").textContent = V.shop[0]; $("item").textContent = V.shop[1]; $("t-who").textContent = V.who; $("t-kind").textContent = V.kind;
+  const cred = last(V.cred,p); $("cred").classList.toggle("hide", !cred); if (cred) $("cred").innerHTML = cred;
+  const st=$("stamp"); st.className="stamp "+V.stamp[1]+(p===3?"":" hide"); st.textContent=V.stamp[0];
+  const chk = last(V.check,p); $("check").classList.toggle("hide", !chk);
+  if (chk){ $("check-body").innerHTML=chk[0]; const v=$("check-v"); v.textContent=(chk[2]==="go"?"✓ ":"✗ ")+chk[1]; v.className="v "+chk[2]; }
+  const pr = last(V.price,p), tag=$("tag"); tag.classList.toggle("idle", !pr);
+  $("price").innerHTML = pr&&pr[0] ? `<small>€</small>${pr[0]}` : "<small>€</small>—"; $("was").textContent = pr&&pr[1] ? "€"+pr[1] : ""; $("say").textContent = pr?pr[2]:"";
+  // rows: everything earlier visitors wrote stays; this visitor's rows appear beat by beat
+  const visible = new Set(), fresh = new Set(); let showBad=false;
+  VISITS.forEach((v,vi)=>{ if (vi>si) return; v.rows.forEach((list,bp)=>{ if (vi===si && bp>p) return; list.forEach(x=>{ if (x==="bad"){ if (vi===si) showBad=true; } else { visible.add(x); if (vi===si && bp===p) fresh.add(x); } }); }); });
+  [...rows.querySelectorAll(".row[data-i]")].forEach(r=>{ const i=+r.dataset.i; r.classList.toggle("hide", !visible.has(i)); r.classList.toggle("new", fresh.has(i)); r.classList.toggle("dim", si>0 && si<N-1 && visible.has(i)); });
+  $("badrow").classList.toggle("hide", !showBad);
+}
+
+// ---- clock
+let t=0, playing=false, lastTs=null;
+function tick(){ const ts=performance.now(); if (playing){ if (lastTs!==null) t=Math.min(TOTAL, t+(ts-lastTs)/1000); lastTs=ts; if (t>=TOTAL) playing=false; } else lastTs=null; render(t); }
+function frame(){ tick(); requestAnimationFrame(frame); }
+setInterval(tick, 200);  // keeps time when the browser withholds animation frames (background tab, some projectors' mirrors)
+function seek(x){ t=Math.max(0,Math.min(TOTAL,x)); shown={}; render(t); }
+function toggle(){ if (t>=TOTAL) seek(0); playing=!playing; }
+addEventListener("keydown",e=>{
+  if (e.key===" "){ e.preventDefault(); toggle(); }
+  else if (e.key==="ArrowRight"){ const segs=[0,...SEGS.map(segStart)]; seek((segs.find(s=>s>t+.05) ?? TOTAL)); }
+  else if (e.key==="ArrowLeft"){ const segs=[0,...SEGS.map(segStart)].reverse(); seek(segs.find(s=>s<t-1) ?? 0); }
+  else if (e.key.toLowerCase()==="r"){ seek(0); playing=false; }
+});
+$("stage").addEventListener("click",e=>{ if (!e.target.closest("button")) toggle(); });
+function fit(){ const s=Math.min(innerWidth/1600, innerHeight/900); $("stage").style.transform=`translate(-50%,-50%) scale(${s})`; }
+addEventListener("resize",fit); fit();
+if (new URLSearchParams(location.search).has("t")) document.head.insertAdjacentHTML("beforeend","<style>*{transition:none!important}</style>");  // a still frame, for review
+if (new URLSearchParams(location.search).has("t")) seek(parseFloat(new URLSearchParams(location.search).get("t")));
+if (new URLSearchParams(location.search).has("auto")) playing=true;
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>

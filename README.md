@@ -57,6 +57,8 @@ Requirements: Python 3.11+, `mcp`, `cryptography`, `pytest`. Nothing else.
 | `mocks/shop.py` | Mock pet shop + merchant agent with the auto-refund `POLICY` and the `RECOGNITION_POLICY` |
 | `mocks/buyer.py` | Scripted buyer agent (user key + agent key), fail-open on outage |
 | `mocks/scenarios.py` | The seven scenarios, shared by `demo.py` and the tests |
+| `wallet/` | The customer wallet: keys on disk, mandates from the command line, an MCP server for the user's own agent |
+| `demo_shop/` | Pawshop, a practice merchant agent (MCP server) to buy from with the wallet |
 | `mocks/buyer_llm.py` | Optional: Claude as the buyer agent (Anthropic SDK tool-use loop) with a `check_order` skip metric |
 | `demo.py` | Runs everything and prints each order's trail as a table |
 | `demo_video.py` | Paced, narrated ~60 s run for the demo video (recognised buyer, live Claude buyer, enforcement, offline verification, limitations) |
@@ -252,6 +254,74 @@ beat both until rule 5b. `benchmark/make_report.py` renders the write-up to
 
 ```bash
 uv run python benchmark/bench_disputes.py --seed 2 --n 120 --default-judgment
+```
+
+## The customer wallet: TrailProof inside your own agent
+
+The wallet is what a person installs into their own AI agent, for free. It is
+the customer's side of TrailProof, the cookie jar: it holds their keys, the
+mandates they signed, and the plaintext of everything their agent committed.
+With it the agent can prove its purchase history to shops, order inside a
+mandate, and dispute an order that went wrong.
+
+```bash
+# 1. a ledger to talk to (keeps its data and signing key in ~/.trailproof)
+uv run python -m wallet ledger
+
+# 2. in another terminal: create your wallet and sign a mandate
+uv run python -m wallet init --name mia
+uv run python -m wallet mandate add --category pet_food --max 80 --days 30
+
+# 3. connect it, and a practice shop, to Claude
+uv run python -m wallet install        # prints the exact commands and config
+```
+
+Then ask your agent, for example: *"Buy a 10 kg bag of dog food from Pawshop
+with my wallet, and tell me what you paid."* Do it twice, and the third time
+ask it to show Pawshop its proof first: the price drops from 36.90 to 33.21.
+
+| Who | Can do | How |
+|---|---|---|
+| You | create, list and revoke mandates | `python -m wallet mandate add / list / revoke` |
+| Your agent | see mandates, prove history, order, confirm delivery, dispute | the nine tools of `python -m wallet serve` |
+| Your agent | create or widen a mandate | not possible: no such tool exists |
+
+Design rules, all covered by `tests/test_wallet.py`:
+
+* **The person grants authority, the agent only uses it.** Mandates come from
+  the command line. Without one, `start_order` refuses, and so does the ledger.
+* **Proofs are per shop and say little.** `prove_history` returns a
+  ledger-signed summary addressed to one shop: counts only. With the default
+  `"*"` it covers every shop and names none, for a shop the agent has never
+  bought from.
+* **Plaintext stays in the wallet.** The ledger gets hashes and signatures;
+  the wallet reveals what was hashed only into a dispute.
+* **Identity survives restarts.** Wallet keys live in
+  `~/.trailproof/wallet.json`; a ledger with a database file keeps its
+  signing key in `<db>.key`, so proofs issued before a restart still verify.
+
+`demo_shop` (Pawshop) is a practice merchant agent, also an MCP server, so a
+wallet has someone to buy from: it commits offers, recognises customers from
+their proof, charges, ships (optionally the wrong item, to try a dispute) and
+refunds by policy.
+
+Limits today: both wallet keys sit in one file, protected only by file
+permissions; a real deployment would hold the user key in a passkey or secure
+enclave so the agent could never sign a mandate. The ledger is one local
+process, and the shop and its payment provider are mocks.
+
+## The 60-second visual presentation
+
+`presentation/index.html` tells the story of six visitors at a shop door as an animation, framed as "the cookie, rebuilt for AI agents": the
+visitor at the door, the ledger as a receipt tape, the shop's price tag, and
+what the ledger checked. It is one self-contained file; open it in a browser,
+press F11, then Space. Arrow keys step between visitors, R restarts.
+
+Everything it shows (hashes, signature results, error codes, the verdict) is
+a replay of a real run of the service. Re-record and re-embed it with:
+
+```bash
+uv run python presentation/make_trace.py
 ```
 
 ## Verifying a result offline

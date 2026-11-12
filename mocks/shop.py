@@ -51,6 +51,8 @@ POLICY = {"auto_refund_if": ["CHARGE_NE_OFFER", "DELIVERED_NE_OFFER", "NOT_RECEI
 #: completed orders here and no more than ``max_lost_cases`` lost cases gets
 #: ``discount_pct`` off the public price. Anyone else gets the public price.
 RECOGNITION_POLICY = {"min_orders": 2, "max_lost_cases": 0, "discount_pct": 10}
+# A buyer this shop has never seen, with a clean record elsewhere (attestation with merchant "*").
+WELCOME_POLICY = {"min_orders": 2, "max_lost_cases": 0, "discount_pct": 5}
 
 
 class MockShop(MockParty):
@@ -64,6 +66,7 @@ class MockShop(MockParty):
         super().__init__(client, "merchant", operator)
         self.policy = policy or POLICY
         self.recognition_policy = recognition_policy or RECOGNITION_POLICY
+        self._tier_pct = self.recognition_policy["discount_pct"]
         self.recognitions: dict[str, dict[str, Any]] = {}  # order_id -> why recognised / not
         self._seq = itertools.count(1)
         self.offers: dict[str, dict[str, Any]] = {}  # order_id -> OFFER payload
@@ -116,7 +119,10 @@ class MockShop(MockParty):
             return False, "attestation signature does not verify with the ledger key"
         if attestation.get("audience") != self.party_id:
             return False, "attestation is addressed to another audience"
-        if attestation.get("merchant") != self.party_id:
+        welcome = attestation.get("merchant") == "*"
+        if welcome:
+            pol = WELCOME_POLICY
+        elif attestation.get("merchant") != self.party_id:
             return False, "attestation is about history with another merchant"
         if buyer_party_id is not None and attestation.get("subject") != buyer_party_id:
             return False, "attestation subject is not this buyer"
@@ -126,6 +132,10 @@ class MockShop(MockParty):
             return False, f"{orders} completed order(s), policy needs {pol['min_orders']}"
         if lost > pol["max_lost_cases"]:
             return False, f"{lost} lost case(s), policy allows {pol['max_lost_cases']}"
+        self._tier_pct = pol["discount_pct"]
+        if welcome:
+            return True, (f"trusted new customer: {orders} completed order(s) at {int(stats.get('merchants', 0))} "
+                          f"other shop(s), {lost} lost case(s): {pol['discount_pct']}% off")
         return True, f"{orders} completed order(s), {lost} lost case(s): {pol['discount_pct']}% off"
 
     async def recognise_and_offer(
@@ -141,12 +151,12 @@ class MockShop(MockParty):
         recognised, reason = self.check_recognition(attestation, buyer_party_id)
         payload = self.quote(sku, qty)
         if recognised:
-            pct = Decimal(str(self.recognition_policy["discount_pct"]))
+            pct = Decimal(str(self._tier_pct))
             unit_price = (Decimal(payload["unit_price"]) * (Decimal(100) - pct) / Decimal(100)).quantize(Decimal("0.01"))
             payload["unit_price"] = crypto.amount_str(unit_price)
             payload["total"] = crypto.amount_str(unit_price * qty)
             payload["recognition"] = {
-                "discount_pct": self.recognition_policy["discount_pct"],
+                "discount_pct": self._tier_pct,
                 "attestation_commit": crypto.commit(attestation),
             }
         else:

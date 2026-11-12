@@ -32,8 +32,35 @@ merchant with attest_history (counts only, ledger-signed, bound to one audience)
 Every error comes back as {"error": CODE, "detail": ...}."""
 
 
+def persistent_ledger(db_path: str) -> Ledger:
+    """Open the ledger at ``db_path``, keeping its signing key across restarts.
+
+    An in-memory ledger gets a throwaway key. A ledger with a database file
+    keeps its key in ``TRAILPROOF_KEY`` (default ``<db>.key``), so receipts and
+    attestations issued before a restart still verify after it.
+    """
+    from . import crypto
+
+    if db_path == ":memory:":
+        return Ledger(db_path)
+    key_path = os.environ.get("TRAILPROOF_KEY", db_path + ".key")
+    if os.path.exists(key_path):
+        with open(key_path, encoding="utf-8") as f:
+            keypair = crypto.Keypair.from_private_hex(f.read().strip())
+    else:
+        keypair = crypto.Keypair.generate()
+        os.makedirs(os.path.dirname(os.path.abspath(key_path)), exist_ok=True)
+        with open(key_path, "w", encoding="utf-8") as f:
+            f.write(keypair.private_hex)
+        try:
+            os.chmod(key_path, 0o600)
+        except OSError:
+            pass
+    return Ledger(db_path, keypair=keypair)
+
+
 def build_server(service: TrailProofService | None = None) -> MCPServer:
-    svc = service or TrailProofService(Ledger(os.environ.get("TRAILPROOF_DB", ":memory:")))
+    svc = service or TrailProofService(persistent_ledger(os.environ.get("TRAILPROOF_DB", ":memory:")))
     server = MCPServer("trailproof", instructions=INSTRUCTIONS, version="0.1.0")
 
     @server.tool(description="Register a party's Ed25519 public key (hex). Roles: user, buyer_agent, merchant, psp.")

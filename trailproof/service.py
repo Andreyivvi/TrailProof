@@ -264,15 +264,25 @@ class TrailProofService:
         skus are disclosed. The attestation is bound to one ``audience`` so it
         cannot be shown to anyone else, and signed with the ledger key over
         ``canonical_json(attestation without ledger_sig)``.
+
+        ``merchant_party_id="*"`` asks for the history across *every* merchant:
+        the same counts plus ``merchants``, the number of distinct merchants,
+        and never which ones. That is what an agent shows a shop it has never
+        bought from: proof of being a real, well-behaved buyer, without a
+        list of where it shops. It is still bound to one audience, so it is
+        a fresh proof per shop and not an identifier that follows the user.
         """
         subject = self.ledger.party(party_id)
         if subject.role not in ("buyer_agent", "user"):
             raise LedgerError("WRONG_ROLE", "attest_history is for buyer agents and user keys")
         if subject.revoked_at:
             raise LedgerError("REVOKED_KEY", f"party {party_id} is revoked")
-        merchant = self.ledger.party(merchant_party_id)  # UNKNOWN_PARTY if unknown
-        if merchant.role != "merchant":
-            raise LedgerError("WRONG_ROLE", f"{merchant_party_id} is a {merchant.role}, not a merchant")
+        everywhere = merchant_party_id == "*"
+        if not everywhere:
+            merchant = self.ledger.party(merchant_party_id)  # UNKNOWN_PARTY if unknown
+            if merchant.role != "merchant":
+                raise LedgerError("WRONG_ROLE", f"{merchant_party_id} is a {merchant.role}, not a merchant")
+        merchants_seen: set[str] = set()
         self.ledger.party(audience_party_id)  # UNKNOWN_PARTY if unknown
 
         completed = 0
@@ -282,7 +292,7 @@ class TrailProofService:
         for order_id in self.ledger.orders_of_party(party_id):
             events = self.ledger.get_trail(order_id)
             offers = [e for e in events if e.type == "OFFER"]
-            if not offers or offers[-1].party_id != merchant_party_id:
+            if not offers or (not everywhere and offers[-1].party_id != merchant_party_id):
                 continue
             for case in self.ledger.cases_for_order(order_id):
                 if rules.evaluate(self._case_input(case["case_id"]), default_judgment=self.default_judgment)["verdict"] == "buyer_at_fault":
@@ -291,6 +301,7 @@ class TrailProofService:
             if charge is None or any(e.type == "REFUND" for e in events):
                 continue
             completed += 1
+            merchants_seen.add(offers[-1].party_id)
             order_ev = next((e for e in events if e.type == "ORDER"), None)
             ts = (order_ev or charge).ledger_ts
             first_ts = ts if first_ts is None or ts < first_ts else first_ts
@@ -308,6 +319,8 @@ class TrailProofService:
             },
             "issued_at": self.ledger.now_iso(),
         }
+        if everywhere:
+            attestation["stats"]["merchants"] = len(merchants_seen)
         return crypto.sign_attestation(self.ledger.keypair.private_key, attestation)
 
     def _case_input(self, case_id: str) -> rules.CaseInput:
