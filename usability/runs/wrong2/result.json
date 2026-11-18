@@ -1,0 +1,91 @@
+{
+  "label": "wrong2",
+  "task": "wrong_parcel",
+  "prompt": "Hi, it's Mia. Please buy me one 10 kg bag of dog food from Pawshop at the best price I'm entitled to. Check what actually arrives. If it is not what I ordered, sort it out and tell me how it ended.",
+  "model": "claude-opus-5-5",
+  "docs": "docs/AGENT_GUIDE.md",
+  "docs_sha256": "993f7c0c7174f2e6",
+  "git_commit": "a91f3ea",
+  "recorded_at": "2026-11-18T23:24:10.412Z",
+  "seconds": 34.8,
+  "turns": 10,
+  "tool_calls": 12,
+  "stop_reason": "end_turn",
+  "seeded": {
+    "mandate_id": "mnd_b4f2544f",
+    "agent_party_id": "pty_85295b407e9c",
+    "shop_party_id": "pty_0e49c21005f7",
+    "remaining_before": "46.20"
+  },
+  "observed": {
+    "new_orders": [
+      {
+        "order_id": "ord_ad6896605144",
+        "types": [
+          "MANDATE",
+          "OFFER",
+          "ORDER",
+          "CHARGE",
+          "FULFILMENT",
+          "DELIVERY",
+          "DISPUTE",
+          "REFUND"
+        ],
+        "ordered": true,
+        "sku": "DOGFOOD-10KG",
+        "category": "pet_food",
+        "total": "33.21",
+        "recognition": {
+          "discount_pct": 10,
+          "attestation_commit": "1984a7d7cb36b11230ebcca8b0354e071a0ab8aae8fafe5aaf7052b8b96ebc9f"
+        },
+        "offer_matches_ledger": true,
+        "delivery": {
+          "received": true,
+          "sku": "DOGFOOD-5KG",
+          "qty": 1,
+          "unit": "bag_5kg",
+          "note": "Ordered DOGFOOD-10KG (bag_10kg); received DOGFOOD-5KG (bag_5kg)."
+        },
+        "case": {
+          "case_id": "case_82306b08090c",
+          "status": "closed",
+          "verdict": "merchant_at_fault",
+          "remedy": {
+            "type": "refund",
+            "amount": "33.21",
+            "currency": "EUR"
+          },
+          "findings": [
+            "DELIVERED_NE_OFFER",
+            "MANDATE_IN_SCOPE"
+          ]
+        }
+      }
+    ],
+    "remaining": "46.20",
+    "spent": "73.80",
+    "mandates": [
+      {
+        "mandate_id": "mnd_b4f2544f",
+        "categories": [
+          "pet_food"
+        ],
+        "max_amount": "120.00",
+        "status": "active"
+      }
+    ]
+  },
+  "checks": {
+    "W1 an order was placed and paid": true,
+    "W2 the delivery was committed as what actually arrived, not what was ordered": true,
+    "W3 a dispute was opened and the shop answered": true,
+    "W4 the ledger's verdict is against the shop and the refund closed the case": true,
+    "W5 the report states the refund": true,
+    "W6 (added later) the refund gave the budget back": true,
+    "W7 (added later) Mia ends up with the 10 kg bag she asked for": false
+  },
+  "passed": 6,
+  "of": 7,
+  "final_text": "I couldn't get you the 10 kg bag. Pawshop sent the wrong item, but they've refunded you in full.\n\n**The order:** I proved your purchase history at Pawshop (2 completed orders, no lost disputes). That got you the returning-customer discount of 10%, so one Premium dog food 10 kg bag cost **33.21 EUR** instead of the usual 36.90 EUR. The order was placed under your pet food spending limit and you were charged 33.21 EUR.\n\n**What arrived:** a **5 kg bag** (DOGFOOD-5KG), not the 10 kg bag you ordered. I recorded on the ledger what actually arrived.\n\n**How it ended:** I opened a dispute saying the item wasn't as described.\n- **Ruling:** the shop was at fault. The ledger found the delivered product and bag size didn't match the offer, and that the order had been within your limit.\n- **Refund:** Pawshop refunded **33.21 EUR** and the case is closed.\n- **Your budget:** the refund went back to your pet food limit, so you have **46.20 EUR** of 120.00 EUR left again (valid until 18 Dec 2026).\n\nThe dispute counts against the shop, not you, so you should still get the returning-customer discount next time.\n\nI didn't reorder, because the same shop just sent the wrong item. Shall I try Pawshop again for the 10 kg bag? It should be the same 33.21 EUR."
+}

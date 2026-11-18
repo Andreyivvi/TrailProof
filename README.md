@@ -310,6 +310,29 @@ permissions; a real deployment would hold the user key in a passkey or secure
 enclave so the agent could never sign a mandate. The ledger is one local
 process, and the shop and its payment provider are mocks.
 
+## Can a fresh agent use it? (cold-start usability test)
+
+`docs/AGENT_GUIDE.md` is the interface documentation written for an agent
+reader. `usability/cold_start.py` tests whether it is enough: a new model
+session gets the guide, the real wallet and shop tools and a task in the
+user's words, with no call sequence and no expected answer. The harness
+records every request and response and scores the outcome against criteria
+fixed beforehand (`usability/PREREGISTERED.md`) by reading the ledger.
+
+```bash
+uv sync --extra llm
+uv run python usability/cold_start.py --task loyal_purchase --label mine
+uv run python usability/cold_start.py --task out_of_mandate --label mine_boundary
+uv run python usability/cold_start.py --task wrong_parcel   --label mine_wrong
+```
+
+Recorded runs are in `usability/runs/`. Two models bought at the right
+price from the documentation alone (7/7 checks each). The wrong-parcel run
+exposed a real flaw, a refund that did not return the mandate's budget; it
+is fixed, with regression tests in `tests/test_refund_budget.py`. The full
+write-up, with what remains unproven, is
+`usability/HW9_TrailProof_usability.pdf` (`usability/make_report.py`).
+
 ## The 60-second visual presentation
 
 `presentation/index.html` tells the story of six visitors at a shop door as an animation, framed as "the cookie, rebuilt for AI agents": the

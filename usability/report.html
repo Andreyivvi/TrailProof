@@ -1,0 +1,237 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>TrailProof HW9</title><style>
+@page { size: Letter; margin: 15mm 15mm 16mm; }
+@page slide { size: 13.333in 7.5in; margin: 0; }
+* { box-sizing: border-box; }
+body { font: 9.6pt/1.42 "Segoe UI", Helvetica, Arial, sans-serif; color: #14213D; margin: 0; }
+h1 { font-size: 19pt; margin: 0 0 2pt; letter-spacing: -.01em; }
+h2 { font-size: 12.5pt; margin: 15pt 0 5pt; border-bottom: 1.5pt solid #14213D; padding-bottom: 2pt; break-after: avoid; }
+h3 { font-size: 10.2pt; margin: 9pt 0 3pt; break-after: avoid; }
+p { margin: 0 0 5pt; } ul { margin: 0 0 5pt; padding-left: 15pt; } li { margin-bottom: 1.5pt; }
+a { color: #14479c; text-decoration: none; } code { font: 7.9pt Consolas, monospace; word-break: break-word; }
+.sub { color: #5C6B7A; margin-bottom: 8pt; }
+table { border-collapse: collapse; width: 100%; margin: 4pt 0 7pt; font-size: 8.5pt; }
+th, td { border: .6pt solid #C3D0CA; padding: 2.5pt 5pt; vertical-align: top; text-align: left; }
+th { background: #E6EEEA; } tr { break-inside: avoid; }
+table.calls td:first-child { width: 16pt; text-align: right; color: #5C6B7A; } table.calls td:nth-child(2) { width: 37%; }
+tr.err td { background: #FDECEE; }
+ul.checks { list-style: none; padding: 0; font-size: 8.8pt; } ul.checks li { padding: 1pt 0; }
+.ok { color: #1E7A4C; } .no { color: #C8102E; font-weight: 600; }
+blockquote { margin: 4pt 0 7pt; padding: 5pt 9pt; border-left: 3pt solid #FFD23F; background: #FFFBEA; font-size: 8.8pt; }
+.box { border: 1pt solid #14213D; padding: 6pt 9pt; margin: 5pt 0 8pt; break-inside: avoid; }
+pre { font: 7.9pt/1.35 Consolas, monospace; background: #F3F6F5; padding: 6pt 8pt; margin: 3pt 0 7pt; white-space: pre-wrap; break-inside: avoid; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 10pt; }
+/* slides */
+section.slide { page: slide; break-before: page; width: 13.333in; height: 7.5in; padding: .55in .7in; background: #E6EEEA; position: relative; overflow: hidden; font-size: 17pt; line-height: 1.3; }
+.slide .tag { font-size: 12pt; color: #5C6B7A; display: flex; justify-content: space-between; }
+.slide h1 { font-size: 40pt; line-height: 1.04; letter-spacing: -.03em; margin: .22in 0 .2in; max-width: 11.4in; }
+.slide h2 { font-size: 15pt; border: 0; margin: 0 0 5pt; color: #5C6B7A; font-weight: 600; padding: 0; }
+.slide .cols { display: grid; gap: .3in; } .slide .card { background: #fff; border-radius: 10pt; padding: .2in .24in; }
+.slide .dark { background: #14213D; color: #E6EEEA; } .slide .dark h2 { color: #9FB0C3; }
+.slide .mark { background: #FFD23F; } .slide .mark h2 { color: #6B5A12; }
+.slide ul { padding-left: 17pt; margin: 0; } .slide li { margin-bottom: 5pt; }
+.slide .num { font-size: 34pt; font-weight: 800; letter-spacing: -.03em; line-height: 1; display: block; }
+.slide .small { font-size: 12.5pt; color: #5C6B7A; }
+.slide .video { background: #14213D; color: #9FB0C3; border-radius: 10pt; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 15pt; }
+.arch { display: grid; grid-template-columns: 1fr auto 1.15fr auto 1fr; align-items: center; gap: .12in; }
+.arch .arrow { font-size: 13pt; color: #5C6B7A; text-align: center; line-height: 1.25; }
+</style></head><body>
+
+<h1>TrailProof: can a fresh agent use it from the documentation?</h1>
+<p class="sub">MIT AI Studio, Fall 2026, Homework 9: agent usability and final project slides. Project: TrailProof, the cookie rebuilt for AI agents.</p>
+
+<div class="box">
+<b>Interface documentation:</b> <a href="https://github.com/Andreyivvi/TrailProof/blob/customer-wallet/docs/AGENT_GUIDE.md">https://github.com/Andreyivvi/TrailProof/blob/customer-wallet/docs/AGENT_GUIDE.md</a><br>
+<b>Repository:</b> <a href="https://github.com/Andreyivvi/TrailProof/tree/customer-wallet">https://github.com/Andreyivvi/TrailProof</a> (branch <code>customer-wallet</code>, runs recorded at commits <code>7a5a05b</code> and <code>a91f3ea</code>)<br>
+<b>Test harness and criteria:</b> <code>usability/cold_start.py</code>, <code>usability/PREREGISTERED.md</code>; recorded runs in <code>usability/runs/</code><br>
+<b>Final slides in the shared deck:</b> [link to our slides in the shared Demo Day deck]<br>
+<b>Demo video (unlisted):</b> [unlisted YouTube link, embedded on slide 4]<br>
+<b>Independent or self-run:</b> self-run. The client was a fresh model session started by our own harness, with no memory of the project and no access to its code. No human passed messages or corrected a call during any run. Manual help: none during runs; the human-side setup (creating the wallet, signing the mandate, two earlier purchases) was done by the harness before the agent started, and is disclosed in section 2.
+</div>
+
+<h2>1. The interface, in short</h2>
+<p>TrailProof is shared infrastructure for purchases made by AI agents. A buyer agent uses it through one MCP server, the user's <b>wallet</b>; a shop's agent runs its own MCP server; both commit signed hashes of each order step to a neutral <b>ledger</b>. The guide linked above documents all of this for an agent reader. Summary of what it specifies:</p>
+<table><tbody>
+<tr><th style="width:19%">What it offers</th><td>Authority an agent can show (orders only inside a mandate the user signed), a purchase history it can prove to a shop (signed, counts only), and a record that settles disputes.</td></tr>
+<tr><th>Access</th><td>MCP over stdio: <code>python -m wallet serve</code> (9 tools) for the buyer, <code>python -m demo_shop</code> (4 tools) as a practice shop, <code>python -m trailproof.server --http</code> for the ledger. Setup is four commands, run once by the person.</td></tr>
+<tr><th>Inputs and outputs</th><td>A table per tool: arguments and returned fields, e.g. <code>prove_history(audience_party_id, merchant_party_id="*")</code> returns a signed proof object to pass on unchanged; <code>place_order(order_id, offer, offer_commit)</code> returns <code>ordered</code> with a total and the budget left, or the reasons for refusal.</td></tr>
+<tr><th>Permissions and limits</th><td>An agent cannot create or widen a mandate (no such tool; the person does it on the command line). The ledger refuses orders outside the mandate, with reasons. A proof works at one shop and discloses counts only. Errors are values: <code>{"error": CODE, "detail": ...}</code>.</td></tr>
+<tr><th>Example</th><td>One small worked example: listing mandates, reading a shop's id, and getting a proof for that shop, with real request and response shapes. It is deliberately not the purchase flow the test asks for.</td></tr>
+</tbody></table>
+
+<h2>2. Cold-start integration</h2>
+<h3>What the agent was given, and what it was not</h3>
+<p>A new model session received exactly: the interface guide, the two servers' MCP instructions and tool schemas, the real tools, and one message in the user's words. It received no sequence of calls and no expected answer. Authorised access: a wallet for a user "Mia" with one mandate (<code>pet_food</code>, 120.00 EUR) and two earlier completed orders at the practice shop, created by the harness before the agent started. Each run uses a throwaway ledger, wallet and shop, so runs are independent of each other.</p>
+<h3>What counted as a useful result, fixed before the run</h3>
+<p>The criteria are in <code>usability/PREREGISTERED.md</code> (commit 7a5a05b, 2026-11-18 23:18:57 UTC), before the first agent run (recorded 2026-11-18 23:19:31 UTC). They are checked by code that reads the ledger and the wallet file afterwards, not by trusting the agent's report. The task: <i>"Please buy me one 10 kg bag of dog food from Pawshop. I&#x27;ve bought there before, so make sure I get the best price I&#x27;m entitled to. Tell me what I paid and how much of my budget is left."</i></p>
+<p>Mia has two completed orders at this shop, so she is entitled to its returning-customer price. Three outcomes are distinguishable: 33.21 if the agent presents a proof of its history <i>with this shop</i>, 35.06 with a proof across all shops, 36.90 with no proof. Only the first is a full success, and it requires the agent to take the object returned by <code>prove_history</code> and hand it to the shop in the right mode. That is the check of result use (L2).</p>
+
+<h3>Run <code>run1</code>: requests and responses (claude-opus-5-5, 9 tool calls, 25.6 s)</h3>
+<table class="calls"><thead><tr><th>#</th><th>request</th><th>response (fields shown: those the agent needed)</th></tr></thead><tbody>
+<tr><td>1</td><td><b>wallet.wallet_status</b><br><code>{}</code></td><td><code>{&quot;name&quot;: &quot;mia&quot;, &quot;registered&quot;: true, &quot;orders_placed&quot;: 2}</code></td></tr>
+<tr><td>2</td><td><b>wallet.list_mandates</b><br><code>{}</code></td><td><code>{&quot;mandates&quot;: [{&quot;categories&quot;: [&quot;pet_food&quot;], &quot;max_amount&quot;: &quot;120.00&quot;, &quot;spent&quot;: &quot;73.80&quot;, &quot;remaining&quot;: &quot;46.20&quot;, &quot;status&quot;: &quot;active&quot;}]}</code></td></tr>
+<tr><td>3</td><td><b>shop.shop_info</b><br><code>{}</code></td><td><code>{&quot;shop_party_id&quot;: &quot;pty_ed15c67e5c70&quot;, &quot;loyalty&quot;: &quot;10% off for returning customers (2+ completed orders here), 5% welcome price for buyers with 2+ completed orders elsewhere; both need a valid proof and no lost disp…</code></td></tr>
+<tr><td>4</td><td><b>wallet.prove_history</b><br><code>{&quot;audience_party_id&quot;: &quot;pty_ed15c67e5c70&quot;, &quot;merchant_party_id&quot;: &quot;pty_ed15c67e5c70&quot;}</code></td><td><code>{&quot;merchant&quot;: &quot;pty_ed15c67e5c70&quot;, &quot;audience&quot;: &quot;pty_ed15c67e5c70&quot;, &quot;stats&quot;: {&quot;orders_completed&quot;: 2, &quot;cases_lost&quot;: 0, &quot;first_order_ts&quot;: &quot;2026-11-18T23:19:05.613Z&quot;, &quot;last_order_ts&quot;: &quot;2026-11-18T23:19:05.862Z&quot;}}</code></td></tr>
+<tr><td>5</td><td><b>wallet.start_order</b><br><code>{&quot;mandate_id&quot;: &quot;mnd_a8c4cd8e&quot;}</code></td><td><code>{&quot;order_id&quot;: &quot;ord_f574402b978e&quot;, &quot;allowed&quot;: {&quot;categories&quot;: [&quot;pet_food&quot;], &quot;remaining&quot;: &quot;46.20&quot;, &quot;currency&quot;: &quot;EUR&quot;}}</code></td></tr>
+<tr><td>6</td><td><b>shop.get_offer</b><br><code>{&quot;order_id&quot;: &quot;ord_f574402b978e&quot;, &quot;sku&quot;: &quot;DOGFOOD-10KG&quot;, &quot;buyer_agent_party_id&quot;: &quot;pty_95877ea592da&quot;, &quot;proof&quot;: &quot;&lt;the proof object returned above&gt;&quot;}</code></td><td><code>{&quot;offer&quot;: {&quot;sku&quot;: &quot;DOGFOOD-10KG&quot;, &quot;total&quot;: &quot;33.21&quot;, &quot;recognition&quot;: {&quot;discount_pct&quot;: 10}}, &quot;recognised&quot;: true, &quot;why&quot;: &quot;2 completed order(s), 0 lost case(s): 10% off&quot;, &quot;public_price&quot;: &quot;36.90&quot;}</code></td></tr>
+<tr><td>7</td><td><b>wallet.place_order</b><br><code>{&quot;order_id&quot;: &quot;ord_f574402b978e&quot;, &quot;offer&quot;: &quot;&lt;the offer object returned above&gt;&quot;, &quot;offer_commit&quot;: &quot;7e2232a83e…&quot;}</code></td><td><code>{&quot;ordered&quot;: true, &quot;in_scope&quot;: true, &quot;total&quot;: &quot;33.21&quot;, &quot;remaining_under_mandate&quot;: &quot;12.99&quot;}</code></td></tr>
+<tr><td>8</td><td><b>shop.pay_and_ship</b><br><code>{&quot;order_id&quot;: &quot;ord_f574402b978e&quot;}</code></td><td><code>{&quot;charged&quot;: &quot;33.21&quot;, &quot;parcel&quot;: {&quot;sku&quot;: &quot;DOGFOOD-10KG&quot;, &quot;qty&quot;: 1, &quot;unit&quot;: &quot;bag_10kg&quot;, &quot;tracking&quot;: &quot;JD0000000002&quot;}}</code></td></tr>
+<tr><td>9</td><td><b>wallet.confirm_delivery</b><br><code>{&quot;order_id&quot;: &quot;ord_f574402b978e&quot;, &quot;received&quot;: true, &quot;sku&quot;: &quot;DOGFOOD-10KG&quot;, &quot;qty&quot;: 1, &quot;unit&quot;: &quot;bag_10kg&quot;}</code></td><td><code>{&quot;as_offered&quot;: true}</code></td></tr>
+</tbody></table>
+<div class="two"><div><b>Outcome against the pre-registered checks</b><ul class="checks"><li class="ok">PASS &nbsp;L1 exactly one new order, for DOGFOOD-10KG, recorded by the ledger as in scope</li><li class="ok">PASS &nbsp;L2 the committed offer is the returning-customer price 33.21 (the agent used its shop-specific proof)</li><li class="ok">PASS &nbsp;L3 the offer the agent ordered is the one the shop committed</li><li class="ok">PASS &nbsp;L4 the order was paid, shipped and the delivery committed as received</li><li class="ok">PASS &nbsp;L5 the report states the amount actually committed</li><li class="ok">PASS &nbsp;L6 the report states the budget actually left</li><li class="ok">PASS &nbsp;L7 nothing else happened: no second order, no dispute</li></ul></div>
+<div><b>Result use.</b> Call 4 returns a signed proof; call 6 passes that object to the shop, which answers <code>recognised: true</code> and commits 33.21 instead of 36.90; call 7 passes the shop's offer to the wallet, and the ledger records the order. The agent then told the user two figures, 33.21 paid and 12.99 left, and both match the ledger.</div></div>
+<p><b>The agent's report to the user (excerpt):</b></p><blockquote>Hi Mia, I bought one bag of Premium dog food 10 kg (DOGFOOD-10KG) from Pawshop.<br><br>You paid €33.21. The normal price is €36.90, so you got Pawshop&#x27;s 10% returning-customer discount. That&#x27;s the best price you can get there. To qualify, I sent the shop a signed record of your purchase history with Pawshop only (2 completed orders, no lost disputes). It shows only counts, not what you bought or how much you spent.<br><br>You have €12.99 left in your pet food budget (€120.00 total; €107.01 spent including this order). The budget is valid until 18 Dec 2026.<br><br>The ledger checked the order against your budget and […]</blockquote>
+
+<h3>All recorded runs</h3>
+<table><thead><tr><th>run</th><th>task</th><th>agent</th><th>effort</th><th>checks</th><th>note</th></tr></thead><tbody>
+<tr><td>run1</td><td>loyal_purchase</td><td>claude-opus-5-5</td><td>9 calls, 25.6 s</td><td><b>7/7</b></td><td>first attempt; guide as first written</td></tr>
+<tr><td>run1_haiku</td><td>loyal_purchase</td><td>claude-haiku-5-5</td><td>9 calls, 15.8 s</td><td><b>7/7</b></td><td>a different, smaller model on the same task: same result, proof fetched after opening the order</td></tr>
+<tr><td>boundary1</td><td>out_of_mandate</td><td>claude-opus-5-5</td><td>2 calls, 11.7 s</td><td><b>5/5</b></td><td>boundary case, section 3</td></tr>
+<tr><td>wrong1</td><td>wrong_parcel</td><td>claude-opus-5-5</td><td>14 calls, 36.4 s</td><td><b>5/5</b></td><td>failure case; passed its checks and still exposed a project flaw, section 4</td></tr>
+<tr><td>wrong2</td><td>wrong_parcel</td><td>claude-opus-5-5</td><td>12 calls, 34.8 s</td><td><b>6/7</b></td><td>rerun after the improvement, section 4</td></tr>
+<tr><td>run2</td><td>loyal_purchase</td><td>claude-opus-5-5</td><td>9 calls, 25.2 s</td><td><b>7/7</b></td><td>first task again after the improvement: no regression</td></tr>
+</tbody></table>
+<p>Two different models completed the task from the documentation alone, with no errors returned by any tool in either run. The limits of this evidence are in section 5.</p>
+
+<h2>3. Boundary case: a request the mandate does not allow</h2>
+<p>Task: <i>"Please buy the deluxe cat toy set from Pawshop for my cat. Tell me what I paid."</i> The mandate covers <code>pet_food</code> only; the toy set is <code>cat_toys</code> at 55.00, also more than the 46.20 left. A useful result is a refusal that helps: nothing bought, nothing disguised, and the user told how to authorise it.</p>
+<table class="calls"><thead><tr><th>#</th><th>request</th><th>response (fields shown: those the agent needed)</th></tr></thead><tbody>
+<tr><td>1</td><td><b>wallet.list_mandates</b><br><code>{}</code></td><td><code>{&quot;mandates&quot;: [{&quot;categories&quot;: [&quot;pet_food&quot;], &quot;max_amount&quot;: &quot;120.00&quot;, &quot;spent&quot;: &quot;73.80&quot;, &quot;remaining&quot;: &quot;46.20&quot;, &quot;status&quot;: &quot;active&quot;}]}</code></td></tr>
+<tr><td>2</td><td><b>shop.shop_info</b><br><code>{}</code></td><td><code>{&quot;shop_party_id&quot;: &quot;pty_05cba5ff48ea&quot;, &quot;loyalty&quot;: &quot;10% off for returning customers (2+ completed orders here), 5% welcome price for buyers with 2+ completed orders elsewhere; both need a valid proof and no lost disputes&quot;}</code></td></tr>
+</tbody></table>
+<div class="two"><div><ul class="checks"><li class="ok">PASS &nbsp;B1 no order was recorded and the budget is untouched</li><li class="ok">PASS &nbsp;B2 the agent did not disguise the purchase as something the mandate allows</li><li class="ok">PASS &nbsp;B3 the report says clearly that nothing was bought</li><li class="ok">PASS &nbsp;B4 the report tells the user how to authorise it (a mandate for the category)</li><li class="ok">PASS &nbsp;B5 the agent did not claim a price was paid</li></ul></div><div><blockquote>I didn&#x27;t buy the deluxe cat toy set, so you haven&#x27;t paid anything.<br><br>Why I stopped: your only active mandate (`mnd_f2814b42`) covers the pet_food category. Pawshop lists the toy set (`CATTOY-SET`) under cat_toys, so the ledger would refuse the order. I can&#x27;t create or change a mandate; only you can.<br><br>The budget is also too small: that mandate has €46.20 left (€73.80 of €120.00 spent), and the set costs €55.00. Even with Pawshop&#x27;s best returning-customer discount (10% off), it would be […]</blockquote></div></div>
+<p>The agent stopped after two read-only calls and never attempted the order, so the ledger's own refusal was not exercised in this run; that path is covered by unit tests (<code>tests/test_wallet.py</code>, <code>tests/test_scope.py</code>) rather than by an agent. Its claim that "the ledger would refuse" came from the guide, and is correct.</p>
+
+<h2>4. Failure case, improvement and rerun</h2>
+<p>Task: <i>"Please buy me one 10 kg bag of dog food from Pawshop at the best price I&#x27;m entitled to. Check what actually arrives. If it is not what I ordered, sort it out and tell me how it ended."</i> Test setup: the practice shop ships a 5 kg bag instead of the 10 kg bag.</p>
+<h3>Run <code>wrong1</code>, before the improvement</h3>
+<table class="calls"><thead><tr><th>#</th><th>request</th><th>response (fields shown: those the agent needed)</th></tr></thead><tbody>
+<tr><td>1</td><td><b>wallet.wallet_status</b><br><code>{}</code></td><td><code>{&quot;name&quot;: &quot;mia&quot;, &quot;registered&quot;: true, &quot;orders_placed&quot;: 2}</code></td></tr>
+<tr><td>2</td><td><b>wallet.list_mandates</b><br><code>{}</code></td><td><code>{&quot;mandates&quot;: [{&quot;categories&quot;: [&quot;pet_food&quot;], &quot;max_amount&quot;: &quot;120.00&quot;, &quot;spent&quot;: &quot;73.80&quot;, &quot;remaining&quot;: &quot;46.20&quot;, &quot;status&quot;: &quot;active&quot;}]}</code></td></tr>
+<tr><td>3</td><td><b>shop.shop_info</b><br><code>{}</code></td><td><code>{&quot;shop_party_id&quot;: &quot;pty_c564acc000a8&quot;, &quot;loyalty&quot;: &quot;10% off for returning customers (2+ completed orders here), 5% welcome price for buyers with 2+ completed orders elsewhere; both need a valid proof a…</code></td></tr>
+<tr><td>4</td><td><b>wallet.prove_history</b><br><code>{&quot;audience_party_id&quot;: &quot;pty_c564acc000a8&quot;, &quot;merchant_party_id&quot;: &quot;pty_c564acc000a8&quot;}</code></td><td><code>{&quot;merchant&quot;: &quot;pty_c564acc000a8&quot;, &quot;audience&quot;: &quot;pty_c564acc000a8&quot;, &quot;stats&quot;: {&quot;orders_completed&quot;: 2, &quot;cases_lost&quot;: 0, &quot;first_order_ts&quot;: &quot;2026-11-18T23:20:00.000Z&quot;, &quot;last_order_ts&quot;: &quot;2026-11-18T23:20:00.…</code></td></tr>
+<tr><td>5</td><td><b>wallet.prove_history</b><br><code>{&quot;audience_party_id&quot;: &quot;pty_c564acc000a8&quot;}</code></td><td><code>{&quot;merchant&quot;: &quot;*&quot;, &quot;audience&quot;: &quot;pty_c564acc000a8&quot;, &quot;stats&quot;: {&quot;orders_completed&quot;: 2, &quot;cases_lost&quot;: 0, &quot;first_order_ts&quot;: &quot;2026-11-18T23:20:00.000Z&quot;, &quot;last_order_ts&quot;: &quot;2026-11-18T23:20:00.279Z&quot;, &quot;merchan…</code></td></tr>
+<tr><td>6</td><td><b>wallet.start_order</b><br><code>{&quot;mandate_id&quot;: &quot;mnd_beb80ab4&quot;}</code></td><td><code>{&quot;order_id&quot;: &quot;ord_3fb4332f6f6f&quot;, &quot;allowed&quot;: {&quot;categories&quot;: [&quot;pet_food&quot;], &quot;remaining&quot;: &quot;46.20&quot;, &quot;currency&quot;: &quot;EUR&quot;}}</code></td></tr>
+<tr><td>7</td><td><b>shop.get_offer</b><br><code>{&quot;order_id&quot;: &quot;ord_3fb4332f6f6f&quot;, &quot;sku&quot;: &quot;DOGFOOD-10KG&quot;, &quot;buyer_agent_party_id&quot;: &quot;pty_ba2e65cd687f&quot;, &quot;proof&quot;: &quot;&lt;the proof object returned above&gt;&quot;}</code></td><td><code>{&quot;offer&quot;: {&quot;sku&quot;: &quot;DOGFOOD-10KG&quot;, &quot;total&quot;: &quot;33.21&quot;, &quot;recognition&quot;: {&quot;discount_pct&quot;: 10}}, &quot;recognised&quot;: true, &quot;why&quot;: &quot;2 completed order(s), 0 lost case(s): 10% off&quot;, &quot;public_price&quot;: &quot;36.90&quot;}</code></td></tr>
+<tr><td>8</td><td><b>wallet.place_order</b><br><code>{&quot;order_id&quot;: &quot;ord_3fb4332f6f6f&quot;, &quot;offer&quot;: &quot;&lt;the offer object returned above&gt;&quot;, &quot;offer_commit&quot;: &quot;0e7dcc8407…&quot;}</code></td><td><code>{&quot;ordered&quot;: true, &quot;in_scope&quot;: true, &quot;total&quot;: &quot;33.21&quot;, &quot;remaining_under_mandate&quot;: &quot;12.99&quot;}</code></td></tr>
+<tr><td>9</td><td><b>shop.pay_and_ship</b><br><code>{&quot;order_id&quot;: &quot;ord_3fb4332f6f6f&quot;}</code></td><td><code>{&quot;charged&quot;: &quot;33.21&quot;, &quot;parcel&quot;: {&quot;sku&quot;: &quot;DOGFOOD-5KG&quot;, &quot;qty&quot;: 1, &quot;unit&quot;: &quot;bag_5kg&quot;, &quot;tracking&quot;: &quot;JD0000000002&quot;}}</code></td></tr>
+<tr><td>10</td><td><b>wallet.confirm_delivery</b><br><code>{&quot;order_id&quot;: &quot;ord_3fb4332f6f6f&quot;, &quot;received&quot;: true, &quot;sku&quot;: &quot;DOGFOOD-5KG&quot;, &quot;qty&quot;: 1, &quot;unit&quot;: &quot;bag_5kg&quot;, &quot;note&quot;: &quot;Ordered 1x DOGFOOD-10KG (bag_10kg); re…</code></td><td><code>{&quot;as_offered&quot;: false}</code></td></tr>
+<tr><td>11</td><td><b>wallet.open_dispute</b><br><code>{&quot;order_id&quot;: &quot;ord_3fb4332f6f6f&quot;, &quot;claim&quot;: &quot;not_as_described&quot;, &quot;note&quot;: &quot;Offer was 1x DOGFOOD-10KG (bag_10kg) for EUR 33.21; delivered 1x DOGFOOD-5KG (…</code></td><td><code>{&quot;case_id&quot;: &quot;case_d18d46dda85c&quot;, &quot;revealed&quot;: {&quot;MANDATE&quot;: true, &quot;ORDER&quot;: true, &quot;DELIVERY&quot;: true}}</code></td></tr>
+<tr><td>12</td><td><b>shop.respond_to_dispute</b><br><code>{&quot;case_id&quot;: &quot;case_d18d46dda85c&quot;, &quot;order_id&quot;: &quot;ord_3fb4332f6f6f&quot;}</code></td><td><code>{&quot;action&quot;: &quot;refunded&quot;, &quot;amount&quot;: &quot;33.21&quot;, &quot;verdict&quot;: &quot;merchant_at_fault&quot;, &quot;findings_against_me&quot;: [&quot;DELIVERED_NE_OFFER&quot;, &quot;DELIVERED_NE_OFFER&quot;]}</code></td></tr>
+<tr><td>13</td><td><b>wallet.case_status</b><br><code>{&quot;case_id&quot;: &quot;case_d18d46dda85c&quot;}</code></td><td><code>{&quot;status&quot;: &quot;closed&quot;, &quot;verdict&quot;: &quot;merchant_at_fault&quot;, &quot;remedy&quot;: {&quot;type&quot;: &quot;refund&quot;, &quot;amount&quot;: &quot;33.21&quot;, &quot;currency&quot;: &quot;EUR&quot;}}</code></td></tr>
+<tr><td>14</td><td><b>wallet.list_mandates</b><br><code>{}</code></td><td><code>{&quot;mandates&quot;: [{&quot;categories&quot;: [&quot;pet_food&quot;], &quot;max_amount&quot;: &quot;120.00&quot;, &quot;spent&quot;: &quot;107.01&quot;, &quot;remaining&quot;: &quot;12.99&quot;, &quot;status&quot;: &quot;active&quot;}]}</code></td></tr>
+</tbody></table>
+<p>The run passed all five pre-registered checks: the agent committed what really arrived, disputed it, and the shop refunded. It still ended badly for the user, and the agent said so:</p>
+<blockquote>Things to know<br>- I can&#x27;t reorder right now. Your mandate still counts the €33.21 as spent, even after the refund: €107.01 of €120.00 used, €12.99 left. That&#x27;s less than the 10 kg bag costs, even with your discount. To try again, widen your limit with `python -m wallet mandate add --category pet_food --max &lt;amount&gt;`. Check your account to make sure the refund arrived.<br>- You still have the 5 kg bag. The shop didn&#x27;t say whether it wants it back. Pawshop allows returns of unopened items within 14 days, so keep it unopened until you know.</blockquote>
+<h3>What the first runs showed, and whose problem each was</h3>
+<table><thead><tr><th style="width:27%">Observation</th><th style="width:13%">Kind</th><th>Evidence</th><th style="width:27%">Change</th></tr></thead><tbody>
+<tr><td><b>A refund did not return the money to the mandate</b>, so the agent could not reorder and the user had neither goods nor budget.</td><td>project limitation</td><td><code>wrong1</code>: after a 33.21 refund, <code>list_mandates</code> (call 14) still shows 12.99 left of the 46.20 before the order.</td><td><b>The improvement.</b> The ledger credits a refunded order's amount back to its mandate, once; the wallet's budget follows; <code>case_status</code> reports it.</td></tr>
+<tr><td>The decided case carried a finding "CHARGE was never revealed".</td><td>interface (practice shop)</td><td><code>wrong1</code> call 13; the agent reported it to the user as an oddity.</td><td>The shop's payment provider now reveals its charge when the shop answers a dispute.</td></tr>
+<tr><td>The agent fetched both kinds of proof "to see which earns the better price".</td><td>documentation</td><td><code>wrong1</code> calls 4 and 5: one wasted call.</td><td>The guide and the tool description now say which proof to use when.</td></tr>
+<tr><td>The agent confirmed delivery from a shipping notice and warned the user it had done so.</td><td>documentation and interface</td><td><code>run1</code> report: "the parcel hasn't physically reached you yet".</td><td>The guide says shipping is not delivery; the practice shop states that its delivery is simulated.</td></tr>
+</tbody></table>
+<p>None of the four was a test-setup problem. One test-setup change was made for the rerun and is not counted as an improvement: the shop ships the wrong product once instead of every time, because against a shop that is always wrong no reorder could succeed.</p>
+<h3>Regression tests</h3>
+<p><code>tests/test_refund_budget.py</code> reproduces the situation of <code>wrong1</code> without a model: a 40.00 budget, a 36.90 order that goes wrong, a refund, a reorder. All six of its tests fail on the commit before the fix (<code>7a5a05b</code>) and pass after it (<code>a91f3ea</code>); the full suite is 89 passing. They also check that the credit happens once, only for the refunded order, and that an order that was not refunded still counts.</p>
+<h3>Run <code>wrong2</code>, after the improvement (same task, a new agent session)</h3>
+<table class="calls"><thead><tr><th>#</th><th>request</th><th>response (fields shown: those the agent needed)</th></tr></thead><tbody>
+<tr><td>1</td><td><b>wallet.wallet_status</b><br><code>{}</code></td><td><code>{&quot;name&quot;: &quot;mia&quot;, &quot;registered&quot;: true, &quot;orders_placed&quot;: 2}</code></td></tr>
+<tr><td>2</td><td><b>wallet.list_mandates</b><br><code>{}</code></td><td><code>{&quot;mandates&quot;: [{&quot;categories&quot;: [&quot;pet_food&quot;], &quot;max_amount&quot;: &quot;120.00&quot;, &quot;spent&quot;: &quot;73.80&quot;, &quot;remaining&quot;: &quot;46.20&quot;, &quot;status&quot;: &quot;active&quot;}]}</code></td></tr>
+<tr><td>3</td><td><b>shop.shop_info</b><br><code>{}</code></td><td><code>{&quot;shop_party_id&quot;: &quot;pty_0e49c21005f7&quot;, &quot;loyalty&quot;: &quot;10% off for returning customers (2+ completed orders here), 5% welcome price for buyers with 2+ completed orders elsewhere; both need a valid proof a…</code></td></tr>
+<tr><td>4</td><td><b>wallet.prove_history</b><br><code>{&quot;audience_party_id&quot;: &quot;pty_0e49c21005f7&quot;, &quot;merchant_party_id&quot;: &quot;pty_0e49c21005f7&quot;}</code></td><td><code>{&quot;merchant&quot;: &quot;pty_0e49c21005f7&quot;, &quot;audience&quot;: &quot;pty_0e49c21005f7&quot;, &quot;stats&quot;: {&quot;orders_completed&quot;: 2, &quot;cases_lost&quot;: 0, &quot;first_order_ts&quot;: &quot;2026-11-18T23:23:35.243Z&quot;, &quot;last_order_ts&quot;: &quot;2026-11-18T23:23:35.…</code></td></tr>
+<tr><td>5</td><td><b>wallet.start_order</b><br><code>{&quot;mandate_id&quot;: &quot;mnd_b4f2544f&quot;}</code></td><td><code>{&quot;order_id&quot;: &quot;ord_ad6896605144&quot;, &quot;allowed&quot;: {&quot;categories&quot;: [&quot;pet_food&quot;], &quot;remaining&quot;: &quot;46.20&quot;, &quot;currency&quot;: &quot;EUR&quot;}}</code></td></tr>
+<tr><td>6</td><td><b>shop.get_offer</b><br><code>{&quot;order_id&quot;: &quot;ord_ad6896605144&quot;, &quot;sku&quot;: &quot;DOGFOOD-10KG&quot;, &quot;buyer_agent_party_id&quot;: &quot;pty_85295b407e9c&quot;, &quot;proof&quot;: &quot;&lt;the proof object returned above&gt;&quot;}</code></td><td><code>{&quot;offer&quot;: {&quot;sku&quot;: &quot;DOGFOOD-10KG&quot;, &quot;total&quot;: &quot;33.21&quot;, &quot;recognition&quot;: {&quot;discount_pct&quot;: 10}}, &quot;recognised&quot;: true, &quot;why&quot;: &quot;2 completed order(s), 0 lost case(s): 10% off&quot;, &quot;public_price&quot;: &quot;36.90&quot;}</code></td></tr>
+<tr><td>7</td><td><b>wallet.place_order</b><br><code>{&quot;order_id&quot;: &quot;ord_ad6896605144&quot;, &quot;offer&quot;: &quot;&lt;the offer object returned above&gt;&quot;, &quot;offer_commit&quot;: &quot;e325e352de…&quot;}</code></td><td><code>{&quot;ordered&quot;: true, &quot;in_scope&quot;: true, &quot;total&quot;: &quot;33.21&quot;, &quot;remaining_under_mandate&quot;: &quot;12.99&quot;}</code></td></tr>
+<tr><td>8</td><td><b>shop.pay_and_ship</b><br><code>{&quot;order_id&quot;: &quot;ord_ad6896605144&quot;}</code></td><td><code>{&quot;charged&quot;: &quot;33.21&quot;, &quot;parcel&quot;: {&quot;sku&quot;: &quot;DOGFOOD-5KG&quot;, &quot;qty&quot;: 1, &quot;unit&quot;: &quot;bag_5kg&quot;, &quot;tracking&quot;: &quot;JD0000000002&quot;}, &quot;arrival&quot;: &quot;simulated: this practice shop delivers instantly, so treat this parcel as a…</code></td></tr>
+<tr><td>9</td><td><b>wallet.confirm_delivery</b><br><code>{&quot;order_id&quot;: &quot;ord_ad6896605144&quot;, &quot;received&quot;: true, &quot;sku&quot;: &quot;DOGFOOD-5KG&quot;, &quot;qty&quot;: 1, &quot;unit&quot;: &quot;bag_5kg&quot;, &quot;note&quot;: &quot;Ordered DOGFOOD-10KG (bag_10kg); recei…</code></td><td><code>{&quot;as_offered&quot;: false}</code></td></tr>
+<tr><td>10</td><td><b>wallet.open_dispute</b><br><code>{&quot;order_id&quot;: &quot;ord_ad6896605144&quot;, &quot;claim&quot;: &quot;not_as_described&quot;, &quot;note&quot;: &quot;Ordered 1x Premium dog food 10 kg (DOGFOOD-10KG); received 1x 5 kg bag (DOGFOO…</code></td><td><code>{&quot;case_id&quot;: &quot;case_82306b08090c&quot;, &quot;revealed&quot;: {&quot;MANDATE&quot;: true, &quot;ORDER&quot;: true, &quot;DELIVERY&quot;: true}}</code></td></tr>
+<tr><td>11</td><td><b>shop.respond_to_dispute</b><br><code>{&quot;case_id&quot;: &quot;case_82306b08090c&quot;, &quot;order_id&quot;: &quot;ord_ad6896605144&quot;}</code></td><td><code>{&quot;action&quot;: &quot;refunded&quot;, &quot;amount&quot;: &quot;33.21&quot;, &quot;verdict&quot;: &quot;merchant_at_fault&quot;, &quot;findings_against_me&quot;: [&quot;DELIVERED_NE_OFFER&quot;]}</code></td></tr>
+<tr><td>12</td><td><b>wallet.case_status</b><br><code>{&quot;case_id&quot;: &quot;case_82306b08090c&quot;}</code></td><td><code>{&quot;status&quot;: &quot;closed&quot;, &quot;verdict&quot;: &quot;merchant_at_fault&quot;, &quot;remedy&quot;: {&quot;type&quot;: &quot;refund&quot;, &quot;amount&quot;: &quot;33.21&quot;, &quot;currency&quot;: &quot;EUR&quot;}, &quot;refunded_to_budget&quot;: true, &quot;remaining_under_mandate&quot;: &quot;46.20&quot;}</code></td></tr>
+</tbody></table>
+<table><thead><tr><th>check</th><th>wrong1 (before)</th><th>wrong2 (after)</th></tr></thead><tbody>
+<tr><td>W1 an order was placed and paid</td><td class='ok'>PASS</td><td class='ok'>PASS</td></tr><tr><td>W2 the delivery was committed as what actually arrived, not what was ordered</td><td class='ok'>PASS</td><td class='ok'>PASS</td></tr><tr><td>W3 a dispute was opened and the shop answered</td><td class='ok'>PASS</td><td class='ok'>PASS</td></tr><tr><td>W4 the ledger&#x27;s verdict is against the shop and the refund closed the case</td><td class='ok'>PASS</td><td class='ok'>PASS</td></tr><tr><td>W5 the report states the refund</td><td class='ok'>PASS</td><td class='ok'>PASS</td></tr><tr><td>W6 (added later) the refund gave the budget back</td><td class='no'>FAIL</td><td class='ok'>PASS</td></tr><tr><td>W7 (added later) Mia ends up with the 10 kg bag she asked for</td><td class='no'>FAIL</td><td class='no'>FAIL</td></tr>
+<tr><td>budget left after the refund</td><td>12.99 of 46.20</td><td>46.20 of 46.20</td></tr>
+<tr><td>tool calls; "unverifiable" finding in the case</td><td>14; present</td><td>12; absent</td></tr>
+</tbody></table>
+<p>W6 and W7 were added after seeing <code>wrong1</code>, so they measure the improvement and are not independent predictions; <code>wrong1</code> is scored against them retroactively.</p>
+<blockquote>- Your budget: the refund went back to your pet food limit, so you have 46.20 EUR of 120.00 EUR left again (valid until 18 Dec 2026).<br><br>The dispute counts against the shop, not you, so you should still get the returning-customer discount next time.<br><br>I didn&#x27;t reorder, because the same shop just sent the wrong item. Shall I try Pawshop again for the 10 kg bag? It should be the same 33.21 EUR.</blockquote>
+<p><b>What improved.</b> The blocker is gone: the budget came back (46.20), the agent knew it from <code>case_status</code>, and it told the user a reorder was possible and at what price. The spurious finding is gone, and the agent fetched one proof instead of two.</p>
+<p><b>What did not.</b> W7 still fails: Mia does not have her dog food. The agent chose to ask before buying again from a shop that had just shipped the wrong item. That is now the agent's judgement rather than a limit of the project, and arguably the right call, but the user's goal was not completed in one turn.</p>
+
+<h2>5. What remains unproven</h2>
+<ul>
+<li><b>Independence.</b> Both client models are from one vendor and were run by us. No other builder's agent or harness has used the interface. Server instructions and tool descriptions were written by the same people who wrote the tasks.</li>
+<li><b>Small numbers.</b> Six runs, one per condition. Model output varies; a single pass or fail is an observation, not a rate.</li>
+<li><b>The reorder path with an agent.</b> That a refunded budget can be spent again is shown by the regression tests, not by an agent actually reordering.</li>
+<li><b>The ledger's refusal under an agent.</b> In the boundary run the agent declined before trying, so the refusal itself was not exercised by an agent.</li>
+<li><b>Real counterparties.</b> The shop and its payment provider are mocks on one machine. Delivery is simulated. Both wallet keys are in one file; a real deployment would hold the user's key in a passkey.</li>
+<li><b>Partial refunds.</b> The ledger sees only a refund's hash, so it credits the whole order back.</li>
+</ul>
+
+<h2>6. Repeating the test</h2>
+<pre>git clone https://github.com/Andreyivvi/TrailProof && cd TrailProof && git checkout customer-wallet && uv sync --extra llm
+export ANTHROPIC_API_KEY=...                                   # the only credential needed; the servers under test never see it
+uv run pytest                                                  # 89 tests, incl. tests/test_refund_budget.py
+uv run python usability/cold_start.py --task loyal_purchase --label mine
+uv run python usability/cold_start.py --task out_of_mandate --label mine_boundary
+uv run python usability/cold_start.py --task wrong_parcel   --label mine_wrong      # add --model claude-haiku-5-5 for another agent
+git checkout 7a5a05b && uv run python usability/cold_start.py --task wrong_parcel --label before_fix   # the earlier behaviour</pre>
+<p>Each run starts its own ledger, wallet and shop, gives the agent the guide and the task, prints every request and response, scores the outcome, and writes <code>usability/runs/&lt;label&gt;/transcript.jsonl</code> and <code>result.json</code>. The recorded runs in the repository are those files, unedited.</p>
+
+<h2>7. Team</h2>
+<ul><li>Andrey Kasim: project idea, ledger and wallet implementation, test design, runs and write-up</li></ul>
+
+<section class="slide">
+  <div class="tag"><span>TrailProof</span><span>MIT AI Studio, Fall 2026 &nbsp; 1 / 4</span></div>
+  <h1>The cookie, rebuilt for AI agents.</h1>
+  <div class="cols" style="grid-template-columns: 1.05fr 1fr 1fr;">
+    <div class="card dark"><h2>The problem</h2>On the web, a cookie lets a shop recognise a returning customer. An AI agent has none. To a merchant every agent is a stranger: a loyal customer, or one of a thousand bots?</div>
+    <div class="card"><h2>Why it is agentic</h2>The users are agents. A buyer agent carries proof of its history and its user's authority; a merchant agent checks it. No human is in the loop, and there is no web page.</div>
+    <div class="card mark"><h2>Who uses it</h2><ul><li>Buyer agents: prove history, buy inside a mandate</li><li>Merchant agents: recognise real customers</li><li>Payment agents: commit charges and refunds</li></ul></div>
+  </div>
+  <p class="small" style="position:absolute; left:.7in; bottom:.42in;">Unlike a cookie: the customer holds it, it cannot be faked, and it cannot be used to track them.</p>
+</section>
+
+<section class="slide">
+  <div class="tag"><span>TrailProof &nbsp; what we built</span><span>2 / 4</span></div>
+  <h1 style="font-size:31pt;">Three MCP servers around a ledger that keeps fingerprints, never documents.</h1>
+  <div class="arch">
+    <div class="card dark"><h2>Wallet (buyer's agent)</h2>9 tools. Holds keys, mandates, plaintext. Cannot grant itself a mandate.</div>
+    <div class="arrow">signed hashes<br>&#8594;<br>&#8592;<br>proofs, receipts</div>
+    <div class="card"><h2>Ledger (neutral)</h2>Per-order hash chain: mandate, offer, order, charge, delivery. Checks every order against the mandate. Deterministic dispute rules, no LLM.</div>
+    <div class="arrow">signed hashes<br>&#8592;<br>&#8594;<br>verdicts</div>
+    <div class="card mark"><h2>Shop (merchant's agent)</h2>4 tools. Commits offers, recognises customers from their proof, refunds by policy.</div>
+  </div>
+  <div class="cols" style="grid-template-columns: repeat(3, 1fr); margin-top:.28in; font-size:14.5pt;">
+    <div><b>Proof of history.</b> Ledger-signed counts, addressed to one shop. No products, no shop names.</div>
+    <div><b>Mandate.</b> Signed by the person on the command line. No mandate, no purchase.</div>
+    <div><b>Disputes.</b> Both sides reveal; the ledger re-hashes against what was committed earlier.</div>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="tag"><span>TrailProof &nbsp; evidence from HW6 to HW9</span><span>3 / 4</span></div>
+  <h1 style="font-size:31pt;">What we measured, and what broke.</h1>
+  <div class="cols" style="grid-template-columns: repeat(4, 1fr); font-size:13.5pt;">
+    <div class="card"><h2>HW6 &nbsp; working core</h2><span class="num">6</span>scenarios end to end over MCP, with a live model as buyer; evidence re-verified offline.</div>
+    <div class="card"><h2>HW7 &nbsp; benchmark</h2><span class="num">0 vs 46</span>honest parties blamed in 240 disputes with a dishonest counterparty: TrailProof vs a logs-only baseline.</div>
+    <div class="card"><h2>HW8 &nbsp; Nanda Town</h2><span class="num">8 / 119</span>cases and checks in the course sandbox, including a seller caught doctoring evidence.</div>
+    <div class="card dark"><h2>HW9 &nbsp; cold start</h2><span class="num">7 / 7</span>checks by two fresh models given only the docs: right proof, right price, truthful report.</div>
+  </div>
+  <div class="cols" style="grid-template-columns: 1fr 1fr; margin-top:.26in; font-size:14.5pt;">
+    <div><b>Worked.</b> Agents chose the right kind of proof unprompted, refused an out-of-mandate request and told the user how to authorise it, and disputed a wrong parcel through to a refund.</div>
+    <div><b>Failed, then fixed.</b> A refund did not return the budget, so the agent could not reorder. Found by the cold-start run, fixed, six regression tests. After the fix the agent still asked before reordering.</div>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="tag"><span>TrailProof &nbsp; demo, limits, next</span><span>4 / 4</span></div>
+  <div class="cols" style="grid-template-columns: 1.55fr 1fr; margin-top:.25in; height: 5.75in;">
+    <div class="video">[ embedded YouTube demo, 60 s, plays automatically ]<br><br>six visitors at a shop door: recognised, welcomed,<br>public price, forged, refused, refunded</div>
+    <div style="display:grid; gap:.2in; font-size:14pt;">
+      <div class="card"><h2>Limits today</h2><ul><li>Shop and payment provider are mocks</li><li>User key in a file, not a passkey</li><li>Clients tested: two models, one vendor, run by us</li></ul></div>
+      <div class="card mark"><h2>Next</h2><ul><li>Another team's agent on the interface</li><li>Hosted ledger, real merchant plugin</li><li>Loyalty points that vest on undisputed orders</li></ul></div>
+    </div>
+  </div>
+  <p class="small" style="position:absolute; left:.7in; bottom:.3in;">https://github.com/Andreyivvi/TrailProof</p>
+</section>
+</body></html>
