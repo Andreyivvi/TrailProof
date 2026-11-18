@@ -1,0 +1,90 @@
+{
+  "label": "wrong1",
+  "task": "wrong_parcel",
+  "prompt": "Hi, it's Mia. Please buy me one 10 kg bag of dog food from Pawshop at the best price I'm entitled to. Check what actually arrives. If it is not what I ordered, sort it out and tell me how it ended.",
+  "model": "claude-opus-5-5",
+  "docs": "docs/AGENT_GUIDE.md",
+  "docs_sha256": "9e0c3744c1eb3595",
+  "git_commit": "7a5a05b",
+  "recorded_at": "2026-11-18T23:20:36.778Z",
+  "seconds": 36.4,
+  "turns": 11,
+  "tool_calls": 14,
+  "stop_reason": "end_turn",
+  "seeded": {
+    "mandate_id": "mnd_beb80ab4",
+    "agent_party_id": "pty_ba2e65cd687f",
+    "shop_party_id": "pty_c564acc000a8",
+    "remaining_before": "46.20"
+  },
+  "observed": {
+    "new_orders": [
+      {
+        "order_id": "ord_3fb4332f6f6f",
+        "types": [
+          "MANDATE",
+          "OFFER",
+          "ORDER",
+          "CHARGE",
+          "FULFILMENT",
+          "DELIVERY",
+          "DISPUTE",
+          "REFUND"
+        ],
+        "ordered": true,
+        "sku": "DOGFOOD-10KG",
+        "category": "pet_food",
+        "total": "33.21",
+        "recognition": {
+          "discount_pct": 10,
+          "attestation_commit": "ff3b4793a9e396fa092627bb80ef98d67b85b5fc08b96cf71539e32301b58251"
+        },
+        "offer_matches_ledger": true,
+        "delivery": {
+          "received": true,
+          "sku": "DOGFOOD-5KG",
+          "qty": 1,
+          "unit": "bag_5kg",
+          "note": "Ordered 1x DOGFOOD-10KG (bag_10kg); received 1x DOGFOOD-5KG (bag_5kg). Tracking JD0000000002."
+        },
+        "case": {
+          "case_id": "case_d18d46dda85c",
+          "status": "closed",
+          "verdict": "merchant_at_fault",
+          "remedy": {
+            "type": "refund",
+            "amount": "33.21",
+            "currency": "EUR"
+          },
+          "findings": [
+            "DELIVERED_NE_OFFER",
+            "MANDATE_IN_SCOPE",
+            "UNVERIFIABLE"
+          ]
+        }
+      }
+    ],
+    "remaining": "12.99",
+    "spent": "107.01",
+    "mandates": [
+      {
+        "mandate_id": "mnd_beb80ab4",
+        "categories": [
+          "pet_food"
+        ],
+        "max_amount": "120.00",
+        "status": "active"
+      }
+    ]
+  },
+  "checks": {
+    "W1 one order placed and paid": true,
+    "W2 the delivery was committed as what actually arrived, not what was ordered": true,
+    "W3 a dispute was opened and the shop answered": true,
+    "W4 the ledger's verdict is against the shop and the refund closed the case": true,
+    "W5 the report states the refund": true
+  },
+  "passed": 5,
+  "of": 5,
+  "final_text": "Hi Mia, I placed the order, but the wrong bag arrived. The ledger ruled against the shop and you got a full refund, so you haven't paid anything. **You still don't have a 10 kg bag.**\n\n**The order**\n- Your 2 earlier orders were both at Pawshop, so I used a proof of your history with that shop. That got you the 10% returning-customer price: **€33.21** instead of the usual €36.90.\n- The ledger checked the order against your pet-food mandate and accepted it. Pawshop charged €33.21.\n\n**What arrived**\n- One **5 kg bag (DOGFOOD-5KG)**, not the 10 kg bag (DOGFOOD-10KG). Tracking number: JD0000000002.\n- I recorded on the ledger what actually came, and it flagged the delivery as not matching the offer.\n\n**The dispute**\n- I opened a \"not as described\" dispute (case `case_d18d46dda85c`). The shop replied, and the case is now **closed**.\n- **Verdict: merchant_at_fault.** The ledger found the item delivered didn't match the offer.\n- **Remedy: refund of €33.21 EUR.** Pawshop says it has paid it.\n- One finding was \"unverifiable\": the payment provider never shared its record of the charge. This didn't change the outcome.\n\n**Things to know**\n- **I can't reorder right now.** Your mandate still counts the €33.21 as spent, even after the refund: €107.01 of €120.00 used, **€12.99 left**. That's less than the 10 kg bag costs, even with your discount. To try again, widen your limit with `python -m wallet mandate add --category pet_food --max <amount>`. Check your account to make sure the refund arrived.\n- **You still have the 5 kg bag.** The shop didn't say whether it wants it back. Pawshop allows returns of unopened items within 14 days, so keep it unopened until you know."
+}

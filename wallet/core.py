@@ -156,7 +156,21 @@ class Wallet:
 
     def spent(self, mandate_id: str) -> Decimal:
         return sum((Decimal(o["total"]) for o in self.state["orders"].values()
-                    if o["mandate_id"] == mandate_id and o.get("ordered")), Decimal("0.00"))
+                    if o["mandate_id"] == mandate_id and o.get("ordered") and not o.get("refunded")), Decimal("0.00"))
+
+    async def sync_refunds(self) -> list[str]:
+        """Ask the ledger which of this wallet's orders were refunded, and stop counting them as spent."""
+        newly = []
+        for order_id, o in self.state["orders"].items():
+            if not o.get("ordered") or o.get("refunded"):
+                continue
+            trail = await self._call("get_trail", order_id=order_id, party_id=self.agent_id)
+            if any(e["type"] == "REFUND" for e in trail["events"]):
+                o["refunded"] = True
+                newly.append(order_id)
+        if newly:
+            self.save()
+        return newly
 
     def mandates(self, active_only: bool = False) -> list[dict[str, Any]]:
         out = []
@@ -228,6 +242,7 @@ class Wallet:
         """
         self._require_registered()
         payload = self._active_mandate(mandate_id)
+        await self.sync_refunds()
         order_id = f"ord_{uuid.uuid4().hex[:12]}"
         self.state["orders"][order_id] = {"mandate_id": mandate_id, "total": "0.00", "events": {}, "ordered": False}
         rec = await self._record(order_id, "MANDATE", payload, "user")
@@ -301,7 +316,11 @@ class Wallet:
 
     async def case_status(self, case_id: str) -> dict[str, Any]:
         b = await self._call("get_case_bundle", case_id=case_id, party_id=self.agent_id)
-        return {"case_id": case_id, "status": b["status"], "verdict": b["verdict"], "remedy": b["remedy"],
+        await self.sync_refunds()
+        order = self.state["orders"].get(self.state["cases"].get(case_id, {}).get("order_id"), {})
+        budget = self.mandates_by_id(order["mandate_id"])["remaining"] if order.get("mandate_id") else None
+        return {"case_id": case_id, "status": b["status"], "refunded_to_budget": bool(order.get("refunded")),
+                "remaining_under_mandate": budget, "verdict": b["verdict"], "remedy": b["remedy"],
                 "rationale": b.get("rationale"), "findings": [{"code": f["code"], "detail": f["detail"]} for f in b["findings"]]}
 
     async def order_trail(self, order_id: str) -> dict[str, Any]:

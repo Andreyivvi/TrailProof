@@ -82,3 +82,20 @@ errors made the right move hard), the **project** (the system cannot do it),
 or the **test setup** (the harness, not TrailProof). The transcript decides
 which. One improvement will be made from what is observed, and the affected
 task rerun.
+
+## Added after run `wrong1` (not pre-registered)
+
+The first `wrong_parcel` run passed W1 to W5 and still left the user worse
+off than the checks could see: the refund did not return the money to the
+mandate, so the agent could not reorder. Two checks were added to make that
+visible. They were written after seeing the problem, so they are a
+regression measure for the improvement, not an independent prediction. The
+first run is scored against them retroactively.
+
+- **W6** the refund gave the budget back
+- **W7** Mia ends up with the 10 kg bag she asked for
+
+The test setup also changed for the rerun: the shop ships the wrong product
+once instead of every time (`--wrong-item once`), because with a shop that
+is always wrong no reorder could ever succeed. W1 was reworded from "one
+order" to "an order", since a successful reorder makes two.

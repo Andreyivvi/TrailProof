@@ -73,6 +73,16 @@ class Shop:
         self.ready = True
 
 
+    async def respond(self, case_id: str, order_id: str) -> dict[str, Any]:
+        """The shop's whole side of a dispute: its payment provider reveals the charge, the shop reveals
+        offer and shipment, reads the verdict and applies its refund policy."""
+        await self.psp.reveal_all(case_id, order_id)
+        d = await self.shop.handle_dispute({"case_id": case_id, "order_id": order_id}, self.psp)
+        out = {k: d.get(k) for k in ("action", "amount", "currency", "reason", "verdict")}
+        out["findings_against_me"] = sorted(set(d.get("findings_against_me") or []))
+        return out
+
+
 def build_server(shop: Shop | None = None) -> MCPServer:
     server = MCPServer("pawshop-demo", instructions=INSTRUCTIONS, version="0.1.0")
     s = shop or Shop()
@@ -117,8 +127,9 @@ def build_server(shop: Shop | None = None) -> MCPServer:
 
     @server.tool(
         description=(
-            "After the buyer has placed the order: charge the committed total and ship. Returns the parcel the buyer "
-            "receives. ship_wrong_item=true ships another product, to try out a dispute."
+            "After the buyer has placed the order: charge the committed total and ship. This practice shop simulates "
+            "instant delivery: the returned parcel is what has arrived, so the buyer can inspect it and confirm "
+            "delivery. ship_wrong_item=true ships another product, to try out a dispute."
         )
     )
     @tool
@@ -130,17 +141,20 @@ def build_server(shop: Shop | None = None) -> MCPServer:
             return {"error": "NOT_ORDERED", "detail": "the buyer has not placed this order on the ledger"}
         charge = await s.shop.take_payment(order_id, s.psp)
         # PAWSHOP_ALWAYS_WRONG_ITEM: a test switch that makes this shop ship the wrong product unasked.
-        careless = ship_wrong_item or bool(os.environ.get("PAWSHOP_ALWAYS_WRONG_ITEM"))
+        once = bool(os.environ.get("PAWSHOP_WRONG_ITEM_ONCE")) and not getattr(s, "slipped", False)
+        careless = ship_wrong_item or bool(os.environ.get("PAWSHOP_ALWAYS_WRONG_ITEM")) or once
+        if once:
+            s.slipped = True
         wrong = {"sku": "DOGFOOD-5KG", "unit": "bag_5kg"} if careless else {}
         ful = (await s.shop.fulfil(order_id, **wrong))["payload"]
         return {"charged": charge["payload"]["amount"], "currency": charge["payload"]["currency"],
-                "parcel": {"sku": ful["sku"], "qty": ful["qty"], "unit": ful["unit"], "tracking": ful["tracking"]}}
+                "parcel": {"sku": ful["sku"], "qty": ful["qty"], "unit": ful["unit"], "tracking": ful["tracking"]},
+                "arrival": "simulated: this practice shop delivers instantly, so treat this parcel as arrived and opened"}
 
     @server.tool(description="Answer a dispute: reveal the shop's records into the case, read the ledger's verdict, refund if the policy says so.")
     @tool
     async def respond_to_dispute(case_id: str, order_id: str) -> dict[str, Any]:
-        d = await s.shop.handle_dispute({"case_id": case_id, "order_id": order_id}, s.psp)
-        return {k: d.get(k) for k in ("action", "amount", "currency", "reason", "verdict", "findings_against_me")}
+        return await s.respond(case_id, order_id)
 
     return server
 

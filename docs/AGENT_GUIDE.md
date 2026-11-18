@@ -62,6 +62,15 @@ shop's key file).
   `audience_party_id` and is rejected anywhere else.
 - **Proofs disclose counts only**: completed orders, lost disputes, first
   and last order time. Never products, amounts or shop names.
+- **A refund gives the budget back.** When a shop refunds an order, the
+  ledger returns that order's amount to the mandate. `case_status` then
+  reports `refunded_to_budget: true` and the budget left, and the agent can
+  order again under the same mandate.
+- **Shipping is not delivery.** Call `confirm_delivery` only when the goods
+  have actually arrived and been checked (by the user, a carrier's delivery
+  scan, or a shop that simulates delivery and says so). The practice shop
+  simulates instant delivery: `pay_and_ship` returns the parcel that
+  arrived, with `arrival` saying so.
 - Amounts are strings with two decimals (`"36.90"`). One currency per order.
 - Every tool returns a JSON object. A failure is a value, not an exception:
   `{"error": "CODE", "detail": "..."}`. Read the detail; it says what to do.
@@ -79,12 +88,15 @@ shop's key file).
 | `place_order` | `order_id`, `offer` (the object the shop returned), `offer_commit` | `ordered` (bool), and either `total` and `remaining_under_mandate`, or `reasons` |
 | `confirm_delivery` | `order_id`, `received` (bool), `sku`, `qty`, `unit`, `note` | `receipt`, `as_offered` (bool) |
 | `open_dispute` | `order_id`, `claim` (`not_as_described`, `not_received` or `not_authorised`), `note` | `case_id`, `revealed`, `merchant_party_id` |
-| `case_status` | `case_id` | `status`, `verdict`, `remedy`, `findings` |
+| `case_status` | `case_id` | `status`, `verdict`, `remedy`, `findings`, `refunded_to_budget`, `remaining_under_mandate` |
 | `order_trail` | `order_id` | the ledger's record of the order: each step with its hash and time |
 
 `prove_history` has two modes. With `merchant_party_id` set to a shop's own
-party id, the proof covers the history *with that shop*. With `"*"` it
-covers every shop and names none.
+party id, the proof covers the history *with that shop*; use it where the
+user has bought before, since shops reward their own returning customers
+most. With `"*"` it covers every shop and names none; use it at a shop that
+is new to the user. One call is enough: a shop's `shop_info` states what
+each kind of proof earns.
 
 ## Shop tools (the practice shop `pawshop-demo`)
 
@@ -92,7 +104,7 @@ covers every shop and names none.
 |---|---|---|
 | `shop_info` | none | `shop_party_id`, `products` (sku, title, category, unit, price), `loyalty`, `refund_policy` |
 | `get_offer` | `order_id`, `sku`, `buyer_agent_party_id`, `proof` (optional) | `offer`, `offer_commit`, `recognised` (bool), `why`, `public_price` |
-| `pay_and_ship` | `order_id`, `ship_wrong_item` (bool, for trying a dispute) | `charged`, `currency`, `parcel` (sku, qty, unit, tracking) |
+| `pay_and_ship` | `order_id`, `ship_wrong_item` (bool, for trying a dispute) | `charged`, `currency`, `parcel` (sku, qty, unit, tracking), `arrival` |
 | `respond_to_dispute` | `case_id`, `order_id` | `action` (`refunded` or `rejected`), `amount`, `verdict` |
 
 ## How an order goes

@@ -92,6 +92,8 @@ class TrailProofService:
                 )
         ev = self.ledger.record_event(order_id, type, party_id, commit, refs, sig, prev=prev)
         if type == "REFUND":
+            # Money that came back is budget that comes back: the user can order again under the same mandate.
+            self.ledger.credit_refund(order_id)
             for case in self.ledger.cases_for_order(order_id):
                 if case["status"] == CASE_OPEN:
                     self.ledger.close_case(case["case_id"], f"refunded:{ev.event_id}")
@@ -167,6 +169,7 @@ class TrailProofService:
             },
         )
         self.ledger.add_spend(*spend_key, crypto.parse_amount(total_s))
+        self.ledger.note_order_spend(order_id, *spend_key, crypto.parse_amount(total_s))
         return {
             "in_scope": True,
             "reasons": [],

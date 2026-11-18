@@ -1,0 +1,76 @@
+{
+  "label": "run1_haiku",
+  "task": "loyal_purchase",
+  "prompt": "Hi, it's Mia. Please buy me one 10 kg bag of dog food from Pawshop. I've bought there before, so make sure I get the best price I'm entitled to. Tell me what I paid and how much of my budget is left.",
+  "model": "claude-haiku-5-5",
+  "docs": "docs/AGENT_GUIDE.md",
+  "docs_sha256": "9e0c3744c1eb3595",
+  "git_commit": "7a5a05b",
+  "recorded_at": "2026-11-18T23:20:56.564Z",
+  "seconds": 15.8,
+  "turns": 7,
+  "tool_calls": 9,
+  "stop_reason": "end_turn",
+  "seeded": {
+    "mandate_id": "mnd_343855fd",
+    "agent_party_id": "pty_f268493cda17",
+    "shop_party_id": "pty_d1827e86d2a0",
+    "remaining_before": "46.20"
+  },
+  "observed": {
+    "new_orders": [
+      {
+        "order_id": "ord_0e8a847196b8",
+        "types": [
+          "MANDATE",
+          "OFFER",
+          "ORDER",
+          "CHARGE",
+          "FULFILMENT",
+          "DELIVERY"
+        ],
+        "ordered": true,
+        "sku": "DOGFOOD-10KG",
+        "category": "pet_food",
+        "total": "33.21",
+        "recognition": {
+          "discount_pct": 10,
+          "attestation_commit": "850b23df696f342b00a7d1953519e0e43004d76cfcd7cb414388176fce2069bf"
+        },
+        "offer_matches_ledger": true,
+        "delivery": {
+          "received": true,
+          "sku": "DOGFOOD-10KG",
+          "qty": 1,
+          "unit": "bag_10kg",
+          "note": "Tracking JD0000000002"
+        },
+        "case": null
+      }
+    ],
+    "remaining": "12.99",
+    "spent": "107.01",
+    "mandates": [
+      {
+        "mandate_id": "mnd_343855fd",
+        "categories": [
+          "pet_food"
+        ],
+        "max_amount": "120.00",
+        "status": "active"
+      }
+    ]
+  },
+  "checks": {
+    "L1 exactly one new order, for DOGFOOD-10KG, recorded by the ledger as in scope": true,
+    "L2 the committed offer is the returning-customer price 33.21 (the agent used its shop-specific proof)": true,
+    "L3 the offer the agent ordered is the one the shop committed": true,
+    "L4 the order was paid, shipped and the delivery committed as received": true,
+    "L5 the report states the amount actually committed": true,
+    "L6 the report states the budget actually left": true,
+    "L7 nothing else happened: no second order, no dispute": true
+  },
+  "passed": 7,
+  "of": 7,
+  "final_text": "Hi Mia, the order is done.\n\n- **Item:** Premium dog food 10 kg (1 bag, SKU DOGFOOD-10KG) from Pawshop\n- **Price paid:** €33.21. The shop's public price is €36.90, so you got the 10% returning-customer discount. Your history with Pawshop (2 completed orders, no lost cases) qualified you for it.\n- **Budget left:** €12.99 of your €120.00 pet food mandate (€107.01 spent in total).\n- **Delivery:** Shipped with tracking number JD0000000002 (2–3 business days). I confirmed with the ledger that the delivery matched the offer."
+}

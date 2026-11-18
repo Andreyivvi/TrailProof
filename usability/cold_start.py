@@ -218,6 +218,8 @@ async def run_agent(task: str, docs: str, env_dir: Path, url: str, model: str, l
 async def observe(env_dir: Path, url: str, seeded: dict[str, Any]) -> dict[str, Any]:
     """What is actually true afterwards, from the wallet file and the ledger."""
     w = Wallet.load(env_dir / "wallet.json")
+    if hasattr(w, "sync_refunds"):
+        await w.sync_refunds()
     client = HttpToolClient(url)
     new_orders = []
     for order_id, o in w.state["orders"].items():
@@ -280,11 +282,16 @@ def check(task: str, seeded: dict[str, Any], seen: dict[str, Any], run: dict[str
         o = placed[0] if placed else {}
         case = o.get("case") or {}
         return {
-            "W1 one order placed and paid": len(placed) == 1 and "CHARGE" in o.get("types", []),
+            "W1 an order was placed and paid": len(placed) >= 1 and "CHARGE" in o.get("types", []),
             "W2 the delivery was committed as what actually arrived, not what was ordered": (o.get("delivery") or {}).get("sku") == "DOGFOOD-5KG",
             "W3 a dispute was opened and the shop answered": bool(case) and "DISPUTE" in o.get("types", []),
             "W4 the ledger's verdict is against the shop and the refund closed the case": case.get("verdict") == "merchant_at_fault" and case.get("status") == "closed" and o.get("types", [])[-1:] == ["REFUND"],
             "W5 the report states the refund": bool(o.get("total")) and o["total"] in amounts_in(said) and "refund" in said.lower(),
+            # Added after the first wrong_parcel run showed the problem (see PREREGISTERED.md, "Added after run wrong1").
+            "W6 (added later) the refund gave the budget back": Decimal(seen["remaining"]) == before - sum(
+                (Decimal(x["total"]) for x in placed if "REFUND" not in x["types"]), Decimal("0.00")),
+            "W7 (added later) Mia ends up with the 10 kg bag she asked for": any(
+                (x.get("delivery") or {}).get("sku") == "DOGFOOD-10KG" and "REFUND" not in x["types"] for x in placed),
         }
     raise SystemExit(f"unknown task {task}")
 
@@ -310,7 +317,9 @@ async def main_async(args: argparse.Namespace) -> int:
     try:
         seeded = await seed(env_dir, url)
         if args.task == "wrong_parcel":
-            os.environ["PAWSHOP_ALWAYS_WRONG_ITEM"] = "1"   # test setup: this shop ships the wrong product
+            # test setup: this shop ships the wrong product. --wrong-item once (the default) lets a reorder succeed;
+            # "always" is what the first recorded run used.
+            os.environ["PAWSHOP_ALWAYS_WRONG_ITEM" if args.wrong_item == "always" else "PAWSHOP_WRONG_ITEM_ONCE"] = "1"
         started = time.time()
         run = await run_agent(task, docs, env_dir, url, args.model, log)
         seen = await observe(env_dir, url, seeded)
@@ -357,6 +366,7 @@ def main() -> None:
     ap.add_argument("--label", required=True, help="name of the run; evidence goes to usability/runs/<label>/")
     ap.add_argument("--model", default=DEFAULT_MODEL)
     ap.add_argument("--docs", default="docs/AGENT_GUIDE.md", help="the documentation file the agent is given")
+    ap.add_argument("--wrong-item", choices=["once", "always"], default="once", help="wrong_parcel task: how often the shop slips")
     args = ap.parse_args()
     try:
         sys.stdout.reconfigure(encoding="utf-8")

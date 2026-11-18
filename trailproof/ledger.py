@@ -148,6 +148,13 @@ CREATE TABLE IF NOT EXISTS mandate_spend (
     spent   TEXT NOT NULL,
     PRIMARY KEY (user_id, nonce)
 );
+CREATE TABLE IF NOT EXISTS order_spend (
+    order_id TEXT PRIMARY KEY,
+    user_id  TEXT NOT NULL,
+    nonce    TEXT NOT NULL,
+    amount   TEXT NOT NULL,
+    refunded INTEGER NOT NULL DEFAULT 0
+);
 CREATE TABLE IF NOT EXISTS cases (
     case_id    TEXT PRIMARY KEY,
     order_id   TEXT NOT NULL,
@@ -427,6 +434,30 @@ class Ledger:
             "SELECT spent FROM mandate_spend WHERE user_id=? AND nonce=?", (user_id, nonce)
         ).fetchone()
         return Decimal(row["spent"]) if row else Decimal("0.00")
+
+    def note_order_spend(self, order_id: str, user_id: str, nonce: str, amount: Decimal) -> None:
+        """Remember which mandate an order drew on, so a refund can give the budget back."""
+        self.conn.execute(
+            "INSERT OR REPLACE INTO order_spend(order_id, user_id, nonce, amount, refunded) VALUES (?,?,?,?,0)",
+            (order_id, user_id, nonce, crypto.amount_str(amount)),
+        )
+
+    def credit_refund(self, order_id: str) -> Decimal | None:
+        """A REFUND was committed for ``order_id``: return its amount to the mandate, once.
+
+        Returns the amount credited, or ``None`` if the order drew on no
+        mandate or was already credited. The ledger sees only the REFUND's
+        hash, so it credits the order's full recorded amount.
+        """
+        row = self.conn.execute("SELECT * FROM order_spend WHERE order_id=? AND refunded=0", (order_id,)).fetchone()
+        if row is None:
+            return None
+        amount = Decimal(row["amount"])
+        remaining = max(self.spent_under(row["user_id"], row["nonce"]) - amount, Decimal("0.00"))
+        self.conn.execute("UPDATE mandate_spend SET spent=? WHERE user_id=? AND nonce=?",
+                          (crypto.amount_str(remaining), row["user_id"], row["nonce"]))
+        self.conn.execute("UPDATE order_spend SET refunded=1 WHERE order_id=?", (order_id,))
+        return amount
 
     def add_spend(self, user_id: str, nonce: str, amount: Decimal) -> Decimal:
         new = self.spent_under(user_id, nonce) + amount

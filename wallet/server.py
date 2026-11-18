@@ -39,6 +39,14 @@ def build_server(wallet_path: str | None = None, client: Any = None) -> MCPServe
         shared["client"] = w._client()
         return w
 
+    async def refresh(w: Wallet) -> None:
+        """Budgets shown to the agent reflect refunds the ledger has recorded. Offline: show what is known."""
+        try:
+            if w.agent_id:
+                await w.sync_refunds()
+        except (WalletError, LedgerUnreachable):
+            pass
+
     def tool(fn):
         @functools.wraps(fn)
         async def wrapper(*args: Any, **kwargs: Any) -> dict[str, Any]:
@@ -56,19 +64,24 @@ def build_server(wallet_path: str | None = None, client: Any = None) -> MCPServe
     @server.tool(description="Who this wallet belongs to, its party ids, its mandates and how many orders it has placed.")
     @tool
     async def wallet_status() -> dict[str, Any]:
-        return wallet().status()
+        w = wallet()
+        await refresh(w)
+        return w.status()
 
     @server.tool(description="The user's mandates: what you may buy, the budget left, and until when. Read-only.")
     @tool
     async def list_mandates(active_only: bool = True) -> dict[str, Any]:
-        return {"mandates": wallet().mandates(active_only=active_only)}
+        w = wallet()
+        await refresh(w)
+        return {"mandates": w.mandates(active_only=active_only)}
 
     @server.tool(
         description=(
             "Get a ledger-signed proof of this agent's purchase history, addressed to one shop (audience_party_id). "
             "Leave merchant_party_id as '*' for the record across all shops (names none; use at a shop you have not "
             "bought from). Pass the shop's own party id for the history with that shop (earns returning-customer "
-            "prices). Hand the returned object to the shop unchanged."
+            "prices). A shop-specific proof is the stronger one when the user has bought there before; the '*' proof "
+            "is for a shop that is new to them. Hand the returned object to the shop unchanged."
         )
     )
     @tool
@@ -96,7 +109,13 @@ def build_server(wallet_path: str | None = None, client: Any = None) -> MCPServe
     async def place_order(order_id: str, offer: dict[str, Any], offer_commit: str | None = None) -> dict[str, Any]:
         return await wallet().place_order(order_id, offer, offer_commit)
 
-    @server.tool(description="Commit what actually arrived for an order: the sku, quantity and unit you received, not what you ordered.")
+    @server.tool(
+        description=(
+            "Commit what actually arrived for an order: the sku, quantity and unit received, not what was ordered. "
+            "Call it only once the goods have arrived and been checked: by the user, by a carrier's delivery scan, "
+            "or at a shop that simulates delivery and says so. A shipping notice or tracking number is not a delivery."
+        )
+    )
     @tool
     async def confirm_delivery(order_id: str, received: bool, sku: str, qty: int, unit: str, note: str = "") -> dict[str, Any]:
         return await wallet().confirm_delivery(order_id, received, sku, qty, unit, note)
@@ -111,7 +130,12 @@ def build_server(wallet_path: str | None = None, client: Any = None) -> MCPServe
     async def open_dispute(order_id: str, claim: str, note: str = "") -> dict[str, Any]:
         return await wallet().open_dispute(order_id, claim, note)
 
-    @server.tool(description="The ledger's findings, verdict and remedy for a dispute case.")
+    @server.tool(
+        description=(
+            "The ledger's findings, verdict and remedy for a dispute case. Once the shop has refunded, "
+            "refunded_to_budget is true and remaining_under_mandate shows the budget given back, so a new order is possible."
+        )
+    )
     @tool
     async def case_status(case_id: str) -> dict[str, Any]:
         return await wallet().case_status(case_id)
