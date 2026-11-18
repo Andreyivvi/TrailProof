@@ -129,7 +129,9 @@ def build_server(shop: Shop | None = None) -> MCPServer:
         if not any(e["type"] == "ORDER" for e in trail.get("events", [])):
             return {"error": "NOT_ORDERED", "detail": "the buyer has not placed this order on the ledger"}
         charge = await s.shop.take_payment(order_id, s.psp)
-        wrong = {"sku": "DOGFOOD-5KG", "unit": "bag_5kg"} if ship_wrong_item else {}
+        # PAWSHOP_ALWAYS_WRONG_ITEM: a test switch that makes this shop ship the wrong product unasked.
+        careless = ship_wrong_item or bool(os.environ.get("PAWSHOP_ALWAYS_WRONG_ITEM"))
+        wrong = {"sku": "DOGFOOD-5KG", "unit": "bag_5kg"} if careless else {}
         ful = (await s.shop.fulfil(order_id, **wrong))["payload"]
         return {"charged": charge["payload"]["amount"], "currency": charge["payload"]["currency"],
                 "parcel": {"sku": ful["sku"], "qty": ful["qty"], "unit": ful["unit"], "tracking": ful["tracking"]}}

@@ -6,3 +6,4 @@ __pycache__/
 packs/
 .mcp.json
 .claude/
+usability/runs/*/env/
