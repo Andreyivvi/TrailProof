@@ -12,7 +12,7 @@ description for screen readers.
 Writes ``usability/slides/slide1..4.png`` and ``usability/TrailProof_slides.pptx``.
 
 In Google Slides: File > Import slides > Upload, select all four. On slide 4,
-Insert > Video, paste the YouTube link, drag the video over the dark box, then
+Insert > Video, paste the YouTube link, drag the video over the dark box (it is 16:9, so the video covers it exactly), then
 Format options > Video playback > Play (automatically).
 """
 
@@ -64,17 +64,15 @@ SLIDES = [
      "work. And you set limits once, like restaurants up to 100 euros a month; inside them your assistant acts alone, outside "
      "them it is stopped. It is built for agents: three pieces of software that AI assistants plug into directly. No website, "
      "no human in the loop."),
-    ("Slide 4. Thirty seconds, three answers: the demo video, a replay of the running system. Beside it, one proof, many doors. "
-     "Running today: restaurants and hotels, ticket sales, contracts and sign-ups, shops. Same proof, next: rentals and customer "
-     "support. Along the bottom, where it stands. Tested: two AI models we never set up used it correctly from the manual alone. "
-     "Not yet: the restaurant, box office and gym are simulated, and every test was run by us. Next: one real partner, and another "
-     "team's assistant using it.",
-     "Here it is running. A restaurant that has never met the assistant gives it the regulars' table, because its record is proven. A scalper bot with a copied proof is "
-     "turned away from a presale. And when a gym's agent pushes a contract, the assistant cannot sign, because its user only allowed "
-     "restaurant bookings. Every check you see was really made. The same proof opens the other doors on the right. Where it stands: "
-     "we gave two AI models nothing but the manual and both used it correctly on the first try; that test also exposed a real bug, "
-     "which we fixed. What is not real yet: the restaurant, box office and gym are simulated, and we ran every test ourselves. Next "
-     "is one real partner, and another team's assistant using it."),
+    ("Slide 4. Thirty seconds, three answers: the demo video, a replay of the running system. A restaurant gives an assistant "
+     "with a proven record the regulars' table; a scalper bot with a copied proof is turned away from a presale; a gym contract is "
+     "blocked because the assistant's owner only allowed restaurant bookings.",
+     "Here it is running. A restaurant that has never met the assistant gives it the regulars' table, because its record is proven. "
+     "A scalper bot with a copied proof is turned away from a presale. And when a gym's agent pushes a contract, the assistant cannot "
+     "sign, because its user only allowed restaurant bookings. Every check you see was really made. After the video, if asked: the "
+     "same proof also works for hotels, shops, rentals and customer support. Two AI models we never set up used it correctly from "
+     "the manual alone, first try. The restaurant, box office and gym are simulated, and we ran every test ourselves. Next is one "
+     "real partner, and another team's assistant using it."),
 ]
 
 

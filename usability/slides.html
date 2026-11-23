@@ -74,20 +74,10 @@ h1{position:absolute;left:96px;right:96px;font-weight:800;letter-spacing:-.035em
 .arch p{font-size:25px;line-height:1.25;color:var(--soft);margin-left:14px;max-width:470px}
 .arch p b{color:var(--paper)}
 
-/* 4. demo, use cases, and where it stands */
-.s3 h1{top:124px;font-size:68px}
-.video{position:absolute;left:96px;top:232px;width:1136px;height:639px;background:var(--ink);border-radius:26px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--soft);font-size:32px;gap:20px}
-.video .play{width:0;height:0;border-left:74px solid var(--mark);border-top:46px solid transparent;border-bottom:46px solid transparent;margin-left:14px}
-.doors{position:absolute;left:1292px;right:96px;top:232px}
-.doors h2{font-size:42px;font-weight:800;letter-spacing:-.03em;line-height:1}
-.doors .grp{font-size:21px;font-weight:800;letter-spacing:.06em;margin:22px 0 4px;display:flex;align-items:center;gap:12px}
-.doors .grp i{width:18px;height:18px;border-radius:50%;background:var(--mark);border:4px solid var(--ink)} .doors .grp.next i{background:transparent;border-color:var(--quiet)} .doors .grp.next{color:var(--quiet)}
-.door{padding:8px 0 9px;border-bottom:2px solid var(--line)}
-.door b{display:block;font-size:30px;font-weight:800;letter-spacing:-.015em} .door span{font-size:23px;color:var(--body)}
-.door.n b{color:var(--quiet)}
-.stands{position:absolute;left:96px;right:96px;top:908px;display:grid;grid-template-columns:1.25fr 1.25fr 1fr;gap:44px}
-.stands div{border-top:5px solid var(--ink);padding-top:12px;font-size:25px;line-height:1.24;color:var(--body)}
-.stands b{color:var(--ink);font-weight:800;font-size:27px;margin-right:6px}
+/* 4. the demo video, as large as the slide allows (16:9, 1472 x 828) */
+.s3 h1{top:104px;font-size:60px;text-align:center}
+.video{position:absolute;left:224px;top:204px;width:1472px;height:828px;background:var(--ink);border-radius:26px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--soft);font-size:34px;gap:22px}
+.video .play{width:0;height:0;border-left:88px solid var(--mark);border-top:54px solid transparent;border-bottom:54px solid transparent;margin-left:16px}
 </style>
 </head>
 <body>
@@ -149,22 +139,6 @@ h1{position:absolute;left:96px;right:96px;font-weight:800;letter-spacing:-.035em
   <div class="brand">TrailProof</div><div class="count">4 / 4</div>
   <h1>Thirty seconds, three answers.</h1>
   <div class="video"><div class="play"></div><div>demo video</div></div>
-  <div class="doors">
-    <h2>One proof, many doors</h2>
-    <div class="grp"><i></i>RUNNING TODAY</div>
-    <div class="door"><b>Restaurants and hotels</b><span>a regular's welcome on the first visit</span></div>
-    <div class="door"><b>Ticket sales</b><span>real fans before scalper bots</span></div>
-    <div class="door"><b>Contracts and sign-ups</b><span>nothing you did not allow</span></div>
-    <div class="door"><b>Shops</b><span>your loyalty, through any assistant</span></div>
-    <div class="grp next"><i></i>SAME PROOF, NEXT</div>
-    <div class="door n"><b>Rentals</b><span>no hold on your card</span></div>
-    <div class="door n"><b>Customer support</b><span>skip the bot queue</span></div>
-  </div>
-  <div class="stands">
-    <div><b>Tested.</b>Two AI models we never set up used it correctly from the manual alone, first try.</div>
-    <div><b>Not yet.</b>The restaurant, box office and gym are simulated, and every test was run by us.</div>
-    <div><b>Next.</b>One real partner, and another team's assistant using it.</div>
-  </div>
 </section>
 
 <script>
