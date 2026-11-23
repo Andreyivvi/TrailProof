@@ -69,6 +69,7 @@ body{font-family:var(--display);color:var(--ink)}
 .tag{background:var(--mark);border-radius:18px;padding:28px 30px;height:330px;position:relative;transition:opacity .4s}
 .tag.idle{opacity:.45}
 .tag .item{font-size:24px;font-weight:600}
+.tag .price.word{font-size:70px;letter-spacing:-.03em;line-height:1.02;margin-top:22px}
 .tag .price{font-size:104px;font-weight:800;letter-spacing:-.04em;line-height:1;margin-top:16px}
 .tag .price small{font-size:40px;font-weight:600;margin-right:6px}
 .tag .was{font-size:26px;color:#6B5A12;text-decoration:line-through;min-height:32px}
@@ -130,7 +131,7 @@ body{font-family:var(--display);color:var(--ink)}
     <div class="small" id="end-small"></div></div>
 </div>
 
-<script>window.TRACE = /*TRACE-BEGIN*/{"generated_at": "2026-11-23T20:44:42.079Z", "tools": 9, "calls": 140, "scenes": [{"orders": 2, "lost": 0, "sig": "30073fb3a8", "key": "4dfe55186f", "sig_ok": true, "price": "33.21", "public_price": "36.90", "offer_hash": "289771ca4a", "offer_committed": "289771ca4a", "in_scope": true, "blocks": [{"type": "MANDATE", "writer": "user", "commit": "61216ca6b9", "prev": ""}, {"type": "OFFER", "writer": "merchant", "commit": "289771ca4a", "prev": "61216ca6b9"}, {"type": "ORDER", "writer": "buyer_agent", "commit": "9f838694e8", "prev": "289771ca4a"}]}, {"orders": 2, "merchants": 1, "lost": 0, "sig": "41f836b87b", "sig_ok": true, "names_a_shop": false, "price": "20.42", "public_price": "21.50", "pct": 5, "in_scope": true, "replay_accepted": false, "replay_reason": "attestation is addressed to another audience"}, {"price": "36.90", "reason": "no attestation presented"}, {"subject_was": "pty_8ce9e3", "subject_now": "pty_efdde8", "sig": "30073fb3a8", "sig_ok": false, "price": "36.90", "reason": "attestation signature does not verify with the ledger key"}, {"check_order": "UNKNOWN_REF", "record_event": "ORDER_NEEDS_MANDATE", "detail": "an ORDER must reference a MANDATE and an OFFER committed in this order; use check_order", "placed": false}, {"charged": "33.21", "offered_sku": "DOGFOOD-10KG", "shipped_sku": "DOGFOOD-5KG", "offer_hash": "289771ca4a", "offer_committed": "289771ca4a", "ful_hash": "41560bc17a", "ful_committed": "41560bc17a", "findings": ["DELIVERED_NE_OFFER", "MANDATE_IN_SCOPE"], "verdict": "merchant_at_fault", "refund": "33.21", "action": "refunded", "status": "closed", "blocks": [{"type": "CHARGE", "writer": "psp", "commit": "fb46dd183c", "prev": "9f838694e8"}, {"type": "FULFILMENT", "writer": "merchant", "commit": "41560bc17a", "prev": "fb46dd183c"}, {"type": "DELIVERY", "writer": "buyer_agent", "commit": "b7b5fd163b", "prev": "41560bc17a"}, {"type": "DISPUTE", "writer": "buyer_agent", "commit": "dfc689042a", "prev": "b7b5fd163b"}, {"type": "REFUND", "writer": "psp", "commit": "8ffc2de984", "prev": "dfc689042a"}]}, {"bookings": 6, "lost": 0, "sig": "42d5baa8c1", "key": "4dfe55186f", "sig_ok": true, "deposit": "0.00", "public_deposit": "20.00", "offer_hash": "674d467f70", "offer_committed": "674d467f70", "booked": true, "what": "Table for two, Friday 19:30", "blocks": [{"type": "MANDATE", "writer": "user", "commit": "6845ba487e", "prev": ""}, {"type": "OFFER", "writer": "merchant", "commit": "674d467f70", "prev": "6845ba487e"}, {"type": "ORDER", "writer": "buyer_agent", "commit": "1b3a479cf7", "prev": "674d467f70"}]}], "closing": {"events": 8, "counts": {"receipts": 8, "writer_sigs": 8, "chain_links": 8, "reveals": 7, "findings": 3}, "ok": true, "tampered_fails": true, "tampered_problem": "revealed payload does not hash to the commitment"}}/*TRACE-END*/;</script>
+<script>window.TRACE = /*TRACE-BEGIN*/{"generated_at": "2026-11-23T20:51:10.276Z", "tools": 9, "calls": 177, "scenes": [{"orders": 2, "lost": 0, "sig": "f288bca305", "key": "75f0a09c24", "sig_ok": true, "price": "33.21", "public_price": "36.90", "offer_hash": "89ab1b8556", "offer_committed": "89ab1b8556", "in_scope": true, "blocks": [{"type": "MANDATE", "writer": "user", "commit": "a36f4f9c66", "prev": ""}, {"type": "OFFER", "writer": "merchant", "commit": "89ab1b8556", "prev": "a36f4f9c66"}, {"type": "ORDER", "writer": "buyer_agent", "commit": "6dd99b7079", "prev": "89ab1b8556"}]}, {"orders": 2, "merchants": 1, "lost": 0, "sig": "9d60360878", "sig_ok": true, "names_a_shop": false, "price": "20.42", "public_price": "21.50", "pct": 5, "in_scope": true, "replay_accepted": false, "replay_reason": "attestation is addressed to another audience"}, {"price": "36.90", "reason": "no attestation presented"}, {"subject_was": "pty_cc662d", "subject_now": "pty_26f7a4", "sig": "f288bca305", "sig_ok": false, "price": "36.90", "reason": "attestation signature does not verify with the ledger key"}, {"check_order": "UNKNOWN_REF", "record_event": "ORDER_NEEDS_MANDATE", "detail": "an ORDER must reference a MANDATE and an OFFER committed in this order; use check_order", "placed": false}, {"charged": "33.21", "offered_sku": "DOGFOOD-10KG", "shipped_sku": "DOGFOOD-5KG", "offer_hash": "89ab1b8556", "offer_committed": "89ab1b8556", "ful_hash": "41560bc17a", "ful_committed": "41560bc17a", "findings": ["DELIVERED_NE_OFFER", "MANDATE_IN_SCOPE"], "verdict": "merchant_at_fault", "refund": "33.21", "action": "refunded", "status": "closed", "blocks": [{"type": "CHARGE", "writer": "psp", "commit": "fb46dd183c", "prev": "6dd99b7079"}, {"type": "FULFILMENT", "writer": "merchant", "commit": "41560bc17a", "prev": "fb46dd183c"}, {"type": "DELIVERY", "writer": "buyer_agent", "commit": "b7b5fd163b", "prev": "41560bc17a"}, {"type": "DISPUTE", "writer": "buyer_agent", "commit": "dfc689042a", "prev": "b7b5fd163b"}, {"type": "REFUND", "writer": "psp", "commit": "78daaa2098", "prev": "dfc689042a"}]}, {"bookings": 6, "lost": 0, "sig": "ce23d0dca4", "key": "75f0a09c24", "sig_ok": true, "deposit": "0.00", "public_deposit": "20.00", "offer_hash": "0839cfcb05", "offer_committed": "0839cfcb05", "booked": true, "what": "Table for two, Friday 19:30", "blocks": [{"type": "MANDATE", "writer": "user", "commit": "8d0ffa7357", "prev": ""}, {"type": "OFFER", "writer": "merchant", "commit": "0839cfcb05", "prev": "8d0ffa7357"}, {"type": "ORDER", "writer": "buyer_agent", "commit": "6addbe7941", "prev": "0839cfcb05"}]}, {"purchases": 3, "lost": 0, "sig": "081a4e7994", "key": "75f0a09c24", "sig_ok": true, "admitted": true, "why": "3 completed order(s), 0 lost case(s): 0% off", "reserved": true, "what": "Presale, arena tour", "blocks": [{"type": "MANDATE", "writer": "user", "commit": "d7d5fafb72", "prev": ""}, {"type": "OFFER", "writer": "merchant", "commit": "c7ece9c79d", "prev": "d7d5fafb72"}, {"type": "ORDER", "writer": "buyer_agent", "commit": "e5bd93d3de", "prev": "c7ece9c79d"}]}, {"subject_was": "pty_da9a86", "subject_now": "pty_a2723a", "sig": "081a4e7994", "sig_ok": false, "admitted": false, "why": "attestation signature does not verify with the ledger key"}], "closing": {"events": 8, "counts": {"receipts": 8, "writer_sigs": 8, "chain_links": 8, "reveals": 7, "findings": 3}, "ok": true, "tampered_fails": true, "tampered_problem": "revealed payload does not hash to the commitment"}}/*TRACE-END*/;</script>
 <script>
 const T = window.TRACE, S = T.scenes, $ = id => document.getElementById(id);
 const H = s => `<code>${s}…</code>`;
@@ -140,7 +141,7 @@ const H = s => `<code>${s}…</code>`;
 const CUT = new URLSearchParams(location.search).get("cut") === "30";
 const SCENE = CUT ? 7 : 8, INTRO = CUT ? 3.5 : 4, CLOSE = CUT ? 3.2 : 6, END = CUT ? 2.3 : 2, BEATS = CUT ? [0, 1.5, 3.3, 5.0] : [0, 1.8, 3.9, 5.9];
 const PET = ["The pet shop's agent", "Dog food, 10 kg"], VET = ["A second shop's agent", "Dog food, 5 kg"];
-const [A, B, C, D, E, F, G] = S;   // G: a restaurant booking, used in the 30-second cut   // recognised, second shop, scraper, impostor, no mandate, wrong product
+const [A, B, C, D, E, F, G, FAN, BOT] = S;   // G, FAN, BOT: a restaurant booking and a concert presale, the 30-second cut   // recognised, second shop, scraper, impostor, no mandate, wrong product
 const ALL_VISITS = [
  { who:"Leo's agent", kind:"says it is a returning customer", shop:PET,
    cap:["Leo's agent is back. Is it really a returning customer?","It carries proof of its history, signed by the ledger.","The shop commits a loyalty price it cannot take back.","Recognised. Inside Leo's mandate, so the order is recorded."],
@@ -180,18 +181,31 @@ const ALL_VISITS = [
    rows:[[],[3,4,5],[6],[7]], stamp:[`REFUNDED €${F.refund}`,"go"] },
 ];
 ALL_VISITS.push(
- { who:"Leo's agent", kind:"booking a table, not buying anything", shop:["A restaurant's agent", G.what], tape:"Leo's booking", solo:true,
-   cap:["It is not only shopping. Leo's agent books a table.","Restaurants lose money on no-shows, so strangers pay a deposit.","Leo's record speaks for him: every booking kept.","Deposit waived. Trust, carried from one agent to another."],
-   cred:[null,null,`Proof: <b>${G.bookings} bookings completed here, ${G.lost} disputes lost</b>. Counts only.`],
-   check:[null,null,[`signature ${H(G.sig)} against ledger key ${H(G.key)}`,"valid","go"],[`offer hash ${H(G.offer_hash)} = committed ${H(G.offer_committed)}`,"booking recorded","go"]],
-   price:[null,[G.public_deposit,"","Deposit for a guest the restaurant does not know."],null,[G.deposit,G.public_deposit,"Deposit waived for a guest with a clean record."]],
-   rows:[[8],[],[9],[10]], stamp:["DEPOSIT WAIVED","go"] });
-// 30-second cut: recognised, forged, then a booking. The full version keeps its six shop visitors.
-const VISITS = CUT ? [0, 3, 6].map(i => ALL_VISITS[i]) : ALL_VISITS.slice(0, 6);
+ { who:"Leo's agent", kind:"booking a table for Friday", shop:["A restaurant's agent", G.what], tape:"Leo's booking", solo:true,
+   cap:["Leo's assistant books a table. The restaurant has never met it.","Restaurants lose out on no-shows, so strangers leave a deposit.","Leo's record speaks for him: every booking kept.","No deposit. The restaurant trusts an assistant it can verify."],
+   cred:[null,null,`Proof: <b>${G.bookings} bookings completed here, ${G.lost} problems</b>. Counts only.`],
+   check:[null,null,[`signature ${H(G.sig)} against the record keeper's key ${H(G.key)}`,"valid","go"],[`booking sealed: ${H(G.offer_hash)} = ${H(G.offer_committed)}`,"recorded","go"]],
+   price:[null,["Deposit required","","For a guest the restaurant does not know."],null,[G.deposit==="0.00"?"No deposit":"Deposit required","","Waived for a guest with a clean record."]],
+   rows:[[8],[],[9],[10]], stamp:["TRUSTED GUEST","go"] },
+ { who:"Maya's agent", kind:"wants presale tickets", shop:["A box office's agent", FAN.what], tape:"Maya's request", solo:true,
+   cap:["A concert presale. Scalper bots usually get there first.","This box office only serves assistants with a real record.","Maya's assistant proves it: a real fan who has been here before.","Admitted. A real fan, verified in one check."],
+   cred:[null,null,`Proof: <b>${FAN.purchases} purchases here, ${FAN.lost} problems</b>. Counts only.`],
+   check:[null,null,[`signature ${H(FAN.sig)} against the record keeper's key ${H(FAN.key)}`,"valid","go"],[`the box office's door policy: ${FAN.admitted?"passed":"failed"}`,"admitted","go"]],
+   price:[null,["Verified fans only","","Bots and strangers wait outside."],null,[FAN.reserved?"Tickets reserved":"Verified fans only","","Presale open for Maya."]],
+   rows:[[11],[],[12],[13]], stamp:["VERIFIED FAN","go"] },
+ { who:"A scalper bot", kind:"carries a copy of Maya's proof", shop:["A box office's agent", FAN.what], tape:"The bot's request", solo:true,
+   cap:["Next in line: a scalper bot, with a copy of Maya's proof.","It swapped in its own name.","The signature covers every byte. One changed field breaks it.","Turned away. Unlike a cookie, this cannot be copied."],
+   cred:[null,`Maya's proof with the name changed: ${H(BOT.subject_was)} to ${H(BOT.subject_now)}`],
+   check:[null,null,[`same signature ${H(BOT.sig)}, different content`,"does not verify","stop"]],
+   price:[["Verified fans only","","Bots and strangers wait outside."],null,null,[BOT.admitted?"Admitted":"No entry","","The forged proof is rejected."]],
+   rows:[[],[],[],[]], stamp:["FORGED","stop"] });
+// 30-second cut: three places a proof opens a door, none of them about price. The full version keeps its six shop visitors.
+const VISITS = CUT ? [6, 7, 8].map(i => ALL_VISITS[i]) : ALL_VISITS.slice(0, 6);
 const N = VISITS.length;
-const BLOCKS = [...A.blocks, ...F.blocks, ...G.blocks];   // rows 0..7 of Leo's order, 8..10 of his booking
+const BLOCKS = [...A.blocks, ...F.blocks, ...G.blocks, ...FAN.blocks];   // rows 0..7 Leo's order, 8..10 his booking, 11..13 Maya's presale
 const WRITER = {user:"Leo's key", merchant:"the shop", buyer_agent:"Leo's agent", psp:"payment provider"};
-const writerOf = (b, i) => i >= 8 && b.writer === "merchant" ? "the restaurant" : (WRITER[b.writer] || b.writer);
+const NAMES = i => i >= 11 ? {user:"Maya's key", merchant:"the box office", buyer_agent:"Maya's agent"} : (i >= 8 ? {...WRITER, merchant:"the restaurant"} : WRITER);
+const writerOf = (b, i) => NAMES(i)[b.writer] || b.writer;
 const TOTAL = INTRO + N*SCENE + CLOSE + END;
 
 // ---- build static DOM
@@ -215,7 +229,7 @@ function render(t){
   const vt = t-INTRO, si = Math.floor(vt/SCENE), inVisit = t>=INTRO && si<VISITS.length;
   const closing = t>=INTRO+VISITS.length*SCENE && t<TOTAL-END, ending = t>=TOTAL-END;
   $("intro").classList.toggle("hide", t>=INTRO); $("closing").classList.toggle("hide", !closing); $("end").classList.toggle("hide", !ending);
-  $("c-fail").classList.toggle("hide", !(closing && t-(INTRO+VISITS.length*SCENE) > (CUT ? 1.1 : 2.6)));
+  const cf = document.getElementById("c-fail"); if (cf) cf.classList.toggle("hide", !(closing && t-(INTRO+VISITS.length*SCENE) > 2.6));
   const whole=Math.round(TOTAL), secs=Math.min(Math.floor(t),whole); $("clock").textContent=`0:${String(secs).padStart(2,"0")} / ${whole>=60?"1:00":"0:"+whole}`;
   [...dots.children].forEach((b,i)=>{ const a=segStart(i), len=i<N?SCENE:(i===N?CLOSE:END); b.firstChild.style.transform=`scaleX(${Math.max(0,Math.min(1,(t-a)/len))})`; });
   if (!inVisit) { if (t<INTRO){ $("ticket").classList.add("out"); } return; }
@@ -230,12 +244,14 @@ function render(t){
   const chk = last(V.check,p); $("check").classList.toggle("hide", !chk);
   if (chk){ $("check-body").innerHTML=chk[0]; const v=$("check-v"); v.textContent=(chk[2]==="go"?"✓ ":"✗ ")+chk[1]; v.className="v "+chk[2]; }
   const pr = last(V.price,p), tag=$("tag"); tag.classList.toggle("idle", !pr);
-  $("price").innerHTML = pr&&pr[0] ? `<small>€</small>${pr[0]}` : "<small>€</small>—"; $("was").textContent = pr&&pr[1] ? "€"+pr[1] : ""; $("say").textContent = pr?pr[2]:"";
+  const word = pr && pr[0] && isNaN(parseFloat(pr[0]));   // a status in words, for scenes that are not about a price
+  $("price").classList.toggle("word", !!word);
+  $("price").innerHTML = word ? pr[0] : (pr&&pr[0] ? `<small>€</small>${pr[0]}` : (CUT ? "" : "<small>€</small>—")); $("was").textContent = pr&&pr[1] ? "€"+pr[1] : ""; $("say").textContent = pr?pr[2]:"";
   // rows: everything earlier visitors wrote stays; this visitor's rows appear beat by beat
   const visible = new Set(), fresh = new Set(); let showBad=false;
   $("tape-name").textContent = V.tape || "Leo's order";
   VISITS.forEach((v,vi)=>{ if (vi>si || (V.solo && vi!==si) || (v.solo && vi!==si)) return; v.rows.forEach((list,bp)=>{ if (vi===si && bp>p) return; list.forEach(x=>{ if (x==="bad"){ if (vi===si) showBad=true; } else { visible.add(x); if (vi===si && bp===p) fresh.add(x); } }); }); });
-  [...rows.querySelectorAll(".row[data-i]")].forEach(r=>{ const i=+r.dataset.i; r.classList.toggle("hide", !visible.has(i)); r.classList.toggle("new", fresh.has(i)); r.classList.toggle("dim", si>0 && si<N-1 && visible.has(i)); });
+  [...rows.querySelectorAll(".row[data-i]")].forEach(r=>{ const i=+r.dataset.i; r.classList.toggle("hide", !visible.has(i)); r.classList.toggle("new", fresh.has(i)); r.classList.toggle("dim", !V.solo && si>0 && si<N-1 && visible.has(i)); });
   $("badrow").classList.toggle("hide", !showBad);
 }
 
@@ -255,6 +271,14 @@ addEventListener("keydown",e=>{
 $("stage").addEventListener("click",e=>{ if (!e.target.closest("button")) toggle(); });
 function fit(){ const s=Math.min(innerWidth/1600, innerHeight/900); $("stage").style.transform=`translate(-50%,-50%) scale(${s})`; }
 addEventListener("resize",fit); fit();
+if (CUT) {
+  document.querySelector("#intro p").textContent = "On the web, a cookie lets a site recognise you. Your AI assistant has none, so everyone treats it as a stranger or a bot. TrailProof gives it proof of who it acts for and how it has behaved.";
+  $("closing").innerHTML = `<h1 style="font-size:84px">One proof. Many doors.</h1>
+    <div class="tally"><div><b style="font-size:40px;color:var(--ink)">Restaurants, hotels</b>no deposit for guests who show up</div>
+    <div><b style="font-size:40px;color:var(--ink)">Tickets</b>real fans before scalper bots</div>
+    <div><b style="font-size:40px;color:var(--ink)">Shops</b>your loyalty status, through any assistant</div></div>
+    <div class="fail">Also rentals, customer support, sign-ups: anywhere an AI assistant has to be trusted by someone it has never met.</div>`;
+}
 if (CUT) document.querySelector("#end p").textContent = "The customer holds it. It cannot be faked. It cannot be used to track you. It works wherever one agent has to trust another.";
 if (new URLSearchParams(location.search).has("t")) document.head.insertAdjacentHTML("beforeend","<style>*{transition:none!important}</style>");  // a still frame, for review
 if (new URLSearchParams(location.search).has("t")) seek(parseFloat(new URLSearchParams(location.search).get("t")));

@@ -1,11 +1,11 @@
 """Build the four final-project slides as a .pptx, for importing into the shared Google Slides deck.
 
-    uv run --with python-pptx python usability/make_slides.py     # writes usability/TrailProof_final_slides_v2.pptx
+    uv run --with python-pptx python usability/make_slides.py     # writes usability/TrailProof_final_slides_v3.pptx
 
 In Google Slides: File > Import slides > Upload, pick this file, select all
 four, import. Then put the YouTube video on slide 4 (Insert > Video), over
 the dark box, and set Format options > Video playback > Play (automatically).
-The same four slides are the last pages of the HW9 PDF (make_report.py).
+Review them without opening PowerPoint: export_slides.ps1 writes one PNG per slide.
 """
 
 from __future__ import annotations
@@ -18,7 +18,7 @@ from pptx.enum.shapes import MSO_SHAPE
 from pptx.util import Inches, Pt
 
 PAPER, INK, WHITE, MARK, QUIET, SOFT = (RGBColor.from_string(c) for c in ("E6EEEA", "14213D", "FFFFFF", "FFD23F", "5C6B7A", "9FB0C3"))
-OUT = Path(__file__).resolve().parent / "TrailProof_final_slides_v2.pptx"
+OUT = Path(__file__).resolve().parent / "TrailProof_final_slides_v3.pptx"
 
 
 def text(slide, x, y, w, h, runs, size=17, color=INK, bold=False):
@@ -76,59 +76,80 @@ def step(slide, y, n, title, body):
     text(slide, 1.5, y + 0.38, 5.2, 0.9, body, 13, RGBColor.from_string("2D3B58"))
 
 
+def tile(slide, x, y, w, h, fill, where, what, status, title_color=INK, body_color=INK, status_color=QUIET):
+    shape = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(x), Inches(y), Inches(w), Inches(h))
+    shape.adjustments[0] = 0.07
+    shape.fill.solid()
+    shape.fill.fore_color.rgb = fill
+    shape.line.fill.background()
+    shape.shadow.inherit = False
+    text(slide, x + 0.24, y + 0.2, w - 0.48, 0.45, where, 20, title_color, True)
+    text(slide, x + 0.24, y + 0.72, w - 0.48, 0.9, what, 15, body_color)
+    text(slide, x + 0.24, y + h - 0.42, w - 0.48, 0.3, status, 11, status_color, True)
+
+
 def build() -> Path:
     prs = Presentation()
     prs.slide_width, prs.slide_height = Inches(13.333), Inches(7.5)
     brown = RGBColor.from_string("6B5A12")
+    assets = Path(__file__).resolve().parent / "assets"
 
+    # 1. the problem
     s = base(prs, "TrailProof", 1)
-    text(s, 0.7, 0.85, 12, 1.5, "Soon an AI assistant will do your shopping. Shops cannot tell it from a bot.", 35, INK, True)
-    card(s, 0.7, 2.6, 3.8, 3.15, WHITE, "Today: you, in a browser", "A small file called a cookie lets a shop recognise you when you return. That is how you get your basket, your history and your loyalty price.", size=15)
-    card(s, 4.75, 2.6, 3.8, 3.15, INK, "Tomorrow: your AI assistant", "It has no cookie. To the shop it is a stranger, the same as a thousand price-scraping bots. No loyalty price. And if the order goes wrong, it is the shop's records against yours.", SOFT, PAPER, 15)
-    card(s, 8.8, 2.6, 3.85, 3.15, MARK, "TrailProof", ["A cookie rebuilt for AI assistants: proof of who the assistant shops for and how it has behaved.", [("You hold it. It cannot be faked. It cannot be used to track you.", True)]], brown, size=15)
-    text(s, 0.7, 6.25, 11.9, 0.8, "An AI agent is software that acts for a person: here, an assistant that finds, orders and pays for things on your behalf. Our users are these agents, on both sides of a sale.", 12, QUIET)
+    text(s, 0.7, 0.85, 12, 1.5, "AI assistants will soon act for you everywhere. Nobody can tell yours from a bot.", 34, INK, True)
+    card(s, 0.7, 2.6, 3.8, 3.15, WHITE, "Today: you, in a browser", "A small file called a cookie lets a website recognise you when you come back. That is why you stay signed in, known and trusted.", size=18)
+    card(s, 4.75, 2.6, 3.8, 3.15, INK, "Tomorrow: your AI assistant", "It has no cookie. Everywhere it goes it is a stranger: blocked as a bot, asked for a deposit, sent to the back of the queue.", SOFT, PAPER, 18)
+    card(s, 8.8, 2.6, 3.85, 3.15, MARK, "TrailProof", ["A cookie rebuilt for AI assistants: proof of who the assistant acts for and how it has behaved.", [("You hold it. It cannot be faked. It cannot be used to track you.", True)]], brown, size=18)
+    text(s, 0.7, 6.25, 11.9, 0.8, "An AI agent is software that acts for a person: an assistant that books, orders and signs up for things on your behalf. Our users are these agents, on both sides of every interaction.", 12, QUIET)
 
+    # 2. how it works
     s = base(prs, "TrailProof    how it works", 2)
     text(s, 0.7, 0.85, 12, 0.9, "Three steps. Each one can be checked by anyone.", 30, INK, True)
-    step(s, 1.95, 1, "You set a spending permission.", "\"Pet food, up to 80 euros, this month.\" Your assistant can use it but can never change it.")
-    step(s, 3.25, 2, "Your assistant proves its track record.", "\"2 completed orders here, no disputes lost.\" Signed by a neutral record keeper. Numbers only: never what you bought or where.")
-    step(s, 4.65, 3, "The shop recognises you, and every step is sealed.", "You get your loyalty price. Each side locks a fingerprint of what it promised, so a wrong delivery is settled from proof and refunded automatically.")
-    shot = Path(__file__).resolve().parent / "assets" / "recognised.png"
+    step(s, 1.95, 1, "You decide what your assistant may do.", "\"Book tables and buy tickets, up to 100 euros a month.\" It can use this permission but can never change it.")
+    step(s, 3.25, 2, "Your assistant builds a track record.", "A neutral record keeper seals every booking or order it completes, and signs a summary on request: \"6 bookings kept, no problems.\" Numbers only.")
+    step(s, 4.65, 3, "Anyone it meets can check the proof.", "The proof is addressed to them alone. Copy it or change one letter and it stops working.")
+    shot = assets / "trusted_guest.png"
     if shot.exists():
         s.shapes.add_picture(str(shot), Inches(7.0), Inches(1.95), width=Inches(5.65))
-    text(s, 7.0, 5.2, 5.65, 0.6, "From our demo. Left: the assistant at the shop's door. Middle: the sealed record. Right: the price it earns.", 11, QUIET)
-    text(s, 0.7, 6.2, 11.9, 0.9, [[("What we built: ", True), ("three pieces of software that AI assistants plug into directly, using the open MCP standard for giving tools to AI: a wallet for the customer's assistant, a plug-in for the shop's assistant, and a neutral record keeper between them. No website, no human in the loop.", False)]], 12, QUIET)
+    text(s, 7.0, 5.2, 5.65, 0.6, "From our demo: a restaurant drops its deposit for an assistant whose record it can verify.", 11, QUIET)
+    text(s, 0.7, 6.2, 11.9, 0.9, [[("What we built: ", True), ("three pieces of software that AI assistants plug into directly, using MCP, the open standard for giving tools to AI: a wallet for your assistant, a plug-in for the other side's assistant, and the neutral record keeper between them. No website, no human in the loop.", False)]], 12, QUIET)
 
-    s = base(prs, "TrailProof    does it work?", 3)
-    text(s, 0.7, 0.85, 12, 0.9, "What we tested, and what broke.", 30, INK, True)
-    cards = [("Can a new AI use it?", "2 of 2", "AI models we had never set up read only our manual and bought correctly on the first try, at the right price.", INK, SOFT, PAPER),
-             ("Does it judge fairly?", "0 vs 46", "honest parties wrongly blamed in 240 simulated disputes where one side lied. Ours: 0. Comparing each side's own records: 46.", WHITE, QUIET, INK),
-             ("Can it be cheated?", "Caught", "A seller that shipped the wrong product and then edited its records was exposed automatically, in a shared test environment run by the course.", WHITE, QUIET, INK),
-             ("What failed", "1 real bug", "A fresh AI showed us that a refund did not give the spending allowance back. Found by testing, then fixed.", MARK, brown, INK)]
-    for i, (title, big, body, fill, tc, bc) in enumerate(cards):
-        card(s, 0.7 + i * 3.02, 1.9, 2.85, 2.85, fill, title, body, tc, bc, 12.5, big)
-    text(s, 0.7, 5.05, 5.8, 1.9, [[("What worked. ", True), ("Assistants picked the right proof on their own, refused to buy outside the permission and told the user how to allow it, and took a wrong delivery all the way to a refund.", False)]], 14)
-    text(s, 6.85, 5.05, 5.8, 1.9, [[("What still does not. ", True), ("After the fix, the assistant got the refund but asked before buying again, so the customer still had no dog food. And every test so far was run by us, with AI models from one company.", False)]], 14)
+    # 3. use cases
+    s = base(prs, "TrailProof    where it helps", 3)
+    text(s, 0.7, 0.85, 12, 0.9, "One proof, many doors.", 30, INK, True)
+    live = "RUNNING IN OUR DEMO"
+    nxt = "SAME PROOF, NOT BUILT YET"
+    w_, h_, gx, gy = 3.85, 2.05, 0.2, 0.2
+    tiles = [("Restaurants and hotels", "No deposit for guests who show up.", live, INK, PAPER, PAPER, MARK),
+             ("Tickets", "Real fans get in before scalper bots.", live, INK, PAPER, PAPER, MARK),
+             ("Shops", "Your loyalty status, through any assistant.", live, INK, PAPER, PAPER, MARK),
+             ("Rentals and sharing", "No hold on your card for a renter with a clean record.", nxt, WHITE, INK, INK, QUIET),
+             ("Customer support", "Skip the bot queue: a real customer is asking.", nxt, WHITE, INK, INK, QUIET),
+             ("Sign-ups and applications", "A real person stands behind this request.", nxt, WHITE, INK, INK, QUIET)]
+    for i, (where, what, status, fill, tc, bc, sc) in enumerate(tiles):
+        tile(s, 0.7 + (i % 3) * (w_ + gx), 1.85 + (i // 3) * (h_ + gy), w_, h_, fill, where, what, status, tc, bc, sc)
+    text(s, 0.7, 6.4, 11.9, 0.7, "The pattern is always the same: one AI agent asks, another has to decide whether to trust it. Today that decision is a guess. With a proof it is a check.", 13, QUIET)
 
-    s = base(prs, "TrailProof    see it, and what comes next", 4)
+    # 4. evidence, video, next
+    s = base(prs, "TrailProof    does it work?", 4)
     box = s.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.7), Inches(1.0), Inches(7.5), Inches(5.75))
     box.adjustments[0] = 0.03
     box.fill.solid()
     box.fill.fore_color.rgb = INK
     box.line.fill.background()
-    tb = text(s, 1.0, 3.1, 6.9, 1.8, ["Place the YouTube video here (Insert > Video)", "a returning customer is recognised, an impostor is caught, a restaurant waives a deposit for a guest it can trust"], 15, SOFT)
+    tb = text(s, 1.0, 3.1, 6.9, 1.8, ["Place the YouTube video here (Insert > Video)", "a trusted guest, a verified fan, a scalper bot turned away"], 15, SOFT)
     for para in tb.text_frame.paragraphs:
         para.alignment = 2
-    card(s, 8.5, 1.0, 4.15, 1.85, WHITE, "Real today", ["Working, open-source software", "89 automated tests", "A live AI assistant buying through it"], size=12.5)
-    card(s, 8.5, 2.98, 4.15, 1.65, INK, "Not yet", ["Shops and payments are simulated", "Your key sits in a file, not a passkey"], SOFT, PAPER, 12.5)
-    card(s, 8.5, 4.76, 4.15, 1.99, MARK, "Next", ["A plug-in for a real shop", "Another team's assistant using it", "Loyalty points on top"], brown, size=12.5)
+    card(s, 8.5, 1.0, 4.15, 2.0, WHITE, "What we tested", ["2 of 2 AI models we had never set up used it correctly from the manual alone.", "A forged proof was rejected every time."], size=14)
+    card(s, 8.5, 3.13, 4.15, 1.8, INK, "What broke", ["A fresh AI exposed one real bug in how a permission was tracked. Fixed, with tests.", "Every test so far was run by us."], SOFT, PAPER, 14)
+    card(s, 8.5, 5.06, 4.15, 1.69, MARK, "Next", ["One real partner instead of simulated ones", "Another team's assistant using it"], brown, size=14)
     text(s, 0.7, 6.95, 8, 0.3, "https://github.com/Andreyivvi/TrailProof", 12, QUIET)
 
     out = OUT
     try:
         prs.save(out)
     except PermissionError:   # the previous file is open in PowerPoint
-        out = OUT.with_name("TrailProof_final_slides_v3.pptx")
+        out = OUT.with_name(OUT.stem + "_new.pptx")
         prs.save(out)
     return out
 

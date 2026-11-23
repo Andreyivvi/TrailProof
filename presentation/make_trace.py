@@ -178,8 +178,39 @@ async def build() -> dict:
     }
     del CATALOG["TABLE-FOR-2"]
 
+    # 8 and 9. a concert presale that only sells to agents with a real record: a fan gets in, a scalper bot does not.
+    CATALOG["PRESALE"] = {"title": "Presale, arena tour", "category": "tickets", "unit": "ticket", "unit_price": "60.00", "currency": "EUR"}
+    box = MockShop(client, operator="box-office", recognition_policy={"min_orders": 2, "max_lost_cases": 0, "discount_pct": 0})
+    await box.register()
+    maya = await w.new_buyer("maya", "fanbot")
+    for i in range(3):                                            # tickets Maya bought here before
+        oid_t = f"tickets_{i + 1}"
+        mt = maya.new_mandate(["tickets"], "400.00", nonce="maya-concerts")
+        await maya.submit_mandate(oid_t, mt)
+        ot = (await box.make_offer(oid_t, "PRESALE"))["payload"]
+        assert (await maya.place_order(oid_t, mt, ot))["placed"]
+        await box.take_payment(oid_t, psp)
+    att_m = await maya.request_attestation(box.party_id)
+    admitted, why_m = box.check_recognition(att_m, maya.agent.party_id)       # the box office's door policy
+    oid_p = "presale_maya"
+    mp = maya.new_mandate(["tickets"], "400.00", nonce="maya-concerts")
+    await maya.submit_mandate(oid_p, mp)
+    offer_p = (await box.recognise_and_offer(oid_p, "PRESALE", att_m, buyer_party_id=maya.agent.party_id))["payload"]
+    placed_p = await maya.place_order(oid_p, mp, offer_p)
+    trail_p = await maya.agent.trail(oid_p)
+    s_fan = {"purchases": att_m["stats"]["orders_completed"], "lost": att_m["stats"]["cases_lost"], "sig": short(att_m["ledger_sig"]),
+             "key": short(ledger_pub), "sig_ok": crypto.verify_attestation(att_m, ledger_pub), "admitted": admitted, "why": why_m,
+             "reserved": bool(placed_p["placed"]), "what": CATALOG["PRESALE"]["title"],
+             "blocks": blocks(trail_p, {**roles, **getattr(w, "extra_roles", {}), box.party_id: "merchant"}, ["MANDATE", "OFFER", "ORDER"])}
+    bot = await w.new_buyer("nobody", "scalperbot")
+    forged_m = dict(att_m, subject=bot.agent.party_id)
+    bot_in, bot_why = box.check_recognition(forged_m, bot.agent.party_id)     # no offer is made to an agent that fails this
+    s_scalper = {"subject_was": short(att_m["subject"]), "subject_now": short(forged_m["subject"]), "sig": short(forged_m["ledger_sig"]),
+                 "sig_ok": crypto.verify_attestation(forged_m, ledger_pub), "admitted": bot_in, "why": bot_why}
+    del CATALOG["PRESALE"]
+
     return {"generated_at": crypto.iso_z(crypto.utc_now()), "tools": 9, "calls": len(client.calls),
-            "scenes": [s1, s_second, s2, s3, s4, s5, s_table], "closing": closing}
+            "scenes": [s1, s_second, s2, s3, s4, s5, s_table, s_fan, s_scalper], "closing": closing}
 
 
 def main() -> None:
@@ -200,6 +231,8 @@ def main() -> None:
           f" replay: {s[1]['replay_reason']})  3 public {s[2]['price']}  4 forged sig ok {s[3]['sig_ok']}"
           f"  5 {s[4]['record_event']}  6 {s[5]['verdict']} refund {s[5]['refund']}"
           f"  7 table: {s[6]['bookings']} bookings, deposit {s[6]['deposit']} (was {s[6]['public_deposit']}), booked {s[6]['booked']}"
+          f"  8 fan: {s[7]['purchases']} purchases, admitted {s[7]['admitted']}, reserved {s[7]['reserved']}"
+          f"  9 scalper: sig ok {s[8]['sig_ok']}, admitted {s[8]['admitted']} ({s[8]['why']})"
           f"  verify ok {trace['closing']['ok']}, tampered fails {trace['closing']['tampered_fails']}")
 
 
