@@ -353,7 +353,7 @@ ledger. Re-record with `uv run python presentation/make_trace.py`.
 `uv run python presentation/render_video.py` renders `demo30.html` to
 `TrailProof_demo_30s.mp4`, frame by frame, with headless Chrome and ffmpeg.
 
-The four final-project slides are designed in `usability/slides.html`.
+The three final-project slides are designed in `usability/slides.html`.
 `uv run --with python-pptx python usability/make_slides.py` photographs them
 and builds `usability/TrailProof_slides.pptx` with the talk track in the
 speaker notes, so the deck looks the same in PowerPoint and Google Slides.
