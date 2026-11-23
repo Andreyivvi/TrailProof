@@ -12,8 +12,10 @@ description for screen readers.
 Writes ``usability/slides/slide1..4.png`` and ``usability/TrailProof_slides.pptx``.
 
 In Google Slides: File > Import slides > Upload, select all four. On slide 4,
-Insert > Video, paste the YouTube link, drag the video over the dark box (it is 16:9, so the video covers it exactly), then
-Format options > Video playback > Play (automatically).
+Insert > Video, paste ``VIDEO_URL`` (below), drag the video over the dark box
+(it is 16:9, so the video covers it exactly), then Format options > Video
+playback > Play (automatically). Until that is done, clicking slide 4 opens the
+video in a browser, and the link is also the first line of its speaker notes.
 """
 
 from __future__ import annotations
@@ -28,6 +30,8 @@ from pptx.util import Inches
 HERE = Path(__file__).resolve().parent
 PAGE = HERE / "slides.html"
 OUT = HERE / "TrailProof_slides.pptx"
+VIDEO_URL = "https://youtu.be/tjDAX98n5yA"      # the 30-second demo, unlisted on YouTube
+VIDEO_SLIDE = 4
 CHROME = [r"C:\Program Files\Google\Chrome\Application\chrome.exe", r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
           r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe", r"C:\Program Files\Microsoft\Edge\Application\msedge.exe",
           "/usr/bin/google-chrome", "/usr/bin/chromium", "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"]
@@ -96,9 +100,12 @@ def photograph() -> list[Path]:
 def build(shots: list[Path]) -> Path:
     prs = Presentation()
     prs.slide_width, prs.slide_height = Inches(13.333), Inches(7.5)
-    for png, (described, notes) in zip(shots, SLIDES):
+    for n, (png, (described, notes)) in enumerate(zip(shots, SLIDES), start=1):
         slide = prs.slides.add_slide(prs.slide_layouts[6])
         pic = slide.shapes.add_picture(str(png), 0, 0, width=prs.slide_width, height=prs.slide_height)
+        if n == VIDEO_SLIDE:      # a fallback: the slide itself links to the video (set before the description, which lives on the same element)
+            pic.click_action.hyperlink.address = VIDEO_URL
+            notes = f"Demo video: {VIDEO_URL}\n\n{notes}"
         pic._element.xpath("./p:nvPicPr/p:cNvPr")[0].set("descr", described)
         slide.notes_slide.notes_text_frame.text = notes
     out = OUT
