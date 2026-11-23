@@ -333,19 +333,30 @@ is fixed, with regression tests in `tests/test_refund_budget.py`. The full
 write-up, with what remains unproven, is
 `usability/HW9_TrailProof_usability.pdf` (`usability/make_report.py`).
 
-## The 60-second visual presentation
+## The demo video and the slides
 
-`presentation/index.html` tells the story of six visitors at a shop door as an animation, framed as "the cookie, rebuilt for AI agents": the
-visitor at the door, the ledger as a receipt tape, the shop's price tag, and
-what the ledger checked. It is one self-contained file; open it in a browser,
-press F11, then Space. Arrow keys step between visitors, R restarts.
+Two pages under `presentation/` tell the story as animation. Both are single
+self-contained files, and both are replays of a real run of the service:
+every figure, signature result and verdict on screen was produced by the
+ledger. Re-record with `uv run python presentation/make_trace.py`.
 
-Everything it shows (hashes, signature results, error codes, the verdict) is
-a replay of a real run of the service. Re-record and re-embed it with:
+* **`demo30.html`, 30 seconds, three questions.** Whoever meets an AI
+  assistant asks: can I trust it, is it genuine, is it allowed? One scene
+  each, in three settings: a restaurant drops its deposit for an assistant
+  with a proven record; a scalper bot with a copied proof is turned away
+  from a presale; a gym's agent pushes a contract and the assistant cannot
+  sign, because its user only allowed restaurant bookings. Built to stay
+  readable when embedded small in a slide. Space plays, arrows step.
+* **`index.html`, 60 seconds, six visitors at a shop door.** The longer,
+  earlier version, centred on a shop.
 
-```bash
-uv run python presentation/make_trace.py
-```
+`uv run python presentation/render_video.py` renders `demo30.html` to
+`TrailProof_demo_30s.mp4`, frame by frame, with headless Chrome and ffmpeg.
+
+The four final-project slides are designed in `usability/slides.html`.
+`uv run --with python-pptx python usability/make_slides.py` photographs them
+and builds `usability/TrailProof_slides.pptx` with the talk track in the
+speaker notes, so the deck looks the same in PowerPoint and Google Slides.
 
 ## Verifying a result offline
 

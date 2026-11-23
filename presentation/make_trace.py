@@ -209,24 +209,48 @@ async def build() -> dict:
                  "sig_ok": crypto.verify_attestation(forged_m, ledger_pub), "admitted": bot_in, "why": bot_why}
     del CATALOG["PRESALE"]
 
+    # 10. permission: another agent pushes a contract the user never allowed. The record keeper refuses the sign-up.
+    CATALOG["GYM-12M"] = {"title": "12-month gym membership", "category": "gym_membership", "unit": "contract",
+                          "unit_price": "39.00", "currency": "EUR"}
+    gym = MockShop(client, operator="gym")
+    await gym.register()
+    oid_g = "gym_signup"
+    mg = leo.new_mandate(["restaurant_booking"], "200.00", nonce="leo-dining")       # what Leo actually signed
+    rec_g = await leo.submit_mandate(oid_g, mg)
+    offer_g = (await gym.make_offer(oid_g, "GYM-12M"))["payload"]
+    tried_g = await leo.place_order(oid_g, mg, offer_g)
+    trail_g = await leo.agent.trail(oid_g)
+    s_gym = {"what": CATALOG["GYM-12M"]["title"], "allowed": mg["categories"], "wanted": offer_g["category"],
+             "signed": bool(tried_g["placed"]), "reason": tried_g["reasons"][0]["code"], "detail": tried_g["reasons"][0]["detail"],
+             "reasons": [r["code"] for r in tried_g["reasons"]], "mandate_commit": short(crypto.commit(mg)),
+             "recorded": [e["type"] for e in trail_g["events"]]}
+    del CATALOG["GYM-12M"]
+
     return {"generated_at": crypto.iso_z(crypto.utc_now()), "tools": 9, "calls": len(client.calls),
-            "scenes": [s1, s_second, s2, s3, s4, s5, s_table, s_fan, s_scalper], "closing": closing}
+            "scenes": [s1, s_second, s2, s3, s4, s5, s_table, s_fan, s_scalper], "closing": closing,
+            # the 30-second demo (demo30.html): one scene per question
+            "cut": {"table": s_table, "fan": s_fan, "bot": s_scalper, "gym": s_gym}}
 
 
 def main() -> None:
-    """Embed the trace in index.html, so the presentation is one self-contained file."""
+    """Embed the trace in the presentation pages, so each is one self-contained file."""
     import re
 
     trace = asyncio.run(build())
-    page = Path(__file__).resolve().parent / "index.html"
-    html = page.read_text(encoding="utf-8")
-    html, n = re.subn(r"/\*TRACE-BEGIN\*/.*?/\*TRACE-END\*/", lambda _: "/*TRACE-BEGIN*/" + json.dumps(trace) + "/*TRACE-END*/",
-                      html, flags=re.S)
-    if n != 1:
-        raise SystemExit("index.html has no TRACE-BEGIN/TRACE-END marker")
-    page.write_text(html, encoding="utf-8", newline="\n")
+    for name in ("index.html", "demo30.html"):
+        page = Path(__file__).resolve().parent / name
+        if not page.exists():
+            continue
+        html = page.read_text(encoding="utf-8")
+        html, n = re.subn(r"/\*TRACE-BEGIN\*/.*?/\*TRACE-END\*/", lambda _: "/*TRACE-BEGIN*/" + json.dumps(trace) + "/*TRACE-END*/",
+                          html, flags=re.S)
+        if n != 1:
+            raise SystemExit(f"{name} has no TRACE-BEGIN/TRACE-END marker")
+        page.write_text(html, encoding="utf-8", newline="\n")
+        print(f"embedded a fresh run in {page}")
     s = trace["scenes"]
-    print(f"embedded a fresh run in {page}")
+    g = trace["cut"]["gym"]
+    print(f"  gym: allowed {g['allowed']}, wanted {g['wanted']}, signed {g['signed']}, reasons {g['reasons']}, recorded {g['recorded']}")
     print(f"  1 recognised {s[0]['price']}  2 second shop {s[1]['price']} (was {s[1]['public_price']}, names a shop: {s[1]['names_a_shop']},"
           f" replay: {s[1]['replay_reason']})  3 public {s[2]['price']}  4 forged sig ok {s[3]['sig_ok']}"
           f"  5 {s[4]['record_event']}  6 {s[5]['verdict']} refund {s[5]['refund']}"

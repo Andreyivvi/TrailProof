@@ -1,158 +1,108 @@
-"""Build the four final-project slides as a .pptx, for importing into the shared Google Slides deck.
+"""Build the four final-project slides.
 
-    uv run --with python-pptx python usability/make_slides.py     # writes usability/TrailProof_final_slides_v3.pptx
+    uv run --with python-pptx python usability/make_slides.py
 
-In Google Slides: File > Import slides > Upload, pick this file, select all
-four, import. Then put the YouTube video on slide 4 (Insert > Video), over
-the dark box, and set Format options > Video playback > Play (automatically).
-Review them without opening PowerPoint: export_slides.ps1 writes one PNG per slide.
+The slides are designed in ``usability/slides.html`` (open it in a browser to
+see or edit them). This script photographs each one at 1920 x 1080 with
+headless Chrome and places it full-bleed on a 16:9 slide, so the deck looks
+identical in PowerPoint and in Google Slides, whatever fonts are installed.
+Speaker notes carry the talk track, and each picture carries its text as a
+description for screen readers.
+
+Writes ``usability/slides/slide1..4.png`` and ``usability/TrailProof_slides.pptx``.
+
+In Google Slides: File > Import slides > Upload, select all four. On slide 3,
+Insert > Video, paste the YouTube link, drag the video over the dark box, then
+Format options > Video playback > Play (automatically).
 """
 
 from __future__ import annotations
 
+import shutil
+import subprocess
 from pathlib import Path
 
 from pptx import Presentation
-from pptx.dml.color import RGBColor
-from pptx.enum.shapes import MSO_SHAPE
-from pptx.util import Inches, Pt
+from pptx.util import Inches
 
-PAPER, INK, WHITE, MARK, QUIET, SOFT = (RGBColor.from_string(c) for c in ("E6EEEA", "14213D", "FFFFFF", "FFD23F", "5C6B7A", "9FB0C3"))
-OUT = Path(__file__).resolve().parent / "TrailProof_final_slides_v3.pptx"
+HERE = Path(__file__).resolve().parent
+PAGE = HERE / "slides.html"
+OUT = HERE / "TrailProof_slides.pptx"
+CHROME = [r"C:\Program Files\Google\Chrome\Application\chrome.exe", r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
+          r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe", r"C:\Program Files\Microsoft\Edge\Application\msedge.exe",
+          "/usr/bin/google-chrome", "/usr/bin/chromium", "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"]
 
-
-def text(slide, x, y, w, h, runs, size=17, color=INK, bold=False):
-    """runs: a string, or a list of paragraphs; a paragraph is a string or a list of (text, bold) pieces."""
-    tb = slide.shapes.add_textbox(Inches(x), Inches(y), Inches(w), Inches(h))
-    tf = tb.text_frame
-    tf.word_wrap = True
-    for m in ("margin_left", "margin_right", "margin_top", "margin_bottom"):
-        setattr(tf, m, 0)
-    paras = runs if isinstance(runs, list) else [runs]
-    for i, para in enumerate(paras):
-        p = tf.paragraphs[0] if i == 0 else tf.add_paragraph()
-        for piece in (para if isinstance(para, list) else [(para, bold)]):
-            r = p.add_run()
-            r.text, r.font.size, r.font.bold, r.font.color.rgb, r.font.name = piece[0], Pt(size), piece[1], color, "Segoe UI"
-        p.space_after = Pt(size * 0.3)
-    return tb
-
-
-def card(slide, x, y, w, h, fill, title, body, title_color=QUIET, body_color=INK, size=15, big=None):
-    shape = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(x), Inches(y), Inches(w), Inches(h))
-    shape.adjustments[0] = 0.06
-    shape.fill.solid()
-    shape.fill.fore_color.rgb = fill
-    shape.line.fill.background()
-    shape.shadow.inherit = False
-    text(slide, x + 0.22, y + 0.17, w - 0.44, 0.35, title, 13, title_color, True)
-    top = y + 0.55
-    if big:
-        text(slide, x + 0.22, top, w - 0.44, 0.6, big, 32, body_color, True)
-        top += 0.62
-    text(slide, x + 0.22, top, w - 0.44, h - (top - y) - 0.15, body, size, body_color)
-
-
-def base(prs, tag, n):
-    s = prs.slides.add_slide(prs.slide_layouts[6])
-    bg = s.background.fill
-    bg.solid()
-    bg.fore_color.rgb = PAPER
-    text(s, 0.7, 0.42, 8, 0.3, tag, 12, QUIET)
-    text(s, 10.3, 0.42, 2.4, 0.3, f"{n} / 4", 12, QUIET).text_frame.paragraphs[0].alignment = 3
-    return s
+# What is on each slide, in words (picture description), and what to say (speaker notes). About 2.5 minutes in all.
+SLIDES = [
+    ("Slide 1. Your AI assistant will soon act for you everywhere. To everyone it meets, it is a stranger. In a browser you are "
+     "known, because a cookie vouches for you. Your AI assistant has no cookie, no history and no proof, so it is blocked as a bot, "
+     "asked for a deposit, sent to the back of the queue. TrailProof is the cookie, rebuilt for AI assistants: you hold it, it cannot "
+     "be faked, it cannot track you.",
+     "On the web, a small file called a cookie lets a site recognise you. That is why you stay signed in and get your usual terms. "
+     "AI assistants are starting to act for us: booking, ordering, signing up. They have no cookie. To a restaurant, a box office or a "
+     "shop, your assistant looks exactly like a bot. TrailProof gives it something to show: a proof that you hold, that cannot be "
+     "faked, and that cannot be used to track you."),
+    ("Slide 2. Whoever meets your assistant asks three questions, and we answer each with proof. One: can I trust it? It carries a "
+     "track record sealed by a neutral record keeper, numbers only. Two: is it genuine? The proof is signed and addressed to one "
+     "recipient; a copy stops working. Three: is it allowed? You sign what your assistant may do, and it can never widen that. "
+     "Architecture: your assistant carries a wallet, their assistant runs a plug-in, and a neutral record keeper sits between them. "
+     "AI agents plug in directly through MCP; there is no website and no human in the loop.",
+     "Anyone meeting an AI assistant asks three things. Can I trust it? Is it really who it claims? Is it allowed to do this? We "
+     "answer each with proof instead of a promise. A neutral record keeper seals what the assistant has done and signs a summary: "
+     "counts only, never where you have been. The proof is addressed to one recipient, so a copy is worthless. And the person signs "
+     "what the assistant may do. It is built for agents: three pieces of software that AI assistants plug into directly. No website, "
+     "no human in the loop."),
+    ("Slide 3. Thirty seconds, three answers: the demo video, a replay of the running system. Beside it, one proof, many doors. "
+     "Running today: restaurants and hotels, ticket sales, contracts and sign-ups, shops. Same proof, next: rentals and customer "
+     "support.",
+     "Here it is running. A restaurant drops its deposit for an assistant with a proven record. A scalper bot with a copied proof is "
+     "turned away from a presale. And when a gym's agent pushes a contract, the assistant cannot sign, because its user only allowed "
+     "restaurant bookings. Every check you see was really made. The same proof opens other doors: the ones on the right."),
+    ("Slide 4. What we tested, what broke, and what comes next. 2 of 2 AI models we never set up used it correctly from the manual "
+     "alone. 0 of 240 honest parties were wrongly blamed in simulated cases where the other side falsified or hid its records. "
+     "1 real bug was exposed by a fresh AI during testing and fixed. Not yet: the restaurant, box office and gym are simulated, and "
+     "every test was run by us. Next: one real partner, another team's assistant, and the user's key in a passkey.",
+     "Does it hold up? We gave two AI models nothing but the manual, and both used it correctly on the first try. In 240 simulated "
+     "cases where one side lied, no honest party was blamed. Testing with a fresh AI also exposed a real bug, which we fixed. What "
+     "is not real yet: the restaurant, box office and gym are simulated, and every test was run by us. Next is one real partner, "
+     "and another team's assistant using it."),
+]
 
 
-def step(slide, y, n, title, body):
-    dot = slide.shapes.add_shape(MSO_SHAPE.OVAL, Inches(0.7), Inches(y), Inches(0.62), Inches(0.62))
-    dot.fill.solid()
-    dot.fill.fore_color.rgb = INK
-    dot.line.fill.background()
-    tf = dot.text_frame
-    tf.paragraphs[0].alignment = 2
-    r = tf.paragraphs[0].add_run()
-    r.text, r.font.size, r.font.bold, r.font.color.rgb, r.font.name = str(n), Pt(20), True, MARK, "Segoe UI"
-    text(slide, 1.5, y - 0.03, 5.2, 0.4, title, 17, INK, True)
-    text(slide, 1.5, y + 0.38, 5.2, 0.9, body, 13, RGBColor.from_string("2D3B58"))
+def photograph() -> list[Path]:
+    chrome = next((c for c in CHROME if Path(c).exists()), None)
+    if not chrome:
+        raise SystemExit("needs Chrome or Edge to photograph the slides")
+    out = HERE / "slides"
+    out.mkdir(exist_ok=True)
+    shots = []
+    for n in range(1, len(SLIDES) + 1):
+        png = out / f"slide{n}.png"
+        subprocess.run([chrome, "--headless=new", "--disable-gpu", "--hide-scrollbars", "--window-size=1920,1080",
+                        f"--user-data-dir={out / '_profile'}", "--virtual-time-budget=4000", f"--screenshot={png}",
+                        f"{PAGE.as_uri()}?s={n}"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=120, check=True)
+        shots.append(png)
+    shutil.rmtree(out / "_profile", ignore_errors=True)
+    return shots
 
 
-def tile(slide, x, y, w, h, fill, where, what, status, title_color=INK, body_color=INK, status_color=QUIET):
-    shape = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(x), Inches(y), Inches(w), Inches(h))
-    shape.adjustments[0] = 0.07
-    shape.fill.solid()
-    shape.fill.fore_color.rgb = fill
-    shape.line.fill.background()
-    shape.shadow.inherit = False
-    text(slide, x + 0.24, y + 0.2, w - 0.48, 0.45, where, 20, title_color, True)
-    text(slide, x + 0.24, y + 0.72, w - 0.48, 0.9, what, 15, body_color)
-    text(slide, x + 0.24, y + h - 0.42, w - 0.48, 0.3, status, 11, status_color, True)
-
-
-def build() -> Path:
+def build(shots: list[Path]) -> Path:
     prs = Presentation()
     prs.slide_width, prs.slide_height = Inches(13.333), Inches(7.5)
-    brown = RGBColor.from_string("6B5A12")
-    assets = Path(__file__).resolve().parent / "assets"
-
-    # 1. the problem
-    s = base(prs, "TrailProof", 1)
-    text(s, 0.7, 0.85, 12, 1.5, "AI assistants will soon act for you everywhere. Nobody can tell yours from a bot.", 34, INK, True)
-    card(s, 0.7, 2.6, 3.8, 3.15, WHITE, "Today: you, in a browser", "A small file called a cookie lets a website recognise you when you come back. That is why you stay signed in, known and trusted.", size=18)
-    card(s, 4.75, 2.6, 3.8, 3.15, INK, "Tomorrow: your AI assistant", "It has no cookie. Everywhere it goes it is a stranger: blocked as a bot, asked for a deposit, sent to the back of the queue.", SOFT, PAPER, 18)
-    card(s, 8.8, 2.6, 3.85, 3.15, MARK, "TrailProof", ["A cookie rebuilt for AI assistants: proof of who the assistant acts for and how it has behaved.", [("You hold it. It cannot be faked. It cannot be used to track you.", True)]], brown, size=18)
-    text(s, 0.7, 6.25, 11.9, 0.8, "An AI agent is software that acts for a person: an assistant that books, orders and signs up for things on your behalf. Our users are these agents, on both sides of every interaction.", 12, QUIET)
-
-    # 2. how it works
-    s = base(prs, "TrailProof    how it works", 2)
-    text(s, 0.7, 0.85, 12, 0.9, "Three steps. Each one can be checked by anyone.", 30, INK, True)
-    step(s, 1.95, 1, "You decide what your assistant may do.", "\"Book tables and buy tickets, up to 100 euros a month.\" It can use this permission but can never change it.")
-    step(s, 3.25, 2, "Your assistant builds a track record.", "A neutral record keeper seals every booking or order it completes, and signs a summary on request: \"6 bookings kept, no problems.\" Numbers only.")
-    step(s, 4.65, 3, "Anyone it meets can check the proof.", "The proof is addressed to them alone. Copy it or change one letter and it stops working.")
-    shot = assets / "trusted_guest.png"
-    if shot.exists():
-        s.shapes.add_picture(str(shot), Inches(7.0), Inches(1.95), width=Inches(5.65))
-    text(s, 7.0, 5.2, 5.65, 0.6, "From our demo: a restaurant drops its deposit for an assistant whose record it can verify.", 11, QUIET)
-    text(s, 0.7, 6.2, 11.9, 0.9, [[("What we built: ", True), ("three pieces of software that AI assistants plug into directly, using MCP, the open standard for giving tools to AI: a wallet for your assistant, a plug-in for the other side's assistant, and the neutral record keeper between them. No website, no human in the loop.", False)]], 12, QUIET)
-
-    # 3. use cases
-    s = base(prs, "TrailProof    where it helps", 3)
-    text(s, 0.7, 0.85, 12, 0.9, "One proof, many doors.", 30, INK, True)
-    live = "RUNNING IN OUR DEMO"
-    nxt = "SAME PROOF, NOT BUILT YET"
-    w_, h_, gx, gy = 3.85, 2.05, 0.2, 0.2
-    tiles = [("Restaurants and hotels", "No deposit for guests who show up.", live, INK, PAPER, PAPER, MARK),
-             ("Tickets", "Real fans get in before scalper bots.", live, INK, PAPER, PAPER, MARK),
-             ("Shops", "Your loyalty status, through any assistant.", live, INK, PAPER, PAPER, MARK),
-             ("Rentals and sharing", "No hold on your card for a renter with a clean record.", nxt, WHITE, INK, INK, QUIET),
-             ("Customer support", "Skip the bot queue: a real customer is asking.", nxt, WHITE, INK, INK, QUIET),
-             ("Sign-ups and applications", "A real person stands behind this request.", nxt, WHITE, INK, INK, QUIET)]
-    for i, (where, what, status, fill, tc, bc, sc) in enumerate(tiles):
-        tile(s, 0.7 + (i % 3) * (w_ + gx), 1.85 + (i // 3) * (h_ + gy), w_, h_, fill, where, what, status, tc, bc, sc)
-    text(s, 0.7, 6.4, 11.9, 0.7, "The pattern is always the same: one AI agent asks, another has to decide whether to trust it. Today that decision is a guess. With a proof it is a check.", 13, QUIET)
-
-    # 4. evidence, video, next
-    s = base(prs, "TrailProof    does it work?", 4)
-    box = s.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.7), Inches(1.0), Inches(7.5), Inches(5.75))
-    box.adjustments[0] = 0.03
-    box.fill.solid()
-    box.fill.fore_color.rgb = INK
-    box.line.fill.background()
-    tb = text(s, 1.0, 3.1, 6.9, 1.8, ["Place the YouTube video here (Insert > Video)", "a trusted guest, a verified fan, a scalper bot turned away"], 15, SOFT)
-    for para in tb.text_frame.paragraphs:
-        para.alignment = 2
-    card(s, 8.5, 1.0, 4.15, 2.0, WHITE, "What we tested", ["2 of 2 AI models we had never set up used it correctly from the manual alone.", "A forged proof was rejected every time."], size=14)
-    card(s, 8.5, 3.13, 4.15, 1.8, INK, "What broke", ["A fresh AI exposed one real bug in how a permission was tracked. Fixed, with tests.", "Every test so far was run by us."], SOFT, PAPER, 14)
-    card(s, 8.5, 5.06, 4.15, 1.69, MARK, "Next", ["One real partner instead of simulated ones", "Another team's assistant using it"], brown, size=14)
-    text(s, 0.7, 6.95, 8, 0.3, "https://github.com/Andreyivvi/TrailProof", 12, QUIET)
-
+    for png, (described, notes) in zip(shots, SLIDES):
+        slide = prs.slides.add_slide(prs.slide_layouts[6])
+        pic = slide.shapes.add_picture(str(png), 0, 0, width=prs.slide_width, height=prs.slide_height)
+        pic._element.xpath("./p:nvPicPr/p:cNvPr")[0].set("descr", described)
+        slide.notes_slide.notes_text_frame.text = notes
     out = OUT
     try:
         prs.save(out)
-    except PermissionError:   # the previous file is open in PowerPoint
+    except PermissionError:   # the file is open in PowerPoint
         out = OUT.with_name(OUT.stem + "_new.pptx")
         prs.save(out)
     return out
 
 
 if __name__ == "__main__":
-    print(f"wrote {build()}")
+    pictures = photograph()
+    print(f"wrote {build(pictures)}  ({len(pictures)} slides from {PAGE.name})")

@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>TrailProof: final project slides</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* Four slides, 1920 x 1080 each, for people who have never heard of the project.
+   Open with ?s=2 to see one slide alone (that is how make_slides.py photographs them). */
+:root{--paper:#E6EEEA;--ink:#14213D;--white:#fff;--go:#1E7A4C;--stop:#C8102E;--mark:#FFD23F;--quiet:#5C6B7A;--soft:#9FB0C3;--line:#C3D0CA;--body:#2D3B58;
+  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;--mono:"IBM Plex Mono",Consolas,monospace}
+*{box-sizing:border-box;margin:0}
+html,body{background:#0c1426;font-family:var(--display);color:var(--ink)}
+.slide{position:relative;width:1920px;height:1080px;background:var(--paper);overflow:hidden;margin:0 auto 40px}
+body.one .slide{margin:0;display:none} body.one .slide.on{display:block}
+.brand{position:absolute;left:96px;top:54px;font-size:34px;font-weight:800;letter-spacing:-.02em}
+.count{position:absolute;right:96px;top:62px;font-size:24px;color:var(--quiet);font-weight:600}
+h1{position:absolute;left:96px;right:96px;font-weight:800;letter-spacing:-.035em;line-height:1.0;text-wrap:balance}
+.stamp{position:absolute;font-weight:800;letter-spacing:.05em;border:7px double currentColor;border-radius:12px;padding:8px 22px 4px;background:var(--paper);transform:rotate(-7deg);white-space:nowrap}
+.go{color:var(--go)} .stop{color:var(--stop)}
+
+/* 1. the problem */
+.s1{background:var(--ink);color:var(--paper)}
+.s1 .count{color:var(--soft)}
+.s1 h1{top:150px;font-size:79px;text-wrap:initial;line-height:1.06;white-space:nowrap}
+.pair{position:absolute;left:96px;right:96px;top:440px;display:grid;grid-template-columns:1fr 1fr;gap:72px}
+.idcard{position:relative;border-radius:30px;padding:42px 48px 36px;height:404px}
+.idcard .who{font-size:48px;font-weight:800;letter-spacing:-.02em}
+.idcard ul{list-style:none;padding:0;margin-top:22px}
+.idcard li{font-size:36px;line-height:1.2;padding:11px 0 11px 60px;position:relative}
+.idcard li::before{position:absolute;left:0;top:11px;width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:27px;font-weight:800;color:#fff}
+.idcard .why{position:absolute;left:48px;bottom:34px;font-size:28px;font-weight:600}
+.known{background:var(--paper);color:var(--ink)} .known li::before{content:"✓";background:var(--go)} .known .why{color:var(--quiet)}
+.stranger{border:4px dashed var(--soft);color:var(--paper)} .stranger li::before{content:"✗";background:var(--stop)} .stranger .why{color:var(--soft)}
+.idcard .stamp{right:-22px;top:-34px;font-size:46px}
+.s1 .stranger .stamp{background:var(--ink)}
+.answer{position:absolute;left:0;right:0;bottom:0;height:176px;background:var(--mark);color:var(--ink);display:flex;flex-direction:column;justify-content:center;padding:0 96px;font-size:36px;line-height:1.2;gap:4px}
+.answer b{font-size:46px;letter-spacing:-.025em}
+.answer b{font-weight:800} .answer span{font-weight:600}
+
+/* 2. three questions */
+.s2 h1{top:140px;font-size:74px}
+.three{position:absolute;left:96px;right:96px;top:372px;display:grid;grid-template-columns:repeat(3,1fr);gap:40px}
+.qcard{position:relative;background:var(--white);border-radius:30px;padding:44px 42px 40px;height:424px}
+.qcard .n{width:60px;height:60px;border-radius:50%;background:var(--ink);color:var(--mark);font-size:34px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.qcard .q{font-size:54px;font-weight:800;letter-spacing:-.03em;margin-top:20px;line-height:1}
+.qcard .a{font-size:29px;line-height:1.25;color:var(--body);margin-top:18px}
+.qcard .chip{position:absolute;left:42px;right:42px;bottom:38px;background:var(--paper);border-radius:12px;padding:14px 18px;font-size:25px;font-weight:600;line-height:1.2}
+.qcard .chip code{font-family:var(--mono);font-size:22px;font-weight:400}
+.qcard .stamp{right:-18px;top:-30px;font-size:38px}
+.arch{position:absolute;left:96px;right:96px;top:842px;height:168px;background:var(--ink);color:var(--paper);border-radius:30px;display:flex;align-items:center;padding:0 40px;gap:22px}
+.node{background:#22335A;border-radius:18px;padding:18px 26px;min-width:290px}
+.node b{display:block;font-size:31px;font-weight:800;letter-spacing:-.01em} .node span{font-size:23px;color:var(--soft)}
+.node.mid{background:var(--mark);color:var(--ink)} .node.mid span{color:#6B5A12}
+.link{font-size:40px;color:var(--soft);font-weight:800}
+.arch p{font-size:25px;line-height:1.25;color:var(--soft);margin-left:14px;max-width:470px}
+.arch p b{color:var(--paper)}
+
+/* 3. demo and use cases */
+.s3 h1{top:136px;font-size:74px}
+.video{position:absolute;left:96px;top:270px;width:1180px;height:664px;background:var(--ink);border-radius:26px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--soft);font-size:32px;gap:20px}
+.video .play{width:0;height:0;border-left:74px solid var(--mark);border-top:46px solid transparent;border-bottom:46px solid transparent;margin-left:14px}
+.vcap{position:absolute;left:96px;top:956px;font-size:26px;color:var(--quiet);font-weight:600}
+.doors{position:absolute;left:1336px;right:96px;top:270px}
+.doors h2{font-size:44px;font-weight:800;letter-spacing:-.03em;line-height:1}
+.doors .grp{font-size:22px;font-weight:800;letter-spacing:.06em;margin:26px 0 6px;display:flex;align-items:center;gap:12px}
+.doors .grp i{width:18px;height:18px;border-radius:50%;background:var(--mark);border:4px solid var(--ink)} .doors .grp.next i{background:transparent;border-color:var(--quiet)} .doors .grp.next{color:var(--quiet)}
+.door{padding:11px 0;border-bottom:2px solid var(--line)}
+.door b{display:block;font-size:31px;font-weight:800;letter-spacing:-.015em} .door span{font-size:24px;color:var(--body)}
+.next + .door b, .door.n b{color:var(--quiet)}
+
+/* 4. evidence */
+.s4 h1{top:140px;font-size:74px}
+.stats{position:absolute;left:96px;right:96px;top:330px;display:grid;grid-template-columns:repeat(3,1fr);gap:40px}
+.stat{border-radius:30px;padding:36px 42px 38px;height:356px;background:var(--white)}
+.stat .big{font-size:150px;font-weight:800;letter-spacing:-.055em;line-height:.92}
+.stat .big small{font-size:74px;letter-spacing:-.03em;font-weight:800;opacity:.55}
+.stat p{font-size:29px;line-height:1.24;margin-top:16px}
+.stat.d{background:var(--ink);color:var(--paper)} .stat.y{background:var(--mark)}
+.cols{position:absolute;left:96px;right:96px;top:736px;display:grid;grid-template-columns:repeat(3,1fr);gap:40px}
+.cols h3{font-size:34px;font-weight:800;letter-spacing:-.02em;border-top:5px solid var(--ink);padding-top:16px}
+.cols p{font-size:27px;line-height:1.28;color:var(--body);margin-top:10px}
+.foot{position:absolute;left:96px;bottom:44px;font-size:23px;color:var(--quiet);font-family:var(--mono)}
+</style>
+</head>
+<body>
+
+<section class="slide s1" data-s="1">
+  <div class="brand">TrailProof</div><div class="count">1 / 4</div>
+  <h1>Your AI assistant will soon act for you everywhere.<br>To everyone it meets, it is a stranger.</h1>
+  <div class="pair">
+    <div class="idcard known"><div class="who">You, in a browser</div>
+      <ul><li>Recognised when you come back</li><li>Signed in, history intact</li><li>Trusted with your usual terms</li></ul>
+      <div class="why">A small file, a cookie, vouches for you.</div><div class="stamp go">KNOWN</div></div>
+    <div class="idcard stranger"><div class="who">Your AI assistant</div>
+      <ul><li>Blocked as a bot</li><li>Asked for a deposit</li><li>Sent to the back of the queue</li></ul>
+      <div class="why">No cookie. No history. No proof.</div><div class="stamp stop">STRANGER</div></div>
+  </div>
+  <div class="answer"><b>TrailProof is the cookie, rebuilt for AI assistants.</b><span>You hold it. It cannot be faked. It cannot track you.</span></div>
+</section>
+
+<section class="slide s2" data-s="2">
+  <div class="brand">TrailProof</div><div class="count">2 / 4</div>
+  <h1>Whoever meets your assistant asks three questions. We answer each with proof.</h1>
+  <div class="three">
+    <div class="qcard"><div class="n">1</div><div class="q">Can I trust it?</div>
+      <div class="a">It carries a track record, sealed by a neutral record keeper. Numbers only: never where you have been.</div>
+      <div class="chip">6 bookings kept, 0 problems</div><div class="stamp go">TRUSTED</div></div>
+    <div class="qcard"><div class="n">2</div><div class="q">Is it genuine?</div>
+      <div class="a">The proof is signed and addressed to one recipient. Copy it or change a letter, and it stops working.</div>
+      <div class="chip"><code>signature 6c23a38f… ✓ &nbsp; copy ✗</code></div><div class="stamp go">GENUINE</div></div>
+    <div class="qcard"><div class="n">3</div><div class="q">Is it allowed?</div>
+      <div class="a">You sign what your assistant may do. It can use that permission. It can never widen it.</div>
+      <div class="chip">Leo allows: restaurant bookings</div><div class="stamp go">ALLOWED</div></div>
+  </div>
+  <div class="arch">
+    <div class="node"><b>Your assistant</b><span>carries a wallet</span></div><div class="link">⇄</div>
+    <div class="node mid"><b>Neutral record keeper</b><span>stores fingerprints, never documents</span></div><div class="link">⇄</div>
+    <div class="node"><b>Their assistant</b><span>runs a plug-in</span></div>
+    <p><b>Built for AI agents, not people.</b> They plug in directly through MCP, the open standard for AI tools. No website. No human in the loop.</p>
+  </div>
+</section>
+
+<section class="slide s3" data-s="3">
+  <div class="brand">TrailProof</div><div class="count">3 / 4</div>
+  <h1>Thirty seconds, three answers.</h1>
+  <div class="video"><div class="play"></div><div>demo video</div></div>
+  <div class="vcap">A replay of the running system. Every check on screen was really made.</div>
+  <div class="doors">
+    <h2>One proof, many doors</h2>
+    <div class="grp"><i></i>RUNNING TODAY</div>
+    <div class="door"><b>Restaurants and hotels</b><span>no deposit for guests who show up</span></div>
+    <div class="door"><b>Ticket sales</b><span>real fans before scalper bots</span></div>
+    <div class="door"><b>Contracts and sign-ups</b><span>nothing you did not allow</span></div>
+    <div class="door"><b>Shops</b><span>your loyalty, through any assistant</span></div>
+    <div class="grp next"><i></i>SAME PROOF, NEXT</div>
+    <div class="door n"><b>Rentals</b><span>no hold on your card</span></div>
+    <div class="door n"><b>Customer support</b><span>skip the bot queue</span></div>
+  </div>
+</section>
+
+<section class="slide s4" data-s="4">
+  <div class="brand">TrailProof</div><div class="count">4 / 4</div>
+  <h1>What we tested, what broke, and what comes next.</h1>
+  <div class="stats">
+    <div class="stat d"><div class="big">2<small> of 2</small></div><p>AI models we never set up used it correctly from the manual alone, on the first try.</p></div>
+    <div class="stat"><div class="big">0<small> of 240</small></div><p>honest parties wrongly blamed in simulated cases where the other side falsified or hid its records.</p></div>
+    <div class="stat y"><div class="big">1</div><p>real bug, exposed by a fresh AI during testing. Fixed, and now covered by tests.</p></div>
+  </div>
+  <div class="cols">
+    <div><h3>What worked</h3><p>Assistants chose the right proof on their own and refused what their user had not allowed, then told the user how to allow it.</p></div>
+    <div><h3>Not yet</h3><p>The restaurant, box office and gym are simulated. Every test was run by us, with AI models from one company.</p></div>
+    <div><h3>Next</h3><p>One real partner. Another team's assistant on the interface. The user's key in a passkey instead of a file.</p></div>
+  </div>
+  <div class="foot">github.com/Andreyivvi/TrailProof</div>
+</section>
+
+<script>
+const s = new URLSearchParams(location.search).get("s");
+if (s) { document.body.classList.add("one"); document.querySelector(`.slide[data-s="${s}"]`).classList.add("on"); }
+</script>
+</body>
+</html>
