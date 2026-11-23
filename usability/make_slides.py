@@ -34,22 +34,22 @@ CHROME = [r"C:\Program Files\Google\Chrome\Application\chrome.exe", r"C:\Program
 
 # What is on each slide, in words (picture description), and what to say (speaker notes). About 2.5 minutes in all.
 SLIDES = [
-    ("Slide 1. Customers are starting to send an AI assistant instead of coming themselves. Today: 53 percent of web traffic is "
+    ("Slide 1. People are starting to send an AI assistant instead of going themselves. Today: 53 percent of web traffic is "
      "already software, not people (Imperva Bad Bot Report 2026). By 2028: 90 percent of business buying runs through AI "
      "agents (Gartner forecast, October 2025). By 2030: 3 to 5 trillion dollars of consumer shopping a year is done by AI agents "
-     "(McKinsey forecast, October 2025). The catch: nobody can tell a customer's assistant from a bot. 40 percent of web traffic today is "
-     "hostile bots, so the web's answer is to block them all.",
-     "Customers are starting to send an AI assistant instead of coming themselves. Already more than half of all web traffic is "
+     "(McKinsey forecast, October 2025). The catch: the web knows people; it does not know their assistants. 40 percent of web traffic "
+     "today is hostile bots, and from the outside an assistant looks like one.",
+     "People are starting to send an AI assistant instead of going themselves. Already more than half of all web traffic is "
      "software, not people. Gartner expects nine in ten business purchases to run through AI agents by 2028, and McKinsey puts "
      "consumer shopping done by agents at three to five trillion dollars a year by 2030. Those are forecasts, but the direction is "
-     "clear. Here is the catch: four in every ten web requests today come from hostile bots, and nobody can tell a customer's assistant from one of "
-     "them. So the web blocks them all."),
-    ("Slide 2. Your AI assistant will soon act for you everywhere. To everyone it meets, it is a stranger. In a browser you are "
+     "clear. Here is the catch: the web knows people, but it does not know their assistants. Four in every ten web requests come "
+     "from hostile bots, and from the outside your assistant looks like one of them. Why is that?"),
+    ("Slide 2. On the web, you are known. Your AI assistant is a stranger. In a browser you are "
      "known, because a cookie vouches for you. Your AI assistant has no cookie, no history and no proof, so it is blocked as a bot, "
      "starts from zero every time, and gets no personalised offers. TrailProof is the cookie, rebuilt for AI assistants: you hold it, it cannot "
      "be faked, it cannot track you.",
-     "On the web, a small file called a cookie lets a site recognise you. That is why you stay signed in and get your usual terms. "
-     "AI assistants are starting to act for us: booking, ordering, signing up. They have no cookie. To a restaurant, a box office or a "
+     "Because you carry something your assistant does not. On the web, a small file called a cookie lets a site recognise you. "
+     "That is why you stay signed in and get your usual terms. Your assistant has no cookie. To a restaurant, a box office or a "
      "shop, your assistant looks exactly like a bot: no history, no personalised offers. TrailProof gives it something to show: a proof that you hold, that cannot be "
      "faked, and that cannot be used to track you."),
     ("Slide 3. Whoever meets your assistant asks three questions, and we answer each with proof. One: does it have a good record? "
