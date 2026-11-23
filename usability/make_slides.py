@@ -1,4 +1,4 @@
-"""Build the three final-project slides.
+"""Build the four final-project slides.
 
     uv run --with python-pptx python usability/make_slides.py
 
@@ -9,9 +9,9 @@ identical in PowerPoint and in Google Slides, whatever fonts are installed.
 Speaker notes carry the talk track, and each picture carries its text as a
 description for screen readers.
 
-Writes ``usability/slides/slide1..3.png`` and ``usability/TrailProof_slides.pptx``.
+Writes ``usability/slides/slide1..4.png`` and ``usability/TrailProof_slides.pptx``.
 
-In Google Slides: File > Import slides > Upload, select all three. On slide 3,
+In Google Slides: File > Import slides > Upload, select all four. On slide 4,
 Insert > Video, paste the YouTube link, drag the video over the dark box, then
 Format options > Video playback > Play (automatically).
 """
@@ -32,9 +32,19 @@ CHROME = [r"C:\Program Files\Google\Chrome\Application\chrome.exe", r"C:\Program
           r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe", r"C:\Program Files\Microsoft\Edge\Application\msedge.exe",
           "/usr/bin/google-chrome", "/usr/bin/chromium", "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"]
 
-# What is on each slide, in words (picture description), and what to say (speaker notes). About 2 minutes in all.
+# What is on each slide, in words (picture description), and what to say (speaker notes). About 2.5 minutes in all.
 SLIDES = [
-    ("Slide 1. Your AI assistant will soon act for you everywhere. To everyone it meets, it is a stranger. In a browser you are "
+    ("Slide 1. Customers are starting to send an AI assistant instead of coming themselves. Today: 53 percent of web traffic is "
+     "already software, not people (Imperva Bad Bot Report 2026). By 2028: 90 percent of business buying runs through AI "
+     "agents (Gartner forecast, October 2025). By 2030: 3 to 5 trillion dollars of consumer shopping a year is done by AI agents "
+     "(McKinsey forecast, October 2025). The catch: nobody can tell a customer's assistant from a bot. 40 percent of web traffic today is "
+     "hostile bots, so the web's answer is to block them all.",
+     "Customers are starting to send an AI assistant instead of coming themselves. Already more than half of all web traffic is "
+     "software, not people. Gartner expects nine in ten business purchases to run through AI agents by 2028, and McKinsey puts "
+     "consumer shopping done by agents at three to five trillion dollars a year by 2030. Those are forecasts, but the direction is "
+     "clear. Here is the catch: four in every ten web requests today come from hostile bots, and nobody can tell a customer's assistant from one of "
+     "them. So the web blocks them all."),
+    ("Slide 2. Your AI assistant will soon act for you everywhere. To everyone it meets, it is a stranger. In a browser you are "
      "known, because a cookie vouches for you. Your AI assistant has no cookie, no history and no proof, so it is blocked as a bot, "
      "starts from zero every time, and gets no personalised offers. TrailProof is the cookie, rebuilt for AI assistants: you hold it, it cannot "
      "be faked, it cannot track you.",
@@ -42,7 +52,7 @@ SLIDES = [
      "AI assistants are starting to act for us: booking, ordering, signing up. They have no cookie. To a restaurant, a box office or a "
      "shop, your assistant looks exactly like a bot: no history, no personalised offers. TrailProof gives it something to show: a proof that you hold, that cannot be "
      "faked, and that cannot be used to track you."),
-    ("Slide 2. Whoever meets your assistant asks three questions, and we answer each with proof. One: does it have a good record? "
+    ("Slide 3. Whoever meets your assistant asks three questions, and we answer each with proof. One: does it have a good record? "
      "A neutral record keeper counts what it has done, numbers only. Two: is the record really its own? Each proof is signed and "
      "tied to one assistant, so a copy stops working. Three: did its owner allow this? You set limits once; inside them the "
      "assistant acts alone, outside them it is stopped. "
@@ -54,12 +64,12 @@ SLIDES = [
      "work. And you set limits once, like restaurants up to 100 euros a month; inside them your assistant acts alone, outside "
      "them it is stopped. It is built for agents: three pieces of software that AI assistants plug into directly. No website, "
      "no human in the loop."),
-    ("Slide 3. Thirty seconds, three answers: the demo video, a replay of the running system. Beside it, one proof, many doors. "
+    ("Slide 4. Thirty seconds, three answers: the demo video, a replay of the running system. Beside it, one proof, many doors. "
      "Running today: restaurants and hotels, ticket sales, contracts and sign-ups, shops. Same proof, next: rentals and customer "
      "support. Along the bottom, where it stands. Tested: two AI models we never set up used it correctly from the manual alone. "
      "Not yet: the restaurant, box office and gym are simulated, and every test was run by us. Next: one real partner, and another "
      "team's assistant using it.",
-     "Here it is running. A restaurant drops its deposit for an assistant with a proven record. A scalper bot with a copied proof is "
+     "Here it is running. A restaurant that has never met the assistant gives it the regulars' table, because its record is proven. A scalper bot with a copied proof is "
      "turned away from a presale. And when a gym's agent pushes a contract, the assistant cannot sign, because its user only allowed "
      "restaurant bookings. Every check you see was really made. The same proof opens the other doors on the right. Where it stands: "
      "we gave two AI models nothing but the manual and both used it correctly on the first try; that test also exposed a real bug, "

@@ -150,6 +150,9 @@ async def build() -> dict:
     # A booking is an order whose price is the deposit; a guest with a clean record has it waived.
     CATALOG["TABLE-FOR-2"] = {"title": "Table for two, Friday 19:30", "category": "restaurant_booking", "unit": "table",
                               "unit_price": "20.00", "currency": "EUR"}
+    # What the restaurant keeps for guests it knows. An assistant with a proven record is offered this one instead.
+    CATALOG["TABLE-REGULARS"] = {"title": "Regulars' table, Friday 19:30", "category": "restaurant_booking", "unit": "table",
+                                 "unit_price": "20.00", "currency": "EUR"}
     trattoria = MockShop(client, operator="trattoria", recognition_policy={"min_orders": 2, "max_lost_cases": 0, "discount_pct": 100})
     await trattoria.register()
     bookings = 6
@@ -164,7 +167,9 @@ async def build() -> dict:
     oid_r = "booking_friday"
     mr = leo.new_mandate(["restaurant_booking"], "200.00", nonce="leo-dining")
     await leo.submit_mandate(oid_r, mr)
-    offer_r = (await trattoria.recognise_and_offer(oid_r, "TABLE-FOR-2", att_r, buyer_party_id=leo.agent.party_id))["payload"]
+    known_r, _ = trattoria.check_recognition(att_r, leo.agent.party_id)
+    sku_r = "TABLE-REGULARS" if known_r else "TABLE-FOR-2"
+    offer_r = (await trattoria.recognise_and_offer(oid_r, sku_r, att_r, buyer_party_id=leo.agent.party_id))["payload"]
     placed_r = await leo.place_order(oid_r, mr, offer_r)
     trail_r = await leo.agent.trail(oid_r)
     offer_ev_r = next(e for e in trail_r["events"] if e["type"] == "OFFER")
@@ -174,9 +179,10 @@ async def build() -> dict:
         "deposit": offer_r["total"], "public_deposit": trattoria.quote("TABLE-FOR-2")["total"],
         "offer_hash": short(crypto.commit(offer_r)), "offer_committed": short(offer_ev_r["commit"]),
         "booked": bool(placed_r["placed"]), "what": CATALOG["TABLE-FOR-2"]["title"],
+        "recognised": bool(offer_r.get("recognition")), "offered": CATALOG[sku_r]["title"],
         "blocks": blocks(trail_r, {**roles, trattoria.party_id: "merchant"}, ["MANDATE", "OFFER", "ORDER"]),
     }
-    del CATALOG["TABLE-FOR-2"]
+    del CATALOG["TABLE-FOR-2"], CATALOG["TABLE-REGULARS"]
 
     # 8 and 9. a concert presale that only sells to agents with a real record: a fan gets in, a scalper bot does not.
     CATALOG["PRESALE"] = {"title": "Presale, arena tour", "category": "tickets", "unit": "ticket", "unit_price": "60.00", "currency": "EUR"}

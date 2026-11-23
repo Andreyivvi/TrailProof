@@ -341,9 +341,10 @@ every figure, signature result and verdict on screen was produced by the
 ledger. Re-record with `uv run python presentation/make_trace.py`.
 
 * **`demo30.html`, 30 seconds, three questions.** Whoever meets an AI
-  assistant asks: can I trust it, is it genuine, is it allowed? One scene
-  each, in three settings: a restaurant drops its deposit for an assistant
-  with a proven record; a scalper bot with a copied proof is turned away
+  assistant asks: does it have a good record, is the record really its
+  own, did its owner allow this? One scene each, in three settings: a
+  restaurant that has never met an assistant gives it the regulars' table,
+  because its record is proven; a scalper bot with a copied proof is turned away
   from a presale; a gym's agent pushes a contract and the assistant cannot
   sign, because its user only allowed restaurant bookings. Built to stay
   readable when embedded small in a slide. Space plays, arrows step.
@@ -353,7 +354,7 @@ ledger. Re-record with `uv run python presentation/make_trace.py`.
 `uv run python presentation/render_video.py` renders `demo30.html` to
 `TrailProof_demo_30s.mp4`, frame by frame, with headless Chrome and ffmpeg.
 
-The three final-project slides are designed in `usability/slides.html`.
+The four final-project slides are designed in `usability/slides.html`.
 `uv run --with python-pptx python usability/make_slides.py` photographs them
 and builds `usability/TrailProof_slides.pptx` with the talk track in the
 speaker notes, so the deck looks the same in PowerPoint and Google Slides.
