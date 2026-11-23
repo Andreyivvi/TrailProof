@@ -18,7 +18,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
 from mocks.scenarios import World  # noqa: E402
-from mocks.shop import MockShop  # noqa: E402
+from mocks.shop import CATALOG, MockShop  # noqa: E402
 from mocks.transport import DirectToolClient  # noqa: E402
 from trailproof import crypto  # noqa: E402
 from trailproof.ledger import Ledger  # noqa: E402
@@ -146,8 +146,40 @@ async def build() -> dict:
     closing = {"events": len(pack["trailproof"]["events"]), "counts": counts, "ok": problems == [],
                "tampered_fails": bool(bad_problems), "tampered_problem": (bad_problems or [""])[0].split(": ", 1)[-1]}
 
+    # 7. not shopping at all: a restaurant booking. The same proof, a different kind of trust.
+    # A booking is an order whose price is the deposit; a guest with a clean record has it waived.
+    CATALOG["TABLE-FOR-2"] = {"title": "Table for two, Friday 19:30", "category": "restaurant_booking", "unit": "table",
+                              "unit_price": "20.00", "currency": "EUR"}
+    trattoria = MockShop(client, operator="trattoria", recognition_policy={"min_orders": 2, "max_lost_cases": 0, "discount_pct": 100})
+    await trattoria.register()
+    bookings = 6
+    for i in range(bookings):                                    # earlier bookings, each kept
+        oid_b = f"booking_{i + 1}"
+        mb = leo.new_mandate(["restaurant_booking"], "200.00", nonce="leo-dining")
+        await leo.submit_mandate(oid_b, mb)
+        ob = (await trattoria.make_offer(oid_b, "TABLE-FOR-2"))["payload"]
+        assert (await leo.place_order(oid_b, mb, ob))["placed"]
+        await trattoria.take_payment(oid_b, psp)
+    att_r = await leo.request_attestation(trattoria.party_id)
+    oid_r = "booking_friday"
+    mr = leo.new_mandate(["restaurant_booking"], "200.00", nonce="leo-dining")
+    await leo.submit_mandate(oid_r, mr)
+    offer_r = (await trattoria.recognise_and_offer(oid_r, "TABLE-FOR-2", att_r, buyer_party_id=leo.agent.party_id))["payload"]
+    placed_r = await leo.place_order(oid_r, mr, offer_r)
+    trail_r = await leo.agent.trail(oid_r)
+    offer_ev_r = next(e for e in trail_r["events"] if e["type"] == "OFFER")
+    s_table = {
+        "bookings": att_r["stats"]["orders_completed"], "lost": att_r["stats"]["cases_lost"],
+        "sig": short(att_r["ledger_sig"]), "key": short(ledger_pub), "sig_ok": crypto.verify_attestation(att_r, ledger_pub),
+        "deposit": offer_r["total"], "public_deposit": trattoria.quote("TABLE-FOR-2")["total"],
+        "offer_hash": short(crypto.commit(offer_r)), "offer_committed": short(offer_ev_r["commit"]),
+        "booked": bool(placed_r["placed"]), "what": CATALOG["TABLE-FOR-2"]["title"],
+        "blocks": blocks(trail_r, {**roles, trattoria.party_id: "merchant"}, ["MANDATE", "OFFER", "ORDER"]),
+    }
+    del CATALOG["TABLE-FOR-2"]
+
     return {"generated_at": crypto.iso_z(crypto.utc_now()), "tools": 9, "calls": len(client.calls),
-            "scenes": [s1, s_second, s2, s3, s4, s5], "closing": closing}
+            "scenes": [s1, s_second, s2, s3, s4, s5, s_table], "closing": closing}
 
 
 def main() -> None:
@@ -167,6 +199,7 @@ def main() -> None:
     print(f"  1 recognised {s[0]['price']}  2 second shop {s[1]['price']} (was {s[1]['public_price']}, names a shop: {s[1]['names_a_shop']},"
           f" replay: {s[1]['replay_reason']})  3 public {s[2]['price']}  4 forged sig ok {s[3]['sig_ok']}"
           f"  5 {s[4]['record_event']}  6 {s[5]['verdict']} refund {s[5]['refund']}"
+          f"  7 table: {s[6]['bookings']} bookings, deposit {s[6]['deposit']} (was {s[6]['public_deposit']}), booked {s[6]['booked']}"
           f"  verify ok {trace['closing']['ok']}, tampered fails {trace['closing']['tampered_fails']}")
 
 

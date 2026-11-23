@@ -110,7 +110,7 @@ body{font-family:var(--display);color:var(--ink)}
       <div class="cred hide" id="cred"></div><div class="stamp hide" id="stamp"></div></div></section>
 
   <section class="place" id="ledger"><h2>The ledger: fingerprints only</h2>
-    <div class="tape"><div class="head"><span>Leo's order</span><span>who wrote it, and its hash</span></div><div id="rows"></div></div></section>
+    <div class="tape"><div class="head"><span id="tape-name">Leo's order</span><span>who wrote it, and its hash</span></div><div id="rows"></div></div></section>
 
   <section class="place" id="counter"><h2 id="shop-name">The pet shop's agent</h2>
     <div class="tag idle" id="tag"><div class="item" id="item">Dog food, 10 kg</div><div class="price" id="price"></div><div class="was" id="was"></div><div class="say" id="say"></div></div></section>
@@ -130,7 +130,7 @@ body{font-family:var(--display);color:var(--ink)}
     <div class="small" id="end-small"></div></div>
 </div>
 
-<script>window.TRACE = /*TRACE-BEGIN*/{"generated_at": "2026-11-18T23:25:11.449Z", "tools": 9, "calls": 83, "scenes": [{"orders": 2, "lost": 0, "sig": "ecddd52a9d", "key": "dba08c213f", "sig_ok": true, "price": "33.21", "public_price": "36.90", "offer_hash": "bace4c8285", "offer_committed": "bace4c8285", "in_scope": true, "blocks": [{"type": "MANDATE", "writer": "user", "commit": "bf78294bb9", "prev": ""}, {"type": "OFFER", "writer": "merchant", "commit": "bace4c8285", "prev": "bf78294bb9"}, {"type": "ORDER", "writer": "buyer_agent", "commit": "b096dc6f9f", "prev": "bace4c8285"}]}, {"orders": 2, "merchants": 1, "lost": 0, "sig": "add0faf4e2", "sig_ok": true, "names_a_shop": false, "price": "20.42", "public_price": "21.50", "pct": 5, "in_scope": true, "replay_accepted": false, "replay_reason": "attestation is addressed to another audience"}, {"price": "36.90", "reason": "no attestation presented"}, {"subject_was": "pty_e87c84", "subject_now": "pty_0f17dc", "sig": "ecddd52a9d", "sig_ok": false, "price": "36.90", "reason": "attestation signature does not verify with the ledger key"}, {"check_order": "UNKNOWN_REF", "record_event": "ORDER_NEEDS_MANDATE", "detail": "an ORDER must reference a MANDATE and an OFFER committed in this order; use check_order", "placed": false}, {"charged": "33.21", "offered_sku": "DOGFOOD-10KG", "shipped_sku": "DOGFOOD-5KG", "offer_hash": "bace4c8285", "offer_committed": "bace4c8285", "ful_hash": "41560bc17a", "ful_committed": "41560bc17a", "findings": ["DELIVERED_NE_OFFER", "MANDATE_IN_SCOPE"], "verdict": "merchant_at_fault", "refund": "33.21", "action": "refunded", "status": "closed", "blocks": [{"type": "CHARGE", "writer": "psp", "commit": "fb46dd183c", "prev": "b096dc6f9f"}, {"type": "FULFILMENT", "writer": "merchant", "commit": "41560bc17a", "prev": "fb46dd183c"}, {"type": "DELIVERY", "writer": "buyer_agent", "commit": "b7b5fd163b", "prev": "41560bc17a"}, {"type": "DISPUTE", "writer": "buyer_agent", "commit": "dfc689042a", "prev": "b7b5fd163b"}, {"type": "REFUND", "writer": "psp", "commit": "389fb1f3e4", "prev": "dfc689042a"}]}], "closing": {"events": 8, "counts": {"receipts": 8, "writer_sigs": 8, "chain_links": 8, "reveals": 7, "findings": 3}, "ok": true, "tampered_fails": true, "tampered_problem": "revealed payload does not hash to the commitment"}}/*TRACE-END*/;</script>
+<script>window.TRACE = /*TRACE-BEGIN*/{"generated_at": "2026-11-23T20:44:42.079Z", "tools": 9, "calls": 140, "scenes": [{"orders": 2, "lost": 0, "sig": "30073fb3a8", "key": "4dfe55186f", "sig_ok": true, "price": "33.21", "public_price": "36.90", "offer_hash": "289771ca4a", "offer_committed": "289771ca4a", "in_scope": true, "blocks": [{"type": "MANDATE", "writer": "user", "commit": "61216ca6b9", "prev": ""}, {"type": "OFFER", "writer": "merchant", "commit": "289771ca4a", "prev": "61216ca6b9"}, {"type": "ORDER", "writer": "buyer_agent", "commit": "9f838694e8", "prev": "289771ca4a"}]}, {"orders": 2, "merchants": 1, "lost": 0, "sig": "41f836b87b", "sig_ok": true, "names_a_shop": false, "price": "20.42", "public_price": "21.50", "pct": 5, "in_scope": true, "replay_accepted": false, "replay_reason": "attestation is addressed to another audience"}, {"price": "36.90", "reason": "no attestation presented"}, {"subject_was": "pty_8ce9e3", "subject_now": "pty_efdde8", "sig": "30073fb3a8", "sig_ok": false, "price": "36.90", "reason": "attestation signature does not verify with the ledger key"}, {"check_order": "UNKNOWN_REF", "record_event": "ORDER_NEEDS_MANDATE", "detail": "an ORDER must reference a MANDATE and an OFFER committed in this order; use check_order", "placed": false}, {"charged": "33.21", "offered_sku": "DOGFOOD-10KG", "shipped_sku": "DOGFOOD-5KG", "offer_hash": "289771ca4a", "offer_committed": "289771ca4a", "ful_hash": "41560bc17a", "ful_committed": "41560bc17a", "findings": ["DELIVERED_NE_OFFER", "MANDATE_IN_SCOPE"], "verdict": "merchant_at_fault", "refund": "33.21", "action": "refunded", "status": "closed", "blocks": [{"type": "CHARGE", "writer": "psp", "commit": "fb46dd183c", "prev": "9f838694e8"}, {"type": "FULFILMENT", "writer": "merchant", "commit": "41560bc17a", "prev": "fb46dd183c"}, {"type": "DELIVERY", "writer": "buyer_agent", "commit": "b7b5fd163b", "prev": "41560bc17a"}, {"type": "DISPUTE", "writer": "buyer_agent", "commit": "dfc689042a", "prev": "b7b5fd163b"}, {"type": "REFUND", "writer": "psp", "commit": "8ffc2de984", "prev": "dfc689042a"}]}, {"bookings": 6, "lost": 0, "sig": "42d5baa8c1", "key": "4dfe55186f", "sig_ok": true, "deposit": "0.00", "public_deposit": "20.00", "offer_hash": "674d467f70", "offer_committed": "674d467f70", "booked": true, "what": "Table for two, Friday 19:30", "blocks": [{"type": "MANDATE", "writer": "user", "commit": "6845ba487e", "prev": ""}, {"type": "OFFER", "writer": "merchant", "commit": "674d467f70", "prev": "6845ba487e"}, {"type": "ORDER", "writer": "buyer_agent", "commit": "1b3a479cf7", "prev": "674d467f70"}]}], "closing": {"events": 8, "counts": {"receipts": 8, "writer_sigs": 8, "chain_links": 8, "reveals": 7, "findings": 3}, "ok": true, "tampered_fails": true, "tampered_problem": "revealed payload does not hash to the commitment"}}/*TRACE-END*/;</script>
 <script>
 const T = window.TRACE, S = T.scenes, $ = id => document.getElementById(id);
 const H = s => `<code>${s}…</code>`;
@@ -140,7 +140,7 @@ const H = s => `<code>${s}…</code>`;
 const CUT = new URLSearchParams(location.search).get("cut") === "30";
 const SCENE = CUT ? 7 : 8, INTRO = CUT ? 3.5 : 4, CLOSE = CUT ? 3.2 : 6, END = CUT ? 2.3 : 2, BEATS = CUT ? [0, 1.5, 3.3, 5.0] : [0, 1.8, 3.9, 5.9];
 const PET = ["The pet shop's agent", "Dog food, 10 kg"], VET = ["A second shop's agent", "Dog food, 5 kg"];
-const [A, B, C, D, E, F] = S;   // recognised, second shop, scraper, impostor, no mandate, wrong product
+const [A, B, C, D, E, F, G] = S;   // G: a restaurant booking, used in the 30-second cut   // recognised, second shop, scraper, impostor, no mandate, wrong product
 const ALL_VISITS = [
  { who:"Leo's agent", kind:"says it is a returning customer", shop:PET,
    cap:["Leo's agent is back. Is it really a returning customer?","It carries proof of its history, signed by the ledger.","The shop commits a loyalty price it cannot take back.","Recognised. Inside Leo's mandate, so the order is recorded."],
@@ -179,17 +179,26 @@ const ALL_VISITS = [
    price:[[A.price,"","Sold at the committed price."]],
    rows:[[],[3,4,5],[6],[7]], stamp:[`REFUNDED €${F.refund}`,"go"] },
 ];
-const VISITS = CUT ? [0, 3, 5].map(i => ALL_VISITS[i]) : ALL_VISITS;   // recognised, forged, refunded
+ALL_VISITS.push(
+ { who:"Leo's agent", kind:"booking a table, not buying anything", shop:["A restaurant's agent", G.what], tape:"Leo's booking", solo:true,
+   cap:["It is not only shopping. Leo's agent books a table.","Restaurants lose money on no-shows, so strangers pay a deposit.","Leo's record speaks for him: every booking kept.","Deposit waived. Trust, carried from one agent to another."],
+   cred:[null,null,`Proof: <b>${G.bookings} bookings completed here, ${G.lost} disputes lost</b>. Counts only.`],
+   check:[null,null,[`signature ${H(G.sig)} against ledger key ${H(G.key)}`,"valid","go"],[`offer hash ${H(G.offer_hash)} = committed ${H(G.offer_committed)}`,"booking recorded","go"]],
+   price:[null,[G.public_deposit,"","Deposit for a guest the restaurant does not know."],null,[G.deposit,G.public_deposit,"Deposit waived for a guest with a clean record."]],
+   rows:[[8],[],[9],[10]], stamp:["DEPOSIT WAIVED","go"] });
+// 30-second cut: recognised, forged, then a booking. The full version keeps its six shop visitors.
+const VISITS = CUT ? [0, 3, 6].map(i => ALL_VISITS[i]) : ALL_VISITS.slice(0, 6);
 const N = VISITS.length;
-const BLOCKS = [...A.blocks, ...F.blocks];           // rows 0..7 of Leo's order
+const BLOCKS = [...A.blocks, ...F.blocks, ...G.blocks];   // rows 0..7 of Leo's order, 8..10 of his booking
 const WRITER = {user:"Leo's key", merchant:"the shop", buyer_agent:"Leo's agent", psp:"payment provider"};
+const writerOf = (b, i) => i >= 8 && b.writer === "merchant" ? "the restaurant" : (WRITER[b.writer] || b.writer);
 const TOTAL = INTRO + N*SCENE + CLOSE + END;
 
 // ---- build static DOM
 const dots = $("dots"); dots.style.gridTemplateColumns = `repeat(${N+2},1fr)`; for (let i=0;i<N+2;i++){ const b=document.createElement("button"); b.setAttribute("aria-label", i<N?`Visitor ${i+1}`:(i===N?"Check":"End")); b.innerHTML="<i></i>"; b.onclick=()=>seek(segStart(i)); dots.append(b); }
 const rows = $("rows");
 BLOCKS.forEach((b,i)=>{ const r=document.createElement("div"); r.className="row hide"; r.dataset.i=i;
-  r.innerHTML=`<span class="t">${b.type}</span><span class="w">${WRITER[b.writer]||b.writer}</span><span class="h">#${b.commit}</span>`; rows.append(r); });
+  r.innerHTML=`<span class="t">${b.type}</span><span class="w">${writerOf(b, i)}</span><span class="h">#${b.commit}</span>`; rows.append(r); });
 const bad=document.createElement("div"); bad.className="row bad hide"; bad.id="badrow";
 bad.innerHTML=`<span class="t">ORDER</span><span class="w">no mandate</span><span class="h">rejected</span>`; rows.append(bad);
 $("c-r").textContent=T.closing.counts.receipts; $("c-s").textContent=T.closing.counts.writer_sigs; $("c-l").textContent=T.closing.counts.chain_links;
@@ -224,7 +233,8 @@ function render(t){
   $("price").innerHTML = pr&&pr[0] ? `<small>€</small>${pr[0]}` : "<small>€</small>—"; $("was").textContent = pr&&pr[1] ? "€"+pr[1] : ""; $("say").textContent = pr?pr[2]:"";
   // rows: everything earlier visitors wrote stays; this visitor's rows appear beat by beat
   const visible = new Set(), fresh = new Set(); let showBad=false;
-  VISITS.forEach((v,vi)=>{ if (vi>si) return; v.rows.forEach((list,bp)=>{ if (vi===si && bp>p) return; list.forEach(x=>{ if (x==="bad"){ if (vi===si) showBad=true; } else { visible.add(x); if (vi===si && bp===p) fresh.add(x); } }); }); });
+  $("tape-name").textContent = V.tape || "Leo's order";
+  VISITS.forEach((v,vi)=>{ if (vi>si || (V.solo && vi!==si) || (v.solo && vi!==si)) return; v.rows.forEach((list,bp)=>{ if (vi===si && bp>p) return; list.forEach(x=>{ if (x==="bad"){ if (vi===si) showBad=true; } else { visible.add(x); if (vi===si && bp===p) fresh.add(x); } }); }); });
   [...rows.querySelectorAll(".row[data-i]")].forEach(r=>{ const i=+r.dataset.i; r.classList.toggle("hide", !visible.has(i)); r.classList.toggle("new", fresh.has(i)); r.classList.toggle("dim", si>0 && si<N-1 && visible.has(i)); });
   $("badrow").classList.toggle("hide", !showBad);
 }
@@ -245,6 +255,7 @@ addEventListener("keydown",e=>{
 $("stage").addEventListener("click",e=>{ if (!e.target.closest("button")) toggle(); });
 function fit(){ const s=Math.min(innerWidth/1600, innerHeight/900); $("stage").style.transform=`translate(-50%,-50%) scale(${s})`; }
 addEventListener("resize",fit); fit();
+if (CUT) document.querySelector("#end p").textContent = "The customer holds it. It cannot be faked. It cannot be used to track you. It works wherever one agent has to trust another.";
 if (new URLSearchParams(location.search).has("t")) document.head.insertAdjacentHTML("beforeend","<style>*{transition:none!important}</style>");  // a still frame, for review
 if (new URLSearchParams(location.search).has("t")) seek(parseFloat(new URLSearchParams(location.search).get("t")));
 if (new URLSearchParams(location.search).has("auto")) playing=true;

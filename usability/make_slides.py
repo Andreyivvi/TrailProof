@@ -116,7 +116,7 @@ def build() -> Path:
     box.fill.solid()
     box.fill.fore_color.rgb = INK
     box.line.fill.background()
-    tb = text(s, 1.0, 3.1, 6.9, 1.8, ["Place the YouTube video here (Insert > Video)", "a returning customer is recognised, an impostor is caught, a wrong delivery is refunded"], 15, SOFT)
+    tb = text(s, 1.0, 3.1, 6.9, 1.8, ["Place the YouTube video here (Insert > Video)", "a returning customer is recognised, an impostor is caught, a restaurant waives a deposit for a guest it can trust"], 15, SOFT)
     for para in tb.text_frame.paragraphs:
         para.alignment = 2
     card(s, 8.5, 1.0, 4.15, 1.85, WHITE, "Real today", ["Working, open-source software", "89 automated tests", "A live AI assistant buying through it"], size=12.5)

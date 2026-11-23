@@ -308,7 +308,7 @@ git checkout {r1['git_commit']} && uv run python usability/cold_start.py --task 
 <section class="slide">
   <div class="tag"><span>TrailProof &nbsp; see it, and what comes next</span><span>4 / 4</span></div>
   <div class="cols" style="grid-template-columns: 1.55fr 1fr; margin-top:.25in; height: 5.75in;">
-    <div class="video">[ demo video, 30 seconds, plays automatically ]<br><br>a returning customer is recognised,<br>an impostor is caught,<br>a wrong delivery is refunded</div>
+    <div class="video">[ demo video, 30 seconds, plays automatically ]<br><br>a returning customer is recognised,<br>an impostor is caught,<br>a restaurant waives a deposit for a guest it can trust</div>
     <div style="display:grid; gap:.16in; font-size:13.5pt;">
       <div class="card"><h2>Real today</h2><ul><li>Working, open-source software</li><li>89 automated tests</li><li>A live AI assistant buying through it</li></ul></div>
       <div class="card dark"><h2>Not yet</h2><ul><li>Shops and payments are simulated</li><li>Your key sits in a file, not a passkey</li></ul></div>
