@@ -61,17 +61,17 @@ SLIDES = [
      "Anyone meeting an AI assistant asks three things. Does it have a good record? Is that record really its own? And did its "
      "owner allow this? We answer each with proof instead of a promise. A neutral record keeper counts what the assistant has "
      "done: numbers only, never what you bought or where. Each proof is tied to one assistant, so stealing a good record does not "
-     "work. And you set limits once, like restaurants up to 100 euros a month; inside them your assistant acts alone, outside "
+     "work. And you set limits once, like hotel stays up to 300 euros; inside them your assistant acts alone, outside "
      "them it is stopped. It is built for agents: three pieces of software that AI assistants plug into directly. No website, "
      "no human in the loop."),
     ("Slide 4. Thirty seconds, three answers: the demo video, a replay of the running system. A restaurant gives an assistant "
-     "with a proven record the regulars' table; a scalper bot with a copied proof is turned away from a presale; a gym contract is "
-     "blocked because the assistant's owner only allowed restaurant bookings.",
+     "with a proven record the regulars' table; a scalper bot with a copied proof is turned away from a presale; a hotel suite is "
+     "not booked, because it costs more than the limit the assistant's owner set.",
      "Here it is running. A restaurant that has never met the assistant gives it the regulars' table, because its record is proven. "
-     "A scalper bot with a copied proof is turned away from a presale. And when a gym's agent pushes a contract, the assistant cannot "
-     "sign, because its user only allowed restaurant bookings. Every check you see was really made. After the video, if asked: the "
+     "A scalper bot with a copied proof is turned away from a presale. And when a hotel's agent upsells a suite, the assistant cannot "
+     "book it, because it costs more than the limit its user set. Every check you see was really made. After the video, if asked: the "
      "same proof also works for hotels, shops, rentals and customer support. Two AI models we never set up used it correctly from "
-     "the manual alone, first try. The restaurant, box office and gym are simulated, and we ran every test ourselves. Next is one "
+     "the manual alone, first try. The restaurant, box office and hotel are simulated, and we ran every test ourselves. Next is one "
      "real partner, and another team's assistant using it."),
 ]
 

@@ -345,8 +345,8 @@ ledger. Re-record with `uv run python presentation/make_trace.py`.
   own, did its owner allow this? One scene each, in three settings: a
   restaurant that has never met an assistant gives it the regulars' table,
   because its record is proven; a scalper bot with a copied proof is turned away
-  from a presale; a gym's agent pushes a contract and the assistant cannot
-  sign, because its user only allowed restaurant bookings. Built to stay
+  from a presale; a hotel's agent upsells a suite and the assistant cannot
+  book it, because it costs more than the limit its user set. Built to stay
   readable when embedded small in a slide. Space plays, arrows step.
 * **`index.html`, 60 seconds, six visitors at a shop door.** The longer,
   earlier version, centred on a shop.

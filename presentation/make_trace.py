@@ -215,27 +215,27 @@ async def build() -> dict:
                  "sig_ok": crypto.verify_attestation(forged_m, ledger_pub), "admitted": bot_in, "why": bot_why}
     del CATALOG["PRESALE"]
 
-    # 10. permission: another agent pushes a contract the user never allowed. The record keeper refuses the sign-up.
-    CATALOG["GYM-12M"] = {"title": "12-month gym membership", "category": "gym_membership", "unit": "contract",
-                          "unit_price": "39.00", "currency": "EUR"}
-    gym = MockShop(client, operator="gym")
-    await gym.register()
-    oid_g = "gym_signup"
-    mg = leo.new_mandate(["restaurant_booking"], "200.00", nonce="leo-dining")       # what Leo actually signed
-    rec_g = await leo.submit_mandate(oid_g, mg)
-    offer_g = (await gym.make_offer(oid_g, "GYM-12M"))["payload"]
-    tried_g = await leo.place_order(oid_g, mg, offer_g)
-    trail_g = await leo.agent.trail(oid_g)
-    s_gym = {"what": CATALOG["GYM-12M"]["title"], "allowed": mg["categories"], "wanted": offer_g["category"],
-             "signed": bool(tried_g["placed"]), "reason": tried_g["reasons"][0]["code"], "detail": tried_g["reasons"][0]["detail"],
-             "reasons": [r["code"] for r in tried_g["reasons"]], "mandate_commit": short(crypto.commit(mg)),
-             "recorded": [e["type"] for e in trail_g["events"]]}
-    del CATALOG["GYM-12M"]
+    # 10. limits: a hotel's agent upsells a suite that costs more than the user allowed. The record keeper refuses the booking.
+    CATALOG["SUITE-2N"] = {"title": "Suite upgrade, two nights", "category": "hotel_stay", "unit": "stay",
+                           "unit_price": "540.00", "currency": "EUR"}
+    hotel = MockShop(client, operator="hotel")
+    await hotel.register()
+    oid_h = "hotel_weekend"
+    mh = leo.new_mandate(["hotel_stay"], "300.00", nonce="leo-travel")               # the limit Leo actually set
+    await leo.submit_mandate(oid_h, mh)
+    offer_h = (await hotel.make_offer(oid_h, "SUITE-2N"))["payload"]
+    tried_h = await leo.place_order(oid_h, mh, offer_h)
+    trail_h = await leo.agent.trail(oid_h)
+    s_limit = {"what": CATALOG["SUITE-2N"]["title"], "allowed": mh["categories"], "max": mh["max_amount"], "total": offer_h["total"],
+               "currency": offer_h["currency"], "booked": bool(tried_h["placed"]), "reason": tried_h["reasons"][0]["code"],
+               "detail": tried_h["reasons"][0]["detail"], "reasons": [r["code"] for r in tried_h["reasons"]],
+               "mandate_commit": short(crypto.commit(mh)), "recorded": [e["type"] for e in trail_h["events"]]}
+    del CATALOG["SUITE-2N"]
 
     return {"generated_at": crypto.iso_z(crypto.utc_now()), "tools": 9, "calls": len(client.calls),
             "scenes": [s1, s_second, s2, s3, s4, s5, s_table, s_fan, s_scalper], "closing": closing,
             # the 30-second demo (demo30.html): one scene per question
-            "cut": {"table": s_table, "fan": s_fan, "bot": s_scalper, "gym": s_gym}}
+            "cut": {"table": s_table, "fan": s_fan, "bot": s_scalper, "limit": s_limit}}
 
 
 def main() -> None:
@@ -255,8 +255,8 @@ def main() -> None:
         page.write_text(html, encoding="utf-8", newline="\n")
         print(f"embedded a fresh run in {page}")
     s = trace["scenes"]
-    g = trace["cut"]["gym"]
-    print(f"  gym: allowed {g['allowed']}, wanted {g['wanted']}, signed {g['signed']}, reasons {g['reasons']}, recorded {g['recorded']}")
+    g = trace["cut"]["limit"]
+    print(f"  limit: allowed {g['allowed']} up to {g['max']}, offered {g['total']}, booked {g['booked']}, reasons {g['reasons']}, recorded {g['recorded']}")
     print(f"  1 recognised {s[0]['price']}  2 second shop {s[1]['price']} (was {s[1]['public_price']}, names a shop: {s[1]['names_a_shop']},"
           f" replay: {s[1]['replay_reason']})  3 public {s[2]['price']}  4 forged sig ok {s[3]['sig_ok']}"
           f"  5 {s[4]['record_event']}  6 {s[5]['verdict']} refund {s[5]['refund']}"
