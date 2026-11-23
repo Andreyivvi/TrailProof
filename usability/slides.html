@@ -41,15 +41,15 @@ h1{position:absolute;left:96px;right:96px;font-weight:800;letter-spacing:-.035em
 .answer b{font-weight:800} .answer span{font-weight:600}
 
 /* 2. three questions */
-.s2 h1{top:140px;font-size:74px}
-.three{position:absolute;left:96px;right:96px;top:372px;display:grid;grid-template-columns:repeat(3,1fr);gap:40px}
-.qcard{position:relative;background:var(--white);border-radius:30px;padding:44px 42px 40px;height:424px}
+.s2 h1{top:134px;font-size:72px}
+.three{position:absolute;left:96px;right:96px;top:352px;display:grid;grid-template-columns:repeat(3,1fr);gap:40px}
+.qcard{position:relative;background:var(--white);border-radius:30px;padding:40px 42px 40px;height:452px}
 .qcard .n{width:60px;height:60px;border-radius:50%;background:var(--ink);color:var(--mark);font-size:34px;font-weight:800;display:flex;align-items:center;justify-content:center}
-.qcard .q{font-size:54px;font-weight:800;letter-spacing:-.03em;margin-top:20px;line-height:1}
-.qcard .a{font-size:29px;line-height:1.25;color:var(--body);margin-top:18px}
+.qcard .q{font-size:45px;font-weight:800;letter-spacing:-.03em;margin-top:18px;line-height:1.02;text-wrap:balance}
+.qcard .a{font-size:27px;line-height:1.26;color:var(--body);margin-top:14px}
 .qcard .chip{position:absolute;left:42px;right:42px;bottom:38px;background:var(--paper);border-radius:12px;padding:14px 18px;font-size:25px;font-weight:600;line-height:1.2}
 .qcard .chip code{font-family:var(--mono);font-size:22px;font-weight:400}
-.qcard .stamp{right:-18px;top:-30px;font-size:38px}
+.qcard .stamp{right:-18px;top:-30px;font-size:34px}
 .arch{position:absolute;left:96px;right:96px;top:842px;height:168px;background:var(--ink);color:var(--paper);border-radius:30px;display:flex;align-items:center;padding:0 40px;gap:22px}
 .node{background:#22335A;border-radius:18px;padding:18px 26px;min-width:290px}
 .node b{display:block;font-size:31px;font-weight:800;letter-spacing:-.01em} .node span{font-size:23px;color:var(--soft)}
@@ -84,7 +84,7 @@ h1{position:absolute;left:96px;right:96px;font-weight:800;letter-spacing:-.035em
       <ul><li>Recognised when you come back</li><li>Signed in, history intact</li><li>Trusted with your usual terms</li></ul>
       <div class="why">A small file, a cookie, vouches for you.</div><div class="stamp go">KNOWN</div></div>
     <div class="idcard stranger"><div class="who">Your AI assistant</div>
-      <ul><li>Blocked as a bot</li><li>Asked for a deposit</li><li>Sent to the back of the queue</li></ul>
+      <ul><li>Blocked as a bot</li><li>Starts from zero every time</li><li>No personalised offers</li></ul>
       <div class="why">No cookie. No history. No proof.</div><div class="stamp stop">STRANGER</div></div>
   </div>
   <div class="answer"><b>TrailProof is the cookie, rebuilt for AI assistants.</b><span>You hold it. It cannot be faked. It cannot track you.</span></div>
@@ -94,15 +94,15 @@ h1{position:absolute;left:96px;right:96px;font-weight:800;letter-spacing:-.035em
   <div class="brand">TrailProof</div><div class="count">2 / 3</div>
   <h1>Whoever meets your assistant asks three questions. We answer each with proof.</h1>
   <div class="three">
-    <div class="qcard"><div class="n">1</div><div class="q">Can I trust it?</div>
-      <div class="a">It carries a track record, sealed by a neutral record keeper. Numbers only: never where you have been.</div>
-      <div class="chip">6 bookings kept, 0 problems</div><div class="stamp go">TRUSTED</div></div>
-    <div class="qcard"><div class="n">2</div><div class="q">Is it genuine?</div>
-      <div class="a">The proof is signed and addressed to one recipient. Copy it or change a letter, and it stops working.</div>
+    <div class="qcard"><div class="n">1</div><div class="q">Does it have a good record?</div>
+      <div class="a">A neutral record keeper counts what it has done. Numbers only: never what you bought or where you went.</div>
+      <div class="chip">6 bookings kept, 0 problems</div><div class="stamp go">GOOD RECORD</div></div>
+    <div class="qcard"><div class="n">2</div><div class="q">Is the record really its own?</div>
+      <div class="a">A good record is worth stealing. Each proof is signed and tied to one assistant, so a copy stops working.</div>
       <div class="chip"><code>signature 6c23a38f… ✓ &nbsp; copy ✗</code></div><div class="stamp go">GENUINE</div></div>
-    <div class="qcard"><div class="n">3</div><div class="q">Is it allowed?</div>
-      <div class="a">You sign what your assistant may do. It can use that permission. It can never widen it.</div>
-      <div class="chip">Leo allows: restaurant bookings</div><div class="stamp go">ALLOWED</div></div>
+    <div class="qcard"><div class="n">3</div><div class="q">Did its owner allow this?</div>
+      <div class="a">You set limits once. Inside them your assistant acts on its own. Outside them it is stopped.</div>
+      <div class="chip">Leo's limits: restaurant bookings</div><div class="stamp go">ALLOWED</div></div>
   </div>
   <div class="arch">
     <div class="node"><b>Your assistant</b><span>carries a wallet</span></div><div class="link">⇄</div>

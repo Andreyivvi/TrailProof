@@ -78,11 +78,11 @@ html,body{height:100%;background:var(--ink);overflow:hidden}
   </div>
 
   <div class="card" id="intro"><h1>A cookie for AI agents.</h1>
-    <p>Whoever meets your AI assistant asks three questions. It should be able to answer each one with proof.</p>
+    <p>Whoever meets your AI assistant asks three questions. It should answer each one with proof.</p>
     <div id="hint"><kbd>Space</kbd> play or pause, <kbd>←</kbd> <kbd>→</kbd> step, <kbd>R</kbd> restart</div></div>
 
   <div class="card" id="end"><h1>The cookie, rebuilt for AI agents.</h1>
-    <div class="answers"><div><b>Trusted</b>by its record, not by its word</div><div><b>Genuine</b>a copied proof stops working</div><div><b>Under your control</b>it does only what you allowed</div></div>
+    <div class="answers"><div><b>A good record</b>counted by a neutral keeper</div><div><b>Really its own</b>a copied proof stops working</div><div><b>Within your limits</b>set once, enforced every time</div></div>
     <div class="fine" id="fine"></div></div>
 </div>
 
@@ -94,27 +94,27 @@ const cap1 = s => s.charAt(0).toUpperCase() + s.slice(1);
 
 // ---- three questions, one scene each. Every figure and verdict below is read from the recorded run.
 const SCENES = [
- { q:"Can I trust it?",
+ { q:"Does it have a good record?",
    left:["an AI assistant","Leo's assistant","booking a table for Friday","“A table for two, please.”"],
    right:["a restaurant", cap1(C.table.what.split(",")[0]), "has never met this assistant", "Deposit required", C.table.deposit === "0.00" ? "No deposit" : "Deposit required"],
    proof:{title:"Proof of track record", big:`${C.table.bookings} bookings kept`, sub:`${C.table.lost} problems`, foot:`signed by the record keeper · ${C.table.sig}…`, from:"left"},
    check:["The restaurant checks the signature", "", C.table.sig_ok ? "valid" : "invalid", C.table.sig_ok ? "go" : "stop"],
    stamp:["TRUSTED","go"],
    caps:["Leo's assistant books a table. The restaurant has never met it.","Strangers leave a deposit. So the assistant shows its record.","One check. No phone call, no login, no human.","No deposit. A stranger became a trusted guest."] },
- { q:"Is it genuine?",
+ { q:"Is the record really its own?",
    left:["a bot","A scalper bot","in the queue for a fan presale","“I am a real fan. Let me in.”"],
    right:["a box office", C.fan.what.split(",")[0], "for fans with a real record", "Verified fans only", C.bot.admitted ? "Admitted" : "No entry"],
    proof:{title:"Proof of track record", big:`${C.fan.purchases} purchases`, sub:`issued to <s>${C.bot.subject_was}…</s><br><span class="swap">${C.bot.subject_now}…</span>`, foot:`same signature · ${C.bot.sig}…`, from:"left"},
    check:["The box office checks the signature", "", C.bot.sig_ok ? "valid" : "does not match", C.bot.sig_ok ? "go" : "stop"],
    stamp:["FORGED","stop"],
    caps:["A presale for real fans. A scalper bot joins the queue.","It shows a real fan's proof, with its own name pasted in.","Change one letter and the signature no longer matches.","Turned away. Unlike a cookie, this cannot be copied."] },
- { q:"Is it allowed?",
+ { q:"Did its owner allow this?",
    left:["an AI assistant","Leo's assistant","sent out to book a table, nothing more","“Sounds good. I will sign.”"],
    right:["a gym", "12-month contract", "its agent is pushing hard", "Sign here", C.gym.signed ? "Signed" : "Not signed"],
-   proof:{title:"What Leo allowed", big:cap1(C.gym.allowed.map(words).join(", ")), sub:"Nothing else.", foot:`signed by Leo · ${C.gym.mandate_commit}…`, from:"top"},
-   check:["The record keeper checks Leo's permission", C.gym.reason, C.gym.signed ? "covered" : "not covered", C.gym.signed ? "go" : "stop"],
+   proof:{title:"The limits Leo set, once", big:cap1(C.gym.allowed.map(words).join(", ")), sub:"Nothing else.", foot:`set by Leo · ${C.gym.mandate_commit}…`, from:"top"},
+   check:["The record keeper checks Leo's limits", C.gym.reason, C.gym.signed ? "covered" : "not covered", C.gym.signed ? "go" : "stop"],
    stamp:["NOT ALLOWED","inkc"],
-   caps:["A gym's agent pushes a 12-month contract. Leo's assistant is about to accept.","First, the record keeper looks at what Leo actually signed.","Leo allowed restaurant bookings. A gym contract is not one.","Blocked. Your assistant cannot sign you up for what you never allowed."] },
+   caps:["A gym's agent pushes a 12-month contract. Leo's assistant is about to accept.","First, the record keeper looks at the limits Leo set.","Leo allowed restaurant bookings. A gym contract is not one.","Blocked. Inside your limits it acts alone. Outside them, it cannot."] },
 ];
 const INTRO = 3.2, SCENE = 7.4, END = 4.6, TOTAL = INTRO + SCENES.length * SCENE + END;      // 30.0 s
 const BEATS = [0.25, 1.9, 3.8, 5.25];        // caption A, proof appears, check, verdict

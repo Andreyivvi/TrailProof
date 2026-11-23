@@ -36,21 +36,23 @@ CHROME = [r"C:\Program Files\Google\Chrome\Application\chrome.exe", r"C:\Program
 SLIDES = [
     ("Slide 1. Your AI assistant will soon act for you everywhere. To everyone it meets, it is a stranger. In a browser you are "
      "known, because a cookie vouches for you. Your AI assistant has no cookie, no history and no proof, so it is blocked as a bot, "
-     "asked for a deposit, sent to the back of the queue. TrailProof is the cookie, rebuilt for AI assistants: you hold it, it cannot "
+     "starts from zero every time, and gets no personalised offers. TrailProof is the cookie, rebuilt for AI assistants: you hold it, it cannot "
      "be faked, it cannot track you.",
      "On the web, a small file called a cookie lets a site recognise you. That is why you stay signed in and get your usual terms. "
      "AI assistants are starting to act for us: booking, ordering, signing up. They have no cookie. To a restaurant, a box office or a "
-     "shop, your assistant looks exactly like a bot. TrailProof gives it something to show: a proof that you hold, that cannot be "
+     "shop, your assistant looks exactly like a bot: no history, no personalised offers. TrailProof gives it something to show: a proof that you hold, that cannot be "
      "faked, and that cannot be used to track you."),
-    ("Slide 2. Whoever meets your assistant asks three questions, and we answer each with proof. One: can I trust it? It carries a "
-     "track record sealed by a neutral record keeper, numbers only. Two: is it genuine? The proof is signed and addressed to one "
-     "recipient; a copy stops working. Three: is it allowed? You sign what your assistant may do, and it can never widen that. "
+    ("Slide 2. Whoever meets your assistant asks three questions, and we answer each with proof. One: does it have a good record? "
+     "A neutral record keeper counts what it has done, numbers only. Two: is the record really its own? Each proof is signed and "
+     "tied to one assistant, so a copy stops working. Three: did its owner allow this? You set limits once; inside them the "
+     "assistant acts alone, outside them it is stopped. "
      "Architecture: your assistant carries a wallet, their assistant runs a plug-in, and a neutral record keeper sits between them. "
      "AI agents plug in directly through MCP; there is no website and no human in the loop.",
-     "Anyone meeting an AI assistant asks three things. Can I trust it? Is it really who it claims? Is it allowed to do this? We "
-     "answer each with proof instead of a promise. A neutral record keeper seals what the assistant has done and signs a summary: "
-     "counts only, never where you have been. The proof is addressed to one recipient, so a copy is worthless. And the person signs "
-     "what the assistant may do. It is built for agents: three pieces of software that AI assistants plug into directly. No website, "
+     "Anyone meeting an AI assistant asks three things. Does it have a good record? Is that record really its own? And did its "
+     "owner allow this? We answer each with proof instead of a promise. A neutral record keeper counts what the assistant has "
+     "done: numbers only, never what you bought or where. Each proof is tied to one assistant, so stealing a good record does not "
+     "work. And you set limits once, like restaurants up to 100 euros a month; inside them your assistant acts alone, outside "
+     "them it is stopped. It is built for agents: three pieces of software that AI assistants plug into directly. No website, "
      "no human in the loop."),
     ("Slide 3. Thirty seconds, three answers: the demo video, a replay of the running system. Beside it, one proof, many doors. "
      "Running today: restaurants and hotels, ticket sales, contracts and sign-ups, shops. Same proof, next: rentals and customer "
