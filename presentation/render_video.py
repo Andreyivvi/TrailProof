@@ -29,6 +29,7 @@ def main() -> int:
     ap.add_argument("--seconds", type=float, default=62.0, help="60 s of story plus a hold on the last card")
     ap.add_argument("--out", default=str(HERE / "TrailProof_demo.mp4"))
     ap.add_argument("--workers", type=int, default=4)
+    ap.add_argument("--cut", choices=["60", "30"], default="60", help="30 renders the 30-second version (three visitors)")
     args = ap.parse_args()
     chrome = next((c for c in CHROME if Path(c).exists()), None)
     ffmpeg = shutil.which("ffmpeg")
@@ -39,14 +40,19 @@ def main() -> int:
     shutil.rmtree(frames, ignore_errors=True)
     frames.mkdir()
     url = (HERE / "index.html").as_uri()
+    if args.cut == "30":
+        args.seconds = 30.0
+        if args.out.endswith("TrailProof_demo.mp4"):
+            args.out = str(HERE / "TrailProof_demo_30s.mp4")
+    story_end = (30.0 if args.cut == "30" else 60.0) - 0.01
     n = int(args.seconds * args.fps)
 
     def shot(i: int) -> None:
-        t = min(i / args.fps, 59.99)
+        t = min(i / args.fps, story_end)
         profile = frames / f"p{i % args.workers}"
         subprocess.run([chrome, "--headless=new", "--disable-gpu", "--hide-scrollbars", "--window-size=1920,1080",
                         f"--user-data-dir={profile}", "--virtual-time-budget=4000",
-                        f"--screenshot={frames / f'f{i:05d}.png'}", f"{url}?t={t:.3f}"],
+                        f"--screenshot={frames / f'f{i:05d}.png'}", f"{url}?cut={args.cut}&t={t:.3f}"],
                        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=120)
 
     # one Chrome profile per worker, so parallel instances do not fight over a profile lock

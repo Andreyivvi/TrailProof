@@ -136,10 +136,12 @@ const T = window.TRACE, S = T.scenes, $ = id => document.getElementById(id);
 const H = s => `<code>${s}…</code>`;
 
 // ---- the story: six visitors, four beats each. Everything quoted comes from the recorded run.
-const SCENE = 8, INTRO = 4, CLOSE = 6, END = 2, BEATS = [0, 1.8, 3.9, 5.9];
+// ?cut=30 plays a 30-second version: three of the six visitors, at a brisker pace.
+const CUT = new URLSearchParams(location.search).get("cut") === "30";
+const SCENE = CUT ? 7 : 8, INTRO = CUT ? 3.5 : 4, CLOSE = CUT ? 3.2 : 6, END = CUT ? 2.3 : 2, BEATS = CUT ? [0, 1.5, 3.3, 5.0] : [0, 1.8, 3.9, 5.9];
 const PET = ["The pet shop's agent", "Dog food, 10 kg"], VET = ["A second shop's agent", "Dog food, 5 kg"];
 const [A, B, C, D, E, F] = S;   // recognised, second shop, scraper, impostor, no mandate, wrong product
-const VISITS = [
+const ALL_VISITS = [
  { who:"Leo's agent", kind:"says it is a returning customer", shop:PET,
    cap:["Leo's agent is back. Is it really a returning customer?","It carries proof of its history, signed by the ledger.","The shop commits a loyalty price it cannot take back.","Recognised. Inside Leo's mandate, so the order is recorded."],
    cred:[null,`Proof: <b>${A.orders} completed orders here, ${A.lost} lost disputes</b>. Counts only.`],
@@ -177,13 +179,14 @@ const VISITS = [
    price:[[A.price,"","Sold at the committed price."]],
    rows:[[],[3,4,5],[6],[7]], stamp:[`REFUNDED €${F.refund}`,"go"] },
 ];
+const VISITS = CUT ? [0, 3, 5].map(i => ALL_VISITS[i]) : ALL_VISITS;   // recognised, forged, refunded
 const N = VISITS.length;
 const BLOCKS = [...A.blocks, ...F.blocks];           // rows 0..7 of Leo's order
 const WRITER = {user:"Leo's key", merchant:"the shop", buyer_agent:"Leo's agent", psp:"payment provider"};
 const TOTAL = INTRO + N*SCENE + CLOSE + END;
 
 // ---- build static DOM
-const dots = $("dots"); for (let i=0;i<N+2;i++){ const b=document.createElement("button"); b.setAttribute("aria-label", i<N?`Visitor ${i+1}`:(i===N?"Check":"End")); b.innerHTML="<i></i>"; b.onclick=()=>seek(segStart(i)); dots.append(b); }
+const dots = $("dots"); dots.style.gridTemplateColumns = `repeat(${N+2},1fr)`; for (let i=0;i<N+2;i++){ const b=document.createElement("button"); b.setAttribute("aria-label", i<N?`Visitor ${i+1}`:(i===N?"Check":"End")); b.innerHTML="<i></i>"; b.onclick=()=>seek(segStart(i)); dots.append(b); }
 const rows = $("rows");
 BLOCKS.forEach((b,i)=>{ const r=document.createElement("div"); r.className="row hide"; r.dataset.i=i;
   r.innerHTML=`<span class="t">${b.type}</span><span class="w">${WRITER[b.writer]||b.writer}</span><span class="h">#${b.commit}</span>`; rows.append(r); });
@@ -203,8 +206,8 @@ function render(t){
   const vt = t-INTRO, si = Math.floor(vt/SCENE), inVisit = t>=INTRO && si<VISITS.length;
   const closing = t>=INTRO+VISITS.length*SCENE && t<TOTAL-END, ending = t>=TOTAL-END;
   $("intro").classList.toggle("hide", t>=INTRO); $("closing").classList.toggle("hide", !closing); $("end").classList.toggle("hide", !ending);
-  $("c-fail").classList.toggle("hide", !(closing && t-(INTRO+VISITS.length*SCENE) > 2.6));
-  const secs=Math.min(Math.floor(t),60); $("clock").textContent=`0:${String(secs).padStart(2,"0")} / 1:00`;
+  $("c-fail").classList.toggle("hide", !(closing && t-(INTRO+VISITS.length*SCENE) > (CUT ? 1.1 : 2.6)));
+  const whole=Math.round(TOTAL), secs=Math.min(Math.floor(t),whole); $("clock").textContent=`0:${String(secs).padStart(2,"0")} / ${whole>=60?"1:00":"0:"+whole}`;
   [...dots.children].forEach((b,i)=>{ const a=segStart(i), len=i<N?SCENE:(i===N?CLOSE:END); b.firstChild.style.transform=`scaleX(${Math.max(0,Math.min(1,(t-a)/len))})`; });
   if (!inVisit) { if (t<INTRO){ $("ticket").classList.add("out"); } return; }
   const local = vt - si*SCENE, V = VISITS[si]; let p = 0; BEATS.forEach((b,k)=>{ if (local>=b) p=k; });

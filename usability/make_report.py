@@ -148,9 +148,15 @@ section.slide {{ page: slide; break-before: page; width: 13.333in; height: 7.5in
 .slide .dark {{ background: #14213D; color: #E6EEEA; }} .slide .dark h2 {{ color: #9FB0C3; }}
 .slide .mark {{ background: #FFD23F; }} .slide .mark h2 {{ color: #6B5A12; }}
 .slide ul {{ padding-left: 17pt; margin: 0; }} .slide li {{ margin-bottom: 5pt; }}
-.slide .num {{ font-size: 34pt; font-weight: 800; letter-spacing: -.03em; line-height: 1; display: block; }}
+.slide .num {{ font-size: 34pt; font-weight: 800; letter-spacing: -.03em; line-height: 1; display: block; margin: 4pt 0 9pt; }}
 .slide .small {{ font-size: 12.5pt; color: #5C6B7A; }}
 .slide .video {{ background: #14213D; color: #9FB0C3; border-radius: 10pt; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 15pt; }}
+.slide .step {{ display: grid; grid-template-columns: .62in 1fr; gap: .18in; align-items: start; margin-bottom: .2in; }}
+.slide .step b.n {{ width: .62in; height: .62in; border-radius: 50%; background: #14213D; color: #FFD23F; font-size: 22pt; display: flex; align-items: center; justify-content: center; }}
+.slide .step .t {{ font-weight: 700; font-size: 18pt; line-height: 1.15; }} .slide .step .d {{ font-size: 14pt; color: #2D3B58; margin-top: 3pt; }}
+.slide .shot {{ width: 100%; border-radius: 10pt; border: 1pt solid #C3D0CA; display: block; }}
+.slide .foot {{ position: absolute; left: .7in; right: .7in; bottom: .36in; font-size: 12pt; color: #5C6B7A; }}
+.slide .vs {{ font-size: 13pt; color: #5C6B7A; }}
 .arch {{ display: grid; grid-template-columns: 1fr auto 1.15fr auto 1fr; align-items: center; gap: .12in; }}
 .arch .arrow {{ font-size: 13pt; color: #5C6B7A; text-align: center; line-height: 1.25; }}
 </style></head><body>
@@ -259,55 +265,54 @@ git checkout {r1['git_commit']} && uv run python usability/cold_start.py --task 
 <ul>{team_html}</ul>
 
 <section class="slide">
-  <div class="tag"><span>TrailProof</span><span>MIT AI Studio, Fall 2026 &nbsp; 1 / 4</span></div>
-  <h1>The cookie, rebuilt for AI agents.</h1>
-  <div class="cols" style="grid-template-columns: 1.05fr 1fr 1fr;">
-    <div class="card dark"><h2>The problem</h2>On the web, a cookie lets a shop recognise a returning customer. An AI agent has none. To a merchant every agent is a stranger: a loyal customer, or one of a thousand bots?</div>
-    <div class="card"><h2>Why it is agentic</h2>The users are agents. A buyer agent carries proof of its history and its user's authority; a merchant agent checks it. No human is in the loop, and there is no web page.</div>
-    <div class="card mark"><h2>Who uses it</h2><ul><li>Buyer agents: prove history, buy inside a mandate</li><li>Merchant agents: recognise real customers</li><li>Payment agents: commit charges and refunds</li></ul></div>
+  <div class="tag"><span>TrailProof</span><span>1 / 4</span></div>
+  <h1 style="font-size:37pt;">Soon an AI assistant will do your shopping. Shops cannot tell it from a bot.</h1>
+  <div class="cols" style="grid-template-columns: 1fr 1fr 1.08fr;">
+    <div class="card"><h2>Today: you, in a browser</h2>A small file called a cookie lets a shop recognise you when you return. That is how you get your basket, your history and your loyalty price.</div>
+    <div class="card dark"><h2>Tomorrow: your AI assistant</h2>It has no cookie. To the shop it is a stranger, the same as a thousand price-scraping bots. No loyalty price. And if the order goes wrong, it is the shop's records against yours.</div>
+    <div class="card mark"><h2>TrailProof</h2>A cookie rebuilt for AI assistants: proof of who the assistant shops for and how it has behaved. <b>You hold it. It cannot be faked. It cannot be used to track you.</b></div>
   </div>
-  <p class="small" style="position:absolute; left:.7in; bottom:.42in;">Unlike a cookie: the customer holds it, it cannot be faked, and it cannot be used to track them.</p>
+  <div class="foot">An AI agent is software that acts for a person: here, an assistant that finds, orders and pays for things on your behalf. Our users are these agents, on both sides of a sale.</div>
 </section>
 
 <section class="slide">
-  <div class="tag"><span>TrailProof &nbsp; what we built</span><span>2 / 4</span></div>
-  <h1 style="font-size:31pt;">Three MCP servers around a ledger that keeps fingerprints, never documents.</h1>
-  <div class="arch">
-    <div class="card dark"><h2>Wallet (buyer's agent)</h2>9 tools. Holds keys, mandates, plaintext. Cannot grant itself a mandate.</div>
-    <div class="arrow">signed hashes<br>&#8594;<br>&#8592;<br>proofs, receipts</div>
-    <div class="card"><h2>Ledger (neutral)</h2>Per-order hash chain: mandate, offer, order, charge, delivery. Checks every order against the mandate. Deterministic dispute rules, no LLM.</div>
-    <div class="arrow">signed hashes<br>&#8592;<br>&#8594;<br>verdicts</div>
-    <div class="card mark"><h2>Shop (merchant's agent)</h2>4 tools. Commits offers, recognises customers from their proof, refunds by policy.</div>
+  <div class="tag"><span>TrailProof &nbsp; how it works</span><span>2 / 4</span></div>
+  <h1 style="font-size:31pt; margin-bottom:.22in;">Three steps. Each one can be checked by anyone.</h1>
+  <div class="cols" style="grid-template-columns: 1.02fr 1fr; align-items: start;">
+    <div>
+      <div class="step"><b class="n">1</b><div><div class="t">You set a spending permission.</div><div class="d">"Pet food, up to 80 euros, this month." Your assistant can use it but can never change it.</div></div></div>
+      <div class="step"><b class="n">2</b><div><div class="t">Your assistant proves its track record.</div><div class="d">"2 completed orders here, no disputes lost." Signed by a neutral record keeper. Numbers only: never what you bought or where.</div></div></div>
+      <div class="step"><b class="n">3</b><div><div class="t">The shop recognises you, and every step is sealed.</div><div class="d">You get your loyalty price. Each side locks a fingerprint of what it promised, so a wrong delivery is settled from proof and refunded automatically.</div></div></div>
+    </div>
+    <div><img class="shot" src="assets/recognised.png" alt="Demo screen: a returning customer's assistant is recognised and gets 33.21 instead of 36.90">
+      <div class="vs" style="margin-top:6pt;">From our demo. Left: the assistant at the shop's door. Middle: the sealed record. Right: the price it earns.</div></div>
   </div>
-  <div class="cols" style="grid-template-columns: repeat(3, 1fr); margin-top:.28in; font-size:14.5pt;">
-    <div><b>Proof of history.</b> Ledger-signed counts, addressed to one shop. No products, no shop names.</div>
-    <div><b>Mandate.</b> Signed by the person on the command line. No mandate, no purchase.</div>
-    <div><b>Disputes.</b> Both sides reveal; the ledger re-hashes against what was committed earlier.</div>
-  </div>
+  <div class="foot"><b>What we built:</b> three pieces of software that AI assistants plug into directly, using the open MCP standard for giving tools to AI: a <b>wallet</b> for the customer's assistant, a <b>plug-in</b> for the shop's assistant, and a neutral <b>record keeper</b> between them. No website, no human in the loop.</div>
 </section>
 
 <section class="slide">
-  <div class="tag"><span>TrailProof &nbsp; evidence from HW6 to HW9</span><span>3 / 4</span></div>
-  <h1 style="font-size:31pt;">What we measured, and what broke.</h1>
+  <div class="tag"><span>TrailProof &nbsp; does it work?</span><span>3 / 4</span></div>
+  <h1 style="font-size:31pt;">What we tested, and what broke.</h1>
   <div class="cols" style="grid-template-columns: repeat(4, 1fr); font-size:13.5pt;">
-    <div class="card"><h2>HW6 &nbsp; working core</h2><span class="num">6</span>scenarios end to end over MCP, with a live model as buyer; evidence re-verified offline.</div>
-    <div class="card"><h2>HW7 &nbsp; benchmark</h2><span class="num">0 vs 46</span>honest parties blamed in 240 disputes with a dishonest counterparty: TrailProof vs a logs-only baseline.</div>
-    <div class="card"><h2>HW8 &nbsp; Nanda Town</h2><span class="num">8 / 119</span>cases and checks in the course sandbox, including a seller caught doctoring evidence.</div>
-    <div class="card dark"><h2>HW9 &nbsp; cold start</h2><span class="num">7 / 7</span>checks by two fresh models given only the docs: right proof, right price, truthful report.</div>
+    <div class="card dark"><h2>Can a new AI use it?</h2><span class="num">2 of 2</span>AI models we had never set up read only our manual and bought correctly on the first try, at the right price.</div>
+    <div class="card"><h2>Does it judge fairly?</h2><span class="num">0 vs 46</span>honest parties wrongly blamed in 240 simulated disputes where one side lied. Ours: 0. Comparing each side's own records: 46.</div>
+    <div class="card"><h2>Can it be cheated?</h2><span class="num">Caught</span>A seller that shipped the wrong product and then edited its records was exposed automatically, in a shared test environment run by the course.</div>
+    <div class="card mark"><h2>What failed</h2><span class="num">1 real bug</span>A fresh AI showed us that a refund did not give the spending allowance back. Found by testing, then fixed.</div>
   </div>
   <div class="cols" style="grid-template-columns: 1fr 1fr; margin-top:.26in; font-size:14.5pt;">
-    <div><b>Worked.</b> Agents chose the right kind of proof unprompted, refused an out-of-mandate request and told the user how to authorise it, and disputed a wrong parcel through to a refund.</div>
-    <div><b>Failed, then fixed.</b> A refund did not return the budget, so the agent could not reorder. Found by the cold-start run, fixed, six regression tests. After the fix the agent still asked before reordering.</div>
+    <div><b>What worked.</b> Assistants picked the right proof on their own, refused to buy outside the permission and told the user how to allow it, and took a wrong delivery all the way to a refund.</div>
+    <div><b>What still does not.</b> After the fix, the assistant got the refund but asked before buying again, so the customer still had no dog food. And every test so far was run by us, with AI models from one company.</div>
   </div>
 </section>
 
 <section class="slide">
-  <div class="tag"><span>TrailProof &nbsp; demo, limits, next</span><span>4 / 4</span></div>
+  <div class="tag"><span>TrailProof &nbsp; see it, and what comes next</span><span>4 / 4</span></div>
   <div class="cols" style="grid-template-columns: 1.55fr 1fr; margin-top:.25in; height: 5.75in;">
-    <div class="video">[ embedded YouTube demo, 60 s, plays automatically ]<br><br>six visitors at a shop door: recognised, welcomed,<br>public price, forged, refused, refunded</div>
-    <div style="display:grid; gap:.2in; font-size:14pt;">
-      <div class="card"><h2>Limits today</h2><ul><li>Shop and payment provider are mocks</li><li>User key in a file, not a passkey</li><li>Clients tested: two models, one vendor, run by us</li></ul></div>
-      <div class="card mark"><h2>Next</h2><ul><li>Another team's agent on the interface</li><li>Hosted ledger, real merchant plugin</li><li>Loyalty points that vest on undisputed orders</li></ul></div>
+    <div class="video">[ demo video, 30 seconds, plays automatically ]<br><br>a returning customer is recognised,<br>an impostor is caught,<br>a wrong delivery is refunded</div>
+    <div style="display:grid; gap:.16in; font-size:13.5pt;">
+      <div class="card"><h2>Real today</h2><ul><li>Working, open-source software</li><li>89 automated tests</li><li>A live AI assistant buying through it</li></ul></div>
+      <div class="card dark"><h2>Not yet</h2><ul><li>Shops and payments are simulated</li><li>Your key sits in a file, not a passkey</li></ul></div>
+      <div class="card mark"><h2>Next</h2><ul><li>A plug-in for a real shop</li><li>Another team's assistant using it</li><li>Loyalty points on top</li></ul></div>
     </div>
   </div>
   <p class="small" style="position:absolute; left:.7in; bottom:.3in;">{E(REPO)}</p>
